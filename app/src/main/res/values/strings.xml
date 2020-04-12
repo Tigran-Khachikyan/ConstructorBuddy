@@ -46,6 +46,7 @@
     <string name="clear">clear</string>
     <string name="calculate">calculate</string>
     <string name="inputError">Must be completed!</string>
+    <string name="chooseTheShape">choose the shape!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
