@@ -11,7 +11,11 @@ import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Shape
 
 
-class AdapterRecyclerShapes(private val context: Context, private val func: (Shape) -> Unit) :
+class AdapterRecyclerShapes(
+    private val context: Context,
+    private val isMarked: Boolean,
+    private val func: (Shape) -> Unit
+) :
     RecyclerView.Adapter<AdapterRecyclerShapes.Holder>() {
 
     var selectedPosition: Int? = null
@@ -39,15 +43,19 @@ class AdapterRecyclerShapes(private val context: Context, private val func: (Sha
     override fun getItemCount(): Int = images.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.name.text = context.getString(images[position].nameRes)
-        holder.image.setImageResource(images[position].imageRes)
-        holder.animate(selectedPosition, position)
+        if (!isMarked) {
+            holder.name.text = context.getString(images[position].nameRes)
+            holder.animate(selectedPosition, position)
+            holder.image.setImageResource(images[position].imageRes)
+        } else
+            holder.image.setImageResource(images[position].markedImageRes)
+
     }
 
     private fun Holder.animate(selPos: Int?, curPos: Int) {
         selPos?.let {
             if (curPos != it)
-                itemView.animate().alpha(0.35F).scaleX(0.8F).scaleY(0.8F).apply { duration = 1000 }
+                itemView.animate().alpha(0.35F).scaleX(0.9F).scaleY(0.9F).apply { duration = 1000 }
             else
                 itemView.animate().scaleX(1.2F).scaleY(1.2F).apply { duration = 1000 }
         }

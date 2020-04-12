@@ -3,6 +3,8 @@
     <string name="title_home">Home</string>
     <string name="title_saved">Saved</string>
     <string name="title_settings">Settings</string>
+    <string name="title_shapes">Chose the shape!</string>
+    <string name="title_Calculator">Calculator</string>
 
     //shapes
     <string name="angle">angle</string>
@@ -46,5 +48,4 @@
     <string name="inputError">Must be completed!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
