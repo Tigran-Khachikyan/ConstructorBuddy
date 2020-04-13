@@ -11,6 +11,7 @@ class CalculateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calculate)
 
-        supportFragmentManager.beginTransaction().replace(R.id.frame_calculation, ShapesFragment()).commit()
+        savedInstanceState ?: supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_calculation, ShapesFragment()).commit()
     }
 }

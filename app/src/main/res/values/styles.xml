@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -9,7 +9,7 @@
     </style>
 
     <style name="textView">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="android:padding">2dp</item>
         <item name="android:gravity">center</item>
@@ -18,7 +18,8 @@
     </style>
 
     <style name="textView_field" parent="textView">
-        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginStart">2dp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="editText_field" parent="textView">
@@ -27,6 +28,12 @@
         <item name="android:textStyle">bold</item>
         <item name="android:inputType">numberDecimal</item>
         <item name="hintTextColor">@android:color/holo_red_dark</item>
+    </style>
+
+    <style name="button_option" parent="textView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

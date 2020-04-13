@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Shape
 import com.calcprojects.constructorbuddy.ui.AdapterRecyclerShapes
-import com.calcprojects.constructorbuddy.ui.MATERIAL_KEY
 import com.calcprojects.constructorbuddy.ui.SHAPE_KEY
 import com.calcprojects.constructorbuddy.ui.calculator.CalculatorFragment
 import kotlinx.android.synthetic.main.fragment_shapes.*

@@ -25,7 +25,7 @@
             android:textColor="@android:color/black"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.3"
+            app:layout_constraintHorizontal_bias="0.4"
             app:layout_constraintLeft_toRightOf="@id/circle_image_material"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -1,8 +1,10 @@
 package com.calcprojects.constructorbuddy.ui
 
-import android.graphics.drawable.shapes.Shape
-import com.calcprojects.constructorbuddy.model.Shape.*
+import java.text.DecimalFormat
 
 const val SHAPE_KEY = "shape"
-const val MATERIAL_KEY = "material"
 const val DEF_VALUE: String = "ROUND_BAR"
+const val NO_INPUT: Double = -1.0
+const val SELECTED: Boolean = true
+const val UNSELECTED: Boolean = false
+val decFormatter2p = DecimalFormat("#,###.##")

@@ -1,13 +1,15 @@
 package com.calcprojects.constructorbuddy.ui.calculator
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.Layout
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.EditText
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,15 +20,17 @@ import androidx.recyclerview.widget.RecyclerView.*
 
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Material
-import com.calcprojects.constructorbuddy.model.Model
 import com.calcprojects.constructorbuddy.model.Shape
 import com.calcprojects.constructorbuddy.model.Shape.*
 import com.calcprojects.constructorbuddy.ui.*
+import com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator
 import kotlinx.android.synthetic.main.fragment_calculator.*
 
 /**
  * A simple [Fragment] subclass.
  */
+
+
 class CalculatorFragment : Fragment() {
 
     private lateinit var viewModel: CalcViewModel
@@ -50,102 +54,86 @@ class CalculatorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //recycler init
         adapterRecShape = AdapterRecyclerShapes(requireContext(), true) {}
-        val startPosition = values().indexOf(shape)
-        recycler_shapes_marked.initialize(adapterRecShape, startPosition, viewModel)
+        recycler_shapes_marked.initialize(
+            adapterRecShape, values().indexOf(shape), viewModel, indicator
+        )
 
+        //spinner init
+        val adapter = AdapterSpinnerMat(requireContext(), materials = materials)
+        spinner.initialize(adapter, viewModel)
 
-        viewModel.getShape().observe(viewLifecycleOwner, Observer {
+        //editText init
+        etField1.initWithTextView(tvField1)
+        etField2.initWithTextView(tvField2)
+        etField3.initWithTextView(tvField3)
+        etField4.initWithTextView(tvField4)
+        etField5.initWithTextView(tvField5)
 
-            setIntroText(it)
-            showFields(it)
-
-        })
-
-
-        indicator.attachToRecyclerView(recycler_shapes_marked)
-
-
-        val adapter = AdapterSpinnerMat(requireContext(), R.layout.holder_material, materials)
-        spinner.adapter = adapter
-
-        spinner.setSelection(3)
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) {
-
-            }
+        btn_byLength.setOnClickListener {
+            viewModel.setType(true)
         }
 
+        btn_byWeight.setOnClickListener {
+            viewModel.setType(false)
+        }
+
+        btn_calculate.setOnClickListener {
+            val par1 = etField1.getValue(layInp1, tvField1)
+            val par2 = etField2.getValue(layInp2, tvField2)
+            val par3 = etField3.getValue(layInp3, tvField3)
+            val par4 = etField4.getValue(layInp4, tvField4)
+            val par5 = etField5.getValue(layInp5, tvField5)
+            if (par1 != NO_INPUT && par2 != NO_INPUT && par3 != NO_INPUT && par4 != NO_INPUT
+                && par5 != NO_INPUT && par1 != null && par2 != null
+            )
+                viewModel.setParameters(par1, par2, par3, par4, par5)
+        }
+
+        viewModel.getType().observe(viewLifecycleOwner, Observer {
+
+            btn_byLength.setSelectedOption(it)
+            btn_byWeight.setSelectedOption(!it)
+
+            tvField1.text =
+                if (it) requireContext().getString(R.string.length) + " (L):"
+                else requireContext().getString(R.string.weight) + " (Wg):"
+            etField1.text.clear()
+            tvField1.warning(false)
+        })
+
+        viewModel.getShape().observe(viewLifecycleOwner, Observer
+        {
+            setIntroText(it)
+            showFields(it)
+        })
+
+        viewModel.getModel().observe(viewLifecycleOwner, Observer {
+
+            Log.d("asafe", "in Observer: weight: ${it?.weight}")
+
+            it?.run {
+                tv_result_weight_length.text =
+                    if (btn_byLength.tag == SELECTED)
+                        "${requireContext().getString(R.string.weight)} = ${decFormatter2p.format(
+                            weight
+                        )}"
+                    else "${requireContext().getString(R.string.length)} = ${decFormatter2p.format(
+                        length
+                    )}"
+
+                Log.d("asafe", "in Observer: length: ${it.length}")
+
+            }
+        })
+
     }
 
-
-/*
-         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-             super.onViewCreated(view, savedInstanceState)
-
-             shape?.let {
-                 imageView_sel_shape.setImageResource(it.markedImageRes)
-                 showFields(it)
-                 setIntroText(it)
-             }
-             material?.let {
-                 imageView_sel_material.setImageResource(it.imageRes)
-                 textView_material_name_show.text = requireContext().getString(it.nameRes)
-                 val density =
-                     requireContext().getString(R.string.density) + ": ${it.density} ${it.unit}"
-                 textView_density_show.text = density
-             }
-
-             viewModel.getModel().observe(viewLifecycleOwner, Observer {
-                 it?.run {
-                     layout_fields_result.visibility = View.VISIBLE
-                     textView_result_weight_length.text = weight.toString()
-                     textView_result_volume.text = volume.toString()
-                 } ?: run {
-                     layout_fields_result.visibility = View.GONE
-                 }
-             })
-
-             button_calculate.setOnClickListener {
-                 if (checkCompletion()) {
-                     val model = shape?.let { s -> material?.let { m -> calculate(s, m) } }
-                     viewModel.setModel(model)
-                 }
-             }
-
-             button_clear.setOnClickListener {
-                 viewModel.setModel(null)
-                 clearInput()
-             }
-         }
-*/
-
-/*    private fun checkCompletion(): Boolean {
-        return editText_field_1.warn() &&
-                editText_field_2.warn() &&
-                editText_field_3.warn() &&
-                editText_field_4.warn() &&
-                editText_field_5.warn()
-    }*/
-
-/*    private val EditText.warning: Boolean
-        get() = if (visibility == View.VISIBLE) text.toString() != "" else true
-
-    private fun EditText.warn(): Boolean {
-        val warn = if (visibility == View.VISIBLE) {
-            text.toString() != ""
-        } else true
-        if (warn) hint = requireContext().getString(R.string.inputError)
-        return warn
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.removeSources()
     }
-
-    private fun EditText.clearWarn() {
-
-    }*/
 
     private fun clearInput() {
         etField1.text.clear()
@@ -153,31 +141,20 @@ class CalculatorFragment : Fragment() {
         etField3.text.clear()
         etField4.text.clear()
         etField5.text.clear()
+        tvField1.warning(false)
+        tvField2.warning(false)
+        tvField3.warning(false)
+        tvField4.warning(false)
+        tvField5.warning(false)
     }
 
-    private fun calculate(shape: Shape, material: Material): Model? {
-
-        val res1: Double? by lazy { etField1.getValue() }
-        val res2: Double? by lazy { etField2.getValue() }
-        val res3: Double? by lazy { etField3.getValue() }
-        val res4: Double? by lazy { etField4.getValue() }
-        val res5: Double? by lazy { etField5.getValue() }
-
-        return res1?.let { r1 ->
-            res2?.let { r2 ->
-                Model.Builder
-                    .ByLength(r1)
-                    .material(material)
-                    .shape(shape)
-                    .param2(r2).param3(res3).param4(res4).param5(res5)
-                    .build()
+    private fun EditText.getValue(layout: ConstraintLayout, tv: TextView): Double? {
+        return if (layout.visibility == View.VISIBLE) {
+            if (text.toString() != "") text.toString().toDouble() else {
+                tv.warning(true)
+                NO_INPUT
             }
-        }
-
-    }
-
-    private fun EditText.getValue(): Double? {
-        return if (text.toString() != "") text.toString().toDouble() else null
+        } else null
     }
 
     private fun ConstraintLayout.hide() = run { visibility = View.GONE }
@@ -186,6 +163,7 @@ class CalculatorFragment : Fragment() {
 
     private fun showFields(shape: Shape) {
 
+        clearInput()
         layInp1.show()
         layInp2.show()
         when (shape) {
@@ -231,14 +209,12 @@ class CalculatorFragment : Fragment() {
 
     private fun setIntroText(shape: Shape) {
 
-        val length: String by lazy { requireContext().getString(R.string.length) + " (L):" }
         val width: String by lazy { requireContext().getString(R.string.width) + " (W):" }
         val height: String by lazy { requireContext().getString(R.string.height) + " (H):" }
         val diameter: String by lazy { requireContext().getString(R.string.diameter) + " (D):" }
         val thickness: String by lazy { requireContext().getString(R.string.thickness) }
         val side: String by lazy { requireContext().getString(R.string.side) + " (S):" }
 
-        tvField1.text = length
         tvField2.text = when (shape) {
             PIPE, ROUND_BAR, HEXAGONAL_TUBE -> diameter
             ANGLE, BEAM, CHANNEL, FLAT_BAR, HEXAGONAL_HEX, SQUARE_TUBE, T_BAR -> width
@@ -254,62 +230,76 @@ class CalculatorFragment : Fragment() {
         tvField4.text = when (shape) {
             ANGLE, CHANNEL, SQUARE_TUBE, T_BAR -> "$thickness (T):"
             BEAM -> "$thickness (T1):"
+
             FLAT_BAR, HEXAGONAL_BAR, HEXAGONAL_HEX, HEXAGONAL_TUBE, PIPE, ROUND_BAR, SQUARE_BAR -> ""
         }
         tvField5.text = if (shape == BEAM) "$thickness (T2):" else ""
 
-
     }
-
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        Log.d("hkjg", "CALC.FR _ onActivityCreated")
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("hkjg", "CALC.FR _ onStart")
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("hkjg", "CALC.FR _ onStop")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d("hkjg", "CALC.FR _ onDestroyView")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("hkjg", "CALC.FR _ onDestroyView")
-
-    }
-
 
     private fun RecyclerView.initialize(
         adapter: AdapterRecyclerShapes,
-        startPosition: Int,
-        viewModel: CalcViewModel
+        startPosition: Int? = null,
+        viewModel: CalcViewModel? = null,
+        indicator: IndefinitePagerIndicator? = null
     ) {
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
         this.adapter = adapter
-        scrollToPosition(startPosition)
+        startPosition?.run { scrollToPosition(this) }
         this.attachSnapHelperWithListener(
             PagerSnapHelper(),
             onSnapPositionChangeListener = object : OnSnapPositionChangeListener {
                 override fun onSnapPositionChange(position: Int) {
-                    viewModel.setShape(Shape.values()[position])
+                    viewModel?.setShape(Shape.values()[position])
                 }
             })
+        indicator?.attachToRecyclerView(this)
+    }
+
+    private fun Spinner.initialize(
+        adapter: AdapterSpinnerMat,
+        viewModel: CalcViewModel? = null,
+        startPosition: Int? = null
+    ) {
+        this.adapter = adapter
+        startPosition?.run { setSelection(this) }
+        onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
+            ) {
+                viewModel?.setMaterial(materials[position])
+            }
+        }
+    }
+
+    private fun EditText.initWithTextView(tv: TextView) {
+        addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                tv.warning(false)
+            }
+        })
+    }
+
+    private fun Button.setSelectedOption(selected: Boolean) {
+        background = if (selected) {
+            tag = SELECTED
+            context.getDrawable(R.drawable.background_btn_stay_pressed)
+        } else {
+            tag = UNSELECTED
+            context.getDrawable(R.drawable.background_btn)
+        }
+    }
+
+    private fun TextView.warning(warn: Boolean) {
+        setTextColor(resources.getColor(if (warn) android.R.color.holo_red_dark else android.R.color.black))
     }
 
 }

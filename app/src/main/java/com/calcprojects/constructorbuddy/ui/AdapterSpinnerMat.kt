@@ -13,7 +13,9 @@ import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Material
 
 
-class AdapterSpinnerMat(context: Context, res: Int, materials: Array<Material>) :
+class AdapterSpinnerMat(
+    context: Context, res: Int = R.layout.holder_material, materials: Array<Material>
+) :
     ArrayAdapter<Material>(context, res, materials) {
 
     private val resource = res
