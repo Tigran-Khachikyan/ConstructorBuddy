@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="com.calcprojects.constructorbuddy.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_calculateActivity"
+            app:destination="@id/calculateActivity" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_saved"
@@ -22,4 +26,19 @@
         android:name="com.calcprojects.constructorbuddy.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/shapesFragment"
+        android:name="com.calcprojects.constructorbuddy.ui.shapes.ShapesFragment"
+        android:label="fragment_shapes"
+        tools:layout="@layout/fragment_shapes" />
+    <fragment
+        android:id="@+id/calculatorFragment"
+        android:name="com.calcprojects.constructorbuddy.ui.calculator.CalculatorFragment"
+        android:label="fragment_calculator"
+        tools:layout="@layout/fragment_calculator" />
+    <activity
+        android:id="@+id/calculateActivity"
+        android:name="com.calcprojects.constructorbuddy.ui.CalculateActivity"
+        android:label="activity_calculate"
+        tools:layout="@layout/activity_calculate" />
 </navigation>
