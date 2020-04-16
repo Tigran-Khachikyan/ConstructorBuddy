@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.calcprojects.constructorbuddy.R
+import com.calcprojects.constructorbuddy.model.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.ParentViewState
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 import kotlinx.coroutines.*
@@ -30,7 +31,19 @@ class SplashFragment : Fragment(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainViewModel.setState(ParentViewState.FULL_SCREEN)
+        MainViewModel.setState(
+            StateUIActivity(
+                (View.SYSTEM_UI_FLAG_IMMERSIVE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN),
+                false,
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            )
+        )
+
         job = Job()
     }
 
@@ -78,21 +91,6 @@ class SplashFragment : Fragment(), CoroutineScope {
 
     }
 
-    @SuppressLint("SourceLockedOrientationActivity")
-    override fun onStop() {
-        super.onStop()
-
-        activity?.run {
-            Log.d("ghstssd", "orien: ${resources.configuration.orientation}")
-
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-            Log.d("ghstssd", "orien after: ${resources.configuration.orientation}")
-
-        }
-
-        Log.d("ghstd", "onStop(): navController: ${navController.hashCode()}")
-
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

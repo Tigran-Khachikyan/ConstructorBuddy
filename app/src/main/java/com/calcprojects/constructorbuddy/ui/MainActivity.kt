@@ -13,7 +13,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.ui.ParentViewState.*
-import com.calcprojects.constructorbuddy.ui.result.ResultFragmentDirections
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -25,24 +24,14 @@ class MainActivity : AppCompatActivity() {
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         mainViewModel.getState().observe(this, Observer {
-            Log.d("asaswe2w", "observer: STATE: $it")
 
-            when (it!!) {
-                DEFAULT_SHOW_ALL -> {
-                    setFullScreenModeOff()
-                    nav_view?.setVisibility(true)
-                }
-                FULL_SCREEN -> {
-                    setFullScreenModeOn()
-                    nav_view?.setVisibility(false)
-                }
-                HIDDEN_NAVIGATION_BAR -> {
-                    setFullScreenModeOff()
-                    nav_view?.setVisibility(false)
-                }
-            }
+            it.systemUiVisibility?.let { sv -> window.decorView.systemUiVisibility = sv }
+            it.requestedOrientation?.let { ro -> requestedOrientation = ro }
+            nav_view.visibility = if (it.bottomNavViewVisibility) View.VISIBLE else View.GONE
+
+            Log.d("kasasja", "STATE: $it")
+
         })
-
 
 
         val navController = findNavController(R.id.nav_host_fragment)
@@ -64,17 +53,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun View.setVisibility(visible: Boolean) {
-        visibility = if (visible) View.VISIBLE else View.GONE
-    }
-
     private fun setFullScreenModeOn() {
         /*  val a = this.window.decorView.systemUiVisibility
           Log.d("hkjg", "SHAPES _ AAAAAAAAA: $a")*/
         window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
                 // Set the content to appear under the system bars so that the
                 // content doesn't resize when the system bars hide and show.
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 // Hide the nav bar and status bar
@@ -83,9 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setFullScreenModeOff() {
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_LAYOUT_FLAGS
-
-
-        // window.decorView.systemUiVisibility = View.SYST
+        window.decorView.systemUiVisibility =
+            (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
     }
 }

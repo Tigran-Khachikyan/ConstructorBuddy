@@ -33,7 +33,8 @@
         <action
             android:id="@+id/action_start_calculation"
             app:destination="@id/destination_calculator"
-            app:popUpTo="@id/destination_home" />
+            app:popUpTo="@id/destination_home"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/destination_calculator"
@@ -48,6 +49,9 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="null" />
+        <action
+            android:id="@+id/action_open_settings"
+            app:destination="@id/destination_settings" />
     </fragment>
     <fragment
         android:id="@+id/destination_splash"
@@ -63,9 +67,5 @@
         android:id="@+id/destination_result"
         android:name="com.calcprojects.constructorbuddy.ui.result.ResultFragment"
         android:label="result"
-        tools:layout="@layout/fragment_result">
-        <action
-            android:id="@+id/action_open_settings"
-            app:destination="@id/destination_settings" />
-    </fragment>
+        tools:layout="@layout/fragment_result"/>
 </navigation>

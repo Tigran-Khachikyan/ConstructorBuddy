@@ -3,21 +3,23 @@ package com.calcprojects.constructorbuddy.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.calcprojects.constructorbuddy.model.StateUIActivity
 
 class MainViewModel : ViewModel() {
 
     companion object {
-        fun setState(newState: ParentViewState) {
+        fun setState(newState: StateUIActivity) {
             state.value = newState
         }
 
-        private val state = MutableLiveData<ParentViewState>()
+        private val state = MutableLiveData<StateUIActivity>()
     }
 
 
-    fun getState(): LiveData<ParentViewState> {
+    fun getState(): LiveData<StateUIActivity> {
         if (state.value == null)
-            state.value = ParentViewState.DEFAULT_SHOW_ALL
+            state.value = StateUIActivity()
+
         return state
     }
 }

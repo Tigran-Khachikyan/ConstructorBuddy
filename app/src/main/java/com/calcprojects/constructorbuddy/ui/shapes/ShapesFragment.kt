@@ -1,5 +1,6 @@
 package com.calcprojects.constructorbuddy.ui.shapes
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Shape
+import com.calcprojects.constructorbuddy.model.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.*
 import kotlinx.android.synthetic.main.fragment_shapes.*
 import kotlinx.coroutines.*
@@ -31,7 +33,18 @@ class ShapesFragment : Fragment(), CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        MainViewModel.setState(ParentViewState.FULL_SCREEN)
+        MainViewModel.setState(
+            StateUIActivity(
+                (View.SYSTEM_UI_FLAG_IMMERSIVE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN),
+                false,
+                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            )
+        )
         Log.d("asaswe2w","Shapes: onCreate")
 
 

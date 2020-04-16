@@ -1,5 +1,6 @@
 package com.calcprojects.constructorbuddy.ui.calculator
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,6 +13,7 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +23,7 @@ import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Material
 import com.calcprojects.constructorbuddy.model.Shape
 import com.calcprojects.constructorbuddy.model.Shape.*
+import com.calcprojects.constructorbuddy.model.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.*
 import com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator
 import kotlinx.android.synthetic.main.fragment_calculator.*
@@ -40,9 +43,10 @@ class CalculatorFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d("asaswew","CalcFr: OnCreate")
+        Log.d("asaswew", "CalcFr: OnCreate")
 
-        MainViewModel.setState(ParentViewState.HIDDEN_NAVIGATION_BAR)
+        activity?.run { setTheme(R.style.NoActionBar) }
+
         viewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
         val shapeName = arguments?.let {
             CalculatorFragmentArgs.fromBundle(it).shapeSelected
@@ -53,8 +57,14 @@ class CalculatorFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-
-        Log.d("asaswew","CalcFr: OnCreateView")
+        MainViewModel.setState(
+            StateUIActivity(
+                View.SYSTEM_UI_FLAG_VISIBLE,
+                false,
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            )
+        )
+        Log.d("asaswew", "CalcFr: OnCreateView")
 
         return inflater.inflate(R.layout.fragment_calculator, container, false)
     }
@@ -62,7 +72,7 @@ class CalculatorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("asaswew","calc: onViewCreated")
+        Log.d("asaswew", "calc: onViewCreated")
 
         //recycler init
         adapterRecShape = AdapterRecyclerShapes(requireContext(), true) {}
@@ -90,7 +100,7 @@ class CalculatorFragment : Fragment() {
         }
 
         btn_calculate.setOnClickListener {
-            val par1 = etField1.getValue(layInp1, tvField1)
+       /*     val par1 = etField1.getValue(layInp1, tvField1)
             val par2 = etField2.getValue(layInp2, tvField2)
             val par3 = etField3.getValue(layInp3, tvField3)
             val par4 = etField4.getValue(layInp4, tvField4)
@@ -98,7 +108,14 @@ class CalculatorFragment : Fragment() {
             if (par1 != NO_INPUT && par2 != NO_INPUT && par3 != NO_INPUT && par4 != NO_INPUT
                 && par5 != NO_INPUT && par1 != null && par2 != null
             )
-                viewModel.setParameters(par1, par2, par3, par4, par5)
+                viewModel.setParameters(par1, par2, par3, par4, par5)*/
+
+            it.findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
+
+        }
+
+        btn_clear.setOnClickListener {
+            it.findNavController().navigate(CalculatorFragmentDirections.actionOpenSettings())
         }
 
         viewModel.getType().observe(viewLifecycleOwner, Observer {
@@ -123,7 +140,7 @@ class CalculatorFragment : Fragment() {
 
             Log.d("asafe", "in Observer: weight: ${it?.weight}")
 
-            it?.run {
+            /*it?.run {
                 tv_result_weight_length.text =
                     if (btn_byLength.tag == SELECTED)
                         "${requireContext().getString(R.string.weight)} = ${decFormatter2p.format(
@@ -135,7 +152,7 @@ class CalculatorFragment : Fragment() {
 
                 Log.d("asafe", "in Observer: length: ${it.length}")
 
-            }
+            }*/
         })
 
     }
@@ -315,7 +332,13 @@ class CalculatorFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("asaswew","calc: onresume")
+        Log.d("asaswew", "calc: onresume")
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        activity?.run { setTheme(R.style.AppTheme) }
 
     }
 

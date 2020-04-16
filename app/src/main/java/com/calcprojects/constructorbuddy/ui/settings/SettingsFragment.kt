@@ -20,7 +20,6 @@ class SettingsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        MainViewModel.setState(ParentViewState.DEFAULT_SHOW_ALL)
 
         Log.d("hkjg","SETTINGS _ onCreate")
 
