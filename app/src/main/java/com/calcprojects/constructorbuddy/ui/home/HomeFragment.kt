@@ -7,17 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.ui.ActivityViewStates
+import com.calcprojects.constructorbuddy.ui.ParentViewState
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        MainViewModel.setState(ActivityViewStates.DEFAULT_SHOW_ALL)
+        MainViewModel.setState(ParentViewState.DEFAULT_SHOW_ALL)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 

@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.ui.ActivityViewStates
+import com.calcprojects.constructorbuddy.ui.ParentViewState
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 
 class ResultFragment : Fragment() {
@@ -18,7 +18,7 @@ class ResultFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainViewModel.setState(ActivityViewStates.HIDDEN_NAVIGATION_BAR)
+        MainViewModel.setState(ParentViewState.HIDDEN_NAVIGATION_BAR)
 
     }
 

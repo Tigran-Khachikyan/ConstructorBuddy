@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.ui.ActivityViewStates
+import com.calcprojects.constructorbuddy.ui.ParentViewState
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 
 class SettingsFragment : Fragment() {
@@ -20,7 +20,7 @@ class SettingsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        MainViewModel.setState(ActivityViewStates.DEFAULT_SHOW_ALL)
+        MainViewModel.setState(ParentViewState.DEFAULT_SHOW_ALL)
 
         Log.d("hkjg","SETTINGS _ onCreate")
 

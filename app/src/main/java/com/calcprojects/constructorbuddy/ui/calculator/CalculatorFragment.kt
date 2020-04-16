@@ -2,7 +2,6 @@ package com.calcprojects.constructorbuddy.ui.calculator
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.Layout
 import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -43,7 +42,7 @@ class CalculatorFragment : Fragment() {
 
         Log.d("asaswew","CalcFr: OnCreate")
 
-        MainViewModel.setState(ActivityViewStates.HIDDEN_NAVIGATION_BAR)
+        MainViewModel.setState(ParentViewState.HIDDEN_NAVIGATION_BAR)
         viewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
         val shapeName = arguments?.let {
             CalculatorFragmentArgs.fromBundle(it).shapeSelected

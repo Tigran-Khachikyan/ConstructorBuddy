@@ -1,19 +1,19 @@
 package com.calcprojects.constructorbuddy.ui.splash
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.ui.ActivityViewStates
+import com.calcprojects.constructorbuddy.ui.ParentViewState
 import com.calcprojects.constructorbuddy.ui.MainViewModel
-import com.calcprojects.constructorbuddy.ui.home.HomeFragmentDirections
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -30,7 +30,7 @@ class SplashFragment : Fragment(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainViewModel.setState(ActivityViewStates.FULL_SCREEN)
+        MainViewModel.setState(ParentViewState.FULL_SCREEN)
         job = Job()
     }
 
@@ -78,8 +78,18 @@ class SplashFragment : Fragment(), CoroutineScope {
 
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onStop() {
         super.onStop()
+
+        activity?.run {
+            Log.d("ghstssd", "orien: ${resources.configuration.orientation}")
+
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            Log.d("ghstssd", "orien after: ${resources.configuration.orientation}")
+
+        }
+
         Log.d("ghstd", "onStop(): navController: ${navController.hashCode()}")
 
     }

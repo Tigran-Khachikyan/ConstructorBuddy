@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Shape
 import com.calcprojects.constructorbuddy.ui.*
-import com.calcprojects.constructorbuddy.ui.calculator.CalculatorFragment
 import kotlinx.android.synthetic.main.fragment_shapes.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -33,7 +31,7 @@ class ShapesFragment : Fragment(), CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        MainViewModel.setState(ActivityViewStates.FULL_SCREEN)
+        MainViewModel.setState(ParentViewState.FULL_SCREEN)
         Log.d("asaswe2w","Shapes: onCreate")
 
 

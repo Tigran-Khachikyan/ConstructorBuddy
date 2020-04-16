@@ -7,17 +7,17 @@ import androidx.lifecycle.ViewModel
 class MainViewModel : ViewModel() {
 
     companion object {
-        fun setState(newState: ActivityViewStates) {
+        fun setState(newState: ParentViewState) {
             state.value = newState
         }
 
-        private val state = MutableLiveData<ActivityViewStates>()
+        private val state = MutableLiveData<ParentViewState>()
     }
 
 
-    fun getState(): LiveData<ActivityViewStates> {
+    fun getState(): LiveData<ParentViewState> {
         if (state.value == null)
-            state.value = ActivityViewStates.DEFAULT_SHOW_ALL
+            state.value = ParentViewState.DEFAULT_SHOW_ALL
         return state
     }
 }
