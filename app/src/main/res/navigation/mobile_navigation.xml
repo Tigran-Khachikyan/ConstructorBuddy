@@ -3,42 +3,69 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/destination_splash">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/destination_home"
         android:name="com.calcprojects.constructorbuddy.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_navigation_home_to_calculateActivity"
-            app:destination="@id/calculateActivity" />
+            android:id="@+id/action_get_started"
+            app:destination="@id/destination_shapes" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_saved"
+        android:id="@+id/destination_saved"
         android:name="com.calcprojects.constructorbuddy.ui.saved.SavedFragment"
         android:label="@string/title_saved"
         tools:layout="@layout/fragment_saved" />
 
     <fragment
-        android:id="@+id/navigation_settings"
+        android:id="@+id/destination_settings"
         android:name="com.calcprojects.constructorbuddy.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
-        android:id="@+id/shapesFragment"
+        android:id="@+id/destination_shapes"
         android:name="com.calcprojects.constructorbuddy.ui.shapes.ShapesFragment"
-        android:label="fragment_shapes"
-        tools:layout="@layout/fragment_shapes" />
+        tools:layout="@layout/fragment_shapes">
+        <action
+            android:id="@+id/action_start_calculation"
+            app:destination="@id/destination_calculator"
+            app:popUpTo="@id/destination_home" />
+    </fragment>
     <fragment
-        android:id="@+id/calculatorFragment"
+        android:id="@+id/destination_calculator"
         android:name="com.calcprojects.constructorbuddy.ui.calculator.CalculatorFragment"
-        android:label="fragment_calculator"
-        tools:layout="@layout/fragment_calculator" />
-    <activity
-        android:id="@+id/calculateActivity"
-        android:name="com.calcprojects.constructorbuddy.ui.CalculateActivity"
-        android:label="activity_calculate"
-        tools:layout="@layout/activity_calculate" />
+        android:label="@string/title_Calculator"
+        tools:layout="@layout/fragment_calculator">
+        <action
+            android:id="@+id/action_show_result"
+            app:destination="@id/destination_result" />
+        <argument
+            android:name="shape_selected"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_splash"
+        android:name="com.calcprojects.constructorbuddy.ui.splash.SplashFragment"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_finish_splash"
+            app:destination="@id/destination_home"
+            app:popUpTo="@id/destination_splash"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_result"
+        android:name="com.calcprojects.constructorbuddy.ui.result.ResultFragment"
+        android:label="result"
+        tools:layout="@layout/fragment_result">
+        <action
+            android:id="@+id/action_open_settings"
+            app:destination="@id/destination_settings" />
+    </fragment>
 </navigation>

@@ -34,25 +34,36 @@ import kotlinx.android.synthetic.main.fragment_calculator.*
 class CalculatorFragment : Fragment() {
 
     private lateinit var viewModel: CalcViewModel
-    private lateinit var shape: Shape
+    private var shape: Shape? = null
     private lateinit var adapterRecShape: AdapterRecyclerShapes
     private val materials by lazy { Material.values() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.d("asaswew","CalcFr: OnCreate")
+
+        MainViewModel.setState(ActivityViewStates.HIDDEN_NAVIGATION_BAR)
         viewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
-        shape = valueOf(arguments!!.getString(SHAPE_KEY, DEF_VALUE))
+        val shapeName = arguments?.let {
+            CalculatorFragmentArgs.fromBundle(it).shapeSelected
+        }
+        shape = shapeName?.let { Shape.valueOf(it) }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
+        Log.d("asaswew","CalcFr: OnCreateView")
+
         return inflater.inflate(R.layout.fragment_calculator, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.d("asaswew","calc: onViewCreated")
 
         //recycler init
         adapterRecShape = AdapterRecyclerShapes(requireContext(), true) {}
@@ -300,6 +311,13 @@ class CalculatorFragment : Fragment() {
 
     private fun TextView.warning(warn: Boolean) {
         setTextColor(resources.getColor(if (warn) android.R.color.holo_red_dark else android.R.color.black))
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("asaswew","calc: onresume")
+
     }
 
 }

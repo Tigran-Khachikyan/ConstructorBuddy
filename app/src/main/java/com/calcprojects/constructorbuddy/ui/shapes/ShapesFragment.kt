@@ -7,13 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Shape
-import com.calcprojects.constructorbuddy.ui.AdapterRecyclerShapes
-import com.calcprojects.constructorbuddy.ui.SHAPE_KEY
+import com.calcprojects.constructorbuddy.ui.*
 import com.calcprojects.constructorbuddy.ui.calculator.CalculatorFragment
 import kotlinx.android.synthetic.main.fragment_shapes.*
 import kotlinx.coroutines.*
@@ -33,46 +33,19 @@ class ShapesFragment : Fragment(), CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activity?.run {
+        MainViewModel.setState(ActivityViewStates.FULL_SCREEN)
+        Log.d("asaswe2w","Shapes: onCreate")
 
-            val a = this.window.decorView.systemUiVisibility
-            Log.d("hkjg", "SHAPES _ AAAAAAAAA: $a")
-
-            this.window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
-                    // Set the content to appear under the system bars so that the
-                    // content doesn't resize when the system bars hide and show.
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    // Hide the nav bar and status bar
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN)
-        }
-
-        Log.d("hkjg", "SHAPES _ onCreate")
 
 
         job = Job()
 
-        func = { s: Shape ->
-            val newFragment = CalculatorFragment()
-            newFragment.arguments = bundleOf(SHAPE_KEY to s.name)
-            activity?.run {
-                launch {
-                    delay(1200)
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_calculation, newFragment)
-                        .commit()
-                }
-            }
-        }
-        adapter = AdapterRecyclerShapes(requireContext(), false, func)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        Log.d("hkjg", "SHAPES _ onCreateView")
+        Log.d("asaswe2w","Shapes: onCreateView")
 
         return inflater.inflate(R.layout.fragment_shapes, container, false)
     }
@@ -80,7 +53,17 @@ class ShapesFragment : Fragment(), CoroutineScope {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("hkjg", "SHAPES _ onViewCreated")
+        func = { s: Shape ->
+            launch {
+                delay(1200)
+                val action = ShapesFragmentDirections.actionStartCalculation(s.name)
+                view.findNavController().navigate(action)
+            }
+        }
+
+        adapter = AdapterRecyclerShapes(requireContext(), false, func)
+
+        Log.d("asaswe2w","Shapes: onViewCreated")
 
 
         recycler_shape_fr.setHasFixedSize(true)
@@ -89,43 +72,49 @@ class ShapesFragment : Fragment(), CoroutineScope {
         recycler_shape_fr.adapter = adapter
     }
 
+
     override fun onResume() {
         super.onResume()
         adapter.selectedPosition = null
         adapter.notifyDataSetChanged()
-        Log.d("hkjg", "SHAPES _ onResume")
+        Log.d("asaswe2w","Shapes: onResume")
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("hkjg", "SHAPES _ onDestroy")
-        activity?.run { window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_IMMERSIVE }
+        Log.d("asaswe2w","Shapes: onDestroy")
         job.cancel()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Log.d("hkjg", "SHAPES _ onActivityCreated")
+        Log.d("asaswe2w","Shapes: onActivityCreated")
+
 
     }
 
     override fun onStart() {
         super.onStart()
-        Log.d("hkjg", "SHAPES _ onStart")
+        Log.d("asaswe2w","Shapes: onStart")
+
     }
 
     override fun onPause() {
         super.onPause()
+        Log.d("asaswe2w","Shapes: onPause")
+
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d("hkjg", "SHAPES _ onStop")
+        Log.d("asaswe2w","Shapes: onStop")
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d("hkjg", "SHAPES _ onDestroyView")
+        Log.d("asaswe2w","Shapes: onDestroyView")
     }
 
 
