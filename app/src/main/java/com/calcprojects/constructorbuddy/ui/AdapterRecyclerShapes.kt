@@ -18,6 +18,7 @@ class AdapterRecyclerShapes(
 ) :
     RecyclerView.Adapter<AdapterRecyclerShapes.Holder>() {
 
+    private var clicked = false
     var selectedPosition: Int? = null
     private val images: Array<Shape> by lazy { Shape.values() }
 
@@ -28,9 +29,12 @@ class AdapterRecyclerShapes(
 
         init {
             itemView.setOnClickListener {
-                func(images[adapterPosition])
-                selectedPosition = adapterPosition
-                notifyDataSetChanged()
+                if (!clicked) {
+                    func(images[adapterPosition])
+                    selectedPosition = adapterPosition
+                    notifyDataSetChanged()
+                    clicked = true
+                }
             }
         }
     }

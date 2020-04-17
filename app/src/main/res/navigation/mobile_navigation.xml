@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_get_started"
-            app:destination="@id/destination_shapes" />
+            app:destination="@id/destination_shapes"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_bottom"
+            app:popEnterAnim="@anim/slide_in_bottom"
+            app:popExitAnim="@anim/slide_out_top" />
     </fragment>
 
     <fragment
@@ -33,6 +37,10 @@
         <action
             android:id="@+id/action_start_calculation"
             app:destination="@id/destination_calculator"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_bottom"
+            app:popExitAnim="@anim/slide_out_top"
             app:popUpTo="@id/destination_home"
             app:popUpToInclusive="false" />
     </fragment>
@@ -43,7 +51,11 @@
         tools:layout="@layout/fragment_calculator">
         <action
             android:id="@+id/action_show_result"
-            app:destination="@id/destination_result" />
+            app:destination="@id/destination_result"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <argument
             android:name="shape_selected"
             app:argType="string"
@@ -51,7 +63,11 @@
             android:defaultValue="null" />
         <action
             android:id="@+id/action_open_settings"
-            app:destination="@id/destination_settings" />
+            app:destination="@id/destination_settings"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_bottom"
+            app:popEnterAnim="@anim/slide_in_bottom"
+            app:popExitAnim="@anim/slide_out_top" />
     </fragment>
     <fragment
         android:id="@+id/destination_splash"
@@ -60,6 +76,8 @@
         <action
             android:id="@+id/action_finish_splash"
             app:destination="@id/destination_home"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
             app:popUpTo="@id/destination_splash"
             app:popUpToInclusive="true" />
     </fragment>

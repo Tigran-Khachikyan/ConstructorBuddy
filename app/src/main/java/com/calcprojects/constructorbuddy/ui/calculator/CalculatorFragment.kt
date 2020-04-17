@@ -27,14 +27,31 @@ import com.calcprojects.constructorbuddy.model.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.*
 import com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator
 import kotlinx.android.synthetic.main.fragment_calculator.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 /**
  * A simple [Fragment] subclass.
  */
 
 
-class CalculatorFragment : Fragment() {
+class CalculatorFragment : Fragment(), CoroutineScope {
 
+
+    private lateinit var job: Job
+    override val coroutineContext: CoroutineContext
+        get() = Main + Job()
+    private val state: StateUIActivity by lazy {
+        StateUIActivity(
+            View.SYSTEM_UI_FLAG_VISIBLE,
+            false,
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        )
+    }
     private lateinit var viewModel: CalcViewModel
     private var shape: Shape? = null
     private lateinit var adapterRecShape: AdapterRecyclerShapes
@@ -43,9 +60,13 @@ class CalculatorFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d("asaswew", "CalcFr: OnCreate")
+        job = Job()
+        launch {
+            delay(SCREEN_DELAY_TIME.toLong())
+        }
 
-        activity?.run { setTheme(R.style.NoActionBar) }
+        Log.d("hhas", "CALC: onCreate()")
+
 
         viewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
         val shapeName = arguments?.let {
@@ -57,14 +78,8 @@ class CalculatorFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        MainViewModel.setState(
-            StateUIActivity(
-                View.SYSTEM_UI_FLAG_VISIBLE,
-                false,
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            )
-        )
-        Log.d("asaswew", "CalcFr: OnCreateView")
+
+        Log.d("hhas", "CALC: onCreateView()")
 
         return inflater.inflate(R.layout.fragment_calculator, container, false)
     }
@@ -72,7 +87,7 @@ class CalculatorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("asaswew", "calc: onViewCreated")
+        Log.d("hhas", "CALC: onViewCreated()")
 
         //recycler init
         adapterRecShape = AdapterRecyclerShapes(requireContext(), true) {}
@@ -100,15 +115,15 @@ class CalculatorFragment : Fragment() {
         }
 
         btn_calculate.setOnClickListener {
-       /*     val par1 = etField1.getValue(layInp1, tvField1)
-            val par2 = etField2.getValue(layInp2, tvField2)
-            val par3 = etField3.getValue(layInp3, tvField3)
-            val par4 = etField4.getValue(layInp4, tvField4)
-            val par5 = etField5.getValue(layInp5, tvField5)
-            if (par1 != NO_INPUT && par2 != NO_INPUT && par3 != NO_INPUT && par4 != NO_INPUT
-                && par5 != NO_INPUT && par1 != null && par2 != null
-            )
-                viewModel.setParameters(par1, par2, par3, par4, par5)*/
+            /*     val par1 = etField1.getValue(layInp1, tvField1)
+                 val par2 = etField2.getValue(layInp2, tvField2)
+                 val par3 = etField3.getValue(layInp3, tvField3)
+                 val par4 = etField4.getValue(layInp4, tvField4)
+                 val par5 = etField5.getValue(layInp5, tvField5)
+                 if (par1 != NO_INPUT && par2 != NO_INPUT && par3 != NO_INPUT && par4 != NO_INPUT
+                     && par5 != NO_INPUT && par1 != null && par2 != null
+                 )
+                     viewModel.setParameters(par1, par2, par3, par4, par5)*/
 
             it.findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
 
@@ -157,9 +172,24 @@ class CalculatorFragment : Fragment() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d("hhas", "CALC: onStart()")
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("hhas", "CALC: onPause()")
+
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.removeSources()
+        Log.d("hhas", "CALC: onDestroyView()")
+
     }
 
     private fun clearInput() {
@@ -332,13 +362,23 @@ class CalculatorFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("asaswew", "calc: onresume")
+        Log.d("hhas", "CALC: onResume()")
 
+        MainViewModel.setState(state)
     }
 
     override fun onStop() {
         super.onStop()
+        Log.d("hhas", "CALC: onStop()")
+
         activity?.run { setTheme(R.style.AppTheme) }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("hhas", "CALC: onDestroy()")
+        job.cancel()
 
     }
 

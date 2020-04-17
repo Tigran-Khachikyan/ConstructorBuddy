@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.calcprojects.constructorbuddy.model.StateUIActivity
+import kotlinx.coroutines.delay
 
 class MainViewModel : ViewModel() {
 
     companion object {
+
         fun setState(newState: StateUIActivity) {
             state.value = newState
         }
