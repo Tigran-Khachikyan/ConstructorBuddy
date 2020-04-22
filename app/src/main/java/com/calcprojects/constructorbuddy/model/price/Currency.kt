@@ -1,5 +1,6 @@
 package com.calcprojects.constructorbuddy.model.price
 
+import androidx.room.TypeConverter
 import com.calcprojects.constructorbuddy.R
 
 enum class Currency(val nameRes: Int) {
@@ -60,4 +61,14 @@ enum class Currency(val nameRes: Int) {
     VES(R.string.VES),
     VND(R.string.VND),
     ZAR(R.string.ZAR)
+}
+
+class CurrencyTypeConverter {
+
+    @TypeConverter
+    fun getCurrency(res: Int): Currency? = Currency.values().find { c -> c.nameRes == res }
+
+    @TypeConverter
+    fun getCurrencyName(currency: Currency): Int = currency.nameRes
+
 }

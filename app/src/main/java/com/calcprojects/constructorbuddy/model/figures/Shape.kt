@@ -1,15 +1,23 @@
 package com.calcprojects.constructorbuddy.model.figures
 
+import androidx.room.*
 import com.calcprojects.constructorbuddy.model.figures.Form.*
 
+@Entity(tableName = "SHAPE")
+@TypeConverters(FormTypeConverter::class)
 data class Shape(
     val form: Form,
     var length: Double? = null,
     var width: Double? = null,
     var height: Double? = null,
     var thickness: Double? = null,
-    var thickness2: Double? = null
+    var thickness2: Double? = null,
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "shape_id")
+    var id: Int = 0
 ) {
+
     val area: Double?
         get() = when (form) {
             ANGLE -> width?.let { w -> height?.let { h -> w * h } }

@@ -1,5 +1,6 @@
 package com.calcprojects.constructorbuddy.model.figures
 
+import androidx.room.TypeConverter
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.units.Unit
 
@@ -16,4 +17,26 @@ enum class Substance(val nameRes: Int, val imageRes: Int, val density: Double) {
     GOLD(R.string.gold, R.mipmap.mat_gold, 19.32);
 
     val unit = Unit.METRIC.density
+}
+
+class SubstanceTypeConverter {
+
+    @TypeConverter
+    fun getSubstanceByNameRes(res: Int): Substance? = Substance.values().find { s -> s.nameRes == res }
+
+    @TypeConverter
+    fun getSubstanceName(substance: Substance): Int = substance.nameRes
+
+  /*  @TypeConverter
+    fun getSubstanceByImage(res: Int): Substance? = Substance.values().find { s -> s.imageRes == res }
+
+    @TypeConverter
+    fun getSubstanceImage(substance: Substance): Int = substance.imageRes*/
+
+ /*   @TypeConverter
+    fun getSubstanceByDensity(res: Int): Substance? = Substance.values().find { s -> s.nameRes == res }
+
+    @TypeConverter
+    fun getSubstanceName(substance: Substance): Int = substance.nameRes*/
+
 }

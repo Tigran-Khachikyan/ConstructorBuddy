@@ -1,16 +1,18 @@
 package com.calcprojects.constructorbuddy.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.calcprojects.constructorbuddy.model.figures.Material
 import com.calcprojects.constructorbuddy.model.figures.Shape
 import com.calcprojects.constructorbuddy.model.units.Unit
+import com.calcprojects.constructorbuddy.model.units.UnitTypeConverter
 import com.calcprojects.constructorbuddy.model.units.fromGCm3ToLbIn3
 
 @Entity(tableName = "MODELS")
-class Model private constructor(
+@TypeConverters(UnitTypeConverter::class)
+class Model constructor(
+    @Embedded
     val shape: Shape,
+    @Embedded
     val material: Material,
     val units: Unit,
     var weight: Double,

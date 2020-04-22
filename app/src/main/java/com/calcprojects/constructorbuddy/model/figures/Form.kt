@@ -1,5 +1,6 @@
 package com.calcprojects.constructorbuddy.model.figures
 
+import androidx.room.TypeConverter
 import com.calcprojects.constructorbuddy.R
 
 enum class Form(val nameRes: Int, val imageRes: Int, val markedImageRes: Int) {
@@ -15,4 +16,26 @@ enum class Form(val nameRes: Int, val imageRes: Int, val markedImageRes: Int) {
     HEXAGONAL_HEX(R.string.hexagonal_hex, R.mipmap.hexagonal_hex, R.mipmap.hexagonal_hex_prof),
     PIPE(R.string.pipe, R.mipmap.pipe, R.mipmap.pipe_prof),
     T_BAR(R.string.t_bar, R.mipmap.t_bar, R.mipmap.t_bar_prof)
+}
+
+class FormTypeConverter {
+
+    @TypeConverter
+    fun getFormByNameRes(res: Int): Form? = Form.values().find { f -> f.nameRes == res }
+
+    @TypeConverter
+    fun getCurrencyName(form: Form): Int = form.nameRes
+
+   /* @TypeConverter
+    fun getFormByImageRes(res: Int): Form? = Form.values().find { f -> f.imageRes == res }
+
+    @TypeConverter
+    fun getCurrencyImage(form: Form): Int = form.imageRes
+
+    @TypeConverter
+    fun getFormByMarkedImage(res: Int): Form? = Form.values().find { f -> f.markedImageRes == res }
+
+    @TypeConverter
+    fun getCurrencyMarkedImage(form: Form): Int = form.markedImageRes*/
+
 }

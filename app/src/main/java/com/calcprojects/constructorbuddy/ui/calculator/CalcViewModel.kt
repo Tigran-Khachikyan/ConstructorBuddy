@@ -83,7 +83,7 @@ class CalcViewModel : ViewModel() {
 
             Log.d("asafe", "combine inside")
 
-            params[0]?.let { p0 ->
+            /*params[0]?.let { p0 ->
                 params[1]?.let { p1 ->
                     if (type)
                         Model.Builder
@@ -99,7 +99,8 @@ class CalcViewModel : ViewModel() {
                         .param2(p1).param3(params[2]).param4(params[3]).param5(params[4])
                         .build()
                 }
-            }
+            }*/
+            null
         } else null
     }
 

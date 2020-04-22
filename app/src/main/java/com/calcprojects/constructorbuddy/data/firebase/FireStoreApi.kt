@@ -44,7 +44,7 @@ object FireStoreApi {
     }
 
     fun getMaterialPrices(): DocumentSnapshot? {
-        return fireStoreDb.collection(MATERIALS.name).document(PRICING).get(Source.CACHE).result
+        return fireStoreDb.collection(MATERIALS.name).document(PRICING).get().result
     }
 
     private fun writeToFireStore(docId: String, map: HashMap<String, Serializable>) {
