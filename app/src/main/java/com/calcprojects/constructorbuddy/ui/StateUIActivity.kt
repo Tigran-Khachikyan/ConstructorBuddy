@@ -1,4 +1,4 @@
-package com.calcprojects.constructorbuddy.model
+package com.calcprojects.constructorbuddy.ui
 
 data class StateUIActivity(
     val systemUiVisibility: Int? = null,

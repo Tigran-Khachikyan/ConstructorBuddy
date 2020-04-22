@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout="@layout/fragment_settings"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="measure units">
+
+        <Preference
+            android:title="assa"
+            android:summary="sldadshasjdalsfbafaasddad"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="pricing options">
+
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,8 +1,6 @@
 package com.calcprojects.constructorbuddy.ui.splash
 
-import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,10 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.model.StateUIActivity
-import com.calcprojects.constructorbuddy.ui.ParentViewState
+import com.calcprojects.constructorbuddy.ui.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -59,19 +56,12 @@ class SplashFragment : Fragment(), CoroutineScope {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = view.findNavController()
 
         Log.d("ghstd", "onViewCreated(): navController: ${navController.hashCode()}")
 
 
-        launch {
-            delay(3000)
-            Log.d("ghstd", "after DELAY(): navController: ${navController.hashCode()}")
-
-            navController?.navigate(SplashFragmentDirections.actionFinishSplash())
-        }
-
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -83,6 +73,13 @@ class SplashFragment : Fragment(), CoroutineScope {
         super.onResume()
         Log.d("ghstd", "onResume(): navController: ${navController.hashCode()}")
 
+        launch {
+            delay(1500)
+            Log.d("ghstd", "after DELAY(): navController: ${navController.hashCode()}")
+
+            navController = findNavController(this@SplashFragment)
+            navController?.navigate(SplashFragmentDirections.actionFinishSplash())
+        }
     }
 
     override fun onPause() {

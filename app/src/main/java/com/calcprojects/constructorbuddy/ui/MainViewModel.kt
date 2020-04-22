@@ -3,8 +3,6 @@ package com.calcprojects.constructorbuddy.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.calcprojects.constructorbuddy.model.StateUIActivity
-import kotlinx.coroutines.delay
 
 class MainViewModel : ViewModel() {
 

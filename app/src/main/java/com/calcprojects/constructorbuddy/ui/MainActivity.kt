@@ -2,25 +2,14 @@ package com.calcprojects.constructorbuddy.ui
 
 import android.os.Bundle
 import android.util.Log
-import android.view.ActionProvider
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.model.StateUIActivity
-import com.calcprojects.constructorbuddy.ui.ParentViewState.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
 

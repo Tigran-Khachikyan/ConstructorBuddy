@@ -2,29 +2,26 @@ package com.calcprojects.constructorbuddy.ui.calculator
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.calcprojects.constructorbuddy.model.Material
+import com.calcprojects.constructorbuddy.model.figures.Substance
 import com.calcprojects.constructorbuddy.model.Model
-import com.calcprojects.constructorbuddy.model.Shape
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
+import com.calcprojects.constructorbuddy.model.figures.Form
 import kotlinx.coroutines.launch
 
 class CalcViewModel : ViewModel() {
 
-    private val shape = MutableLiveData<Shape>()
-    private val material = MutableLiveData<Material>()
+    private val shape = MutableLiveData<Form>()
+    private val material = MutableLiveData<Substance>()
     private val type = MutableLiveData<Boolean>()
     private val params = MutableLiveData<Array<Double?>>()
     private val model = MediatorLiveData<Model>()
 
-    fun setShape(shape: Shape) {
+    fun setShape(shape: Form) {
         this.shape.value = shape
     }
 
-    fun getShape(): LiveData<Shape> = shape
+    fun getShape(): LiveData<Form> = shape
 
-    fun setMaterial(material: Material) {
+    fun setMaterial(material: Substance) {
         this.material.value = material
     }
 
@@ -68,8 +65,8 @@ class CalcViewModel : ViewModel() {
     }
 
     private fun combine(
-        shapeLD: LiveData<Shape>,
-        materialLD: LiveData<Material>,
+        shapeLD: LiveData<Form>,
+        materialLD: LiveData<Substance>,
         typeLD: LiveData<Boolean>,
         paramsLD: LiveData<Array<Double?>>
     ): Model? {

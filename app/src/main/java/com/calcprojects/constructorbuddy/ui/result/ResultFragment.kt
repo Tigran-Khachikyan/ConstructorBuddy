@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.model.StateUIActivity
+import com.calcprojects.constructorbuddy.ui.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
 import kotlinx.coroutines.CoroutineScope

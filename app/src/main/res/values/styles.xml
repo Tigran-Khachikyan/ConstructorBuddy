@@ -1,18 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="NoActionTheme" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
     </style>
 
     <style name="textView">
@@ -37,10 +31,56 @@
         <item name="hintTextColor">@android:color/holo_red_dark</item>
     </style>
 
-    <style name="button_option" parent="textView">
+    <style name="button_big" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="elevation">24dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="rippleColor">@color/colorAccent</item>
+        <item name="strokeColor">@color/colorPrimaryLight</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="button_options" parent="Widget.MaterialComponents.Button.UnelevatedButton.Icon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="elevation">8dp</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="backgroundTint">@color/colorPrimaryDark</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    style="?attr/materialButtonOutlinedStyle"
+
+
+    <style name="inputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/colorAccent</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="hintTextColor">@android:color/holo_orange_light</item>
+        <item name="android:textColorHint">@android:color/holo_green_light</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="helperTextTextColor">@android:color/holo_blue_bright</item>
+        <item name="errorTextColor">@android:color/holo_red_dark</item>
+        <item name="endIconDrawable">@android:drawable/ic_notification_clear_all</item>
+        <item name="endIconTint">@android:color/holo_red_light</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:layout_marginStart">12dp</item>
+    </style>
+
+    <style name="inputText">
+        <item name="android:textSize">24sp</item>
+        <item name="android:inputType">numberDecimal</item>
+        <item name="android:textColor">@android:color/holo_orange_light</item>
     </style>
 
 </resources>

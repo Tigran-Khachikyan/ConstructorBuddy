@@ -9,8 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.model.StateUIActivity
-import com.calcprojects.constructorbuddy.ui.ParentViewState
+import com.calcprojects.constructorbuddy.ui.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
 import kotlinx.android.synthetic.main.fragment_home.*

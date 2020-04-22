@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ConstructorBuddy</string>
+    <string name="app_name">Constructor Buddy</string>
     <string name="title_home">Home</string>
     <string name="title_saved">Saved</string>
     <string name="title_settings">Settings</string>
@@ -54,4 +54,86 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+
+
+    ---------------------------------------------------------------------
+    <string name="getStarted">Get started</string>
+    <string name="conDescHomeImage">Constructing</string>
+
+    --Currencies
+    <string name="USD">United States dollar</string>
+    <string name="EUR">Eurozone currency</string>
+    <string name="GBP">Pound sterling</string>
+    <string name="CNY">Chinese yuan</string>
+    <string name="RUB">Russian ruble</string>
+    <string name="AMD">Armenian dram</string>
+    <string name="AED">United Arab Emirates dirham</string>
+    <string name="ARS">Argentine peso</string>
+    <string name="AUD">Australian dollar</string>
+    <string name="BOB">Boliviano</string>
+    <string name="BRL">Brazilian real</string>
+    <string name="BYN">Belarusian ruble</string>
+    <string name="CAD">Canadian dollar</string>
+    <string name="CHF">Swiss franc</string>
+    <string name="CUC">Cuban convertible peso</string>
+    <string name="DKK">Danish krone</string>
+    --new
+    <string name="EGP">Egyptian pound</string>
+    <string name="GEL">Georgian lari</string>
+    <string name="HKD">Hong Kong dollar</string>
+    --new
+    <string name="IDR">Indonesian rupiah</string>
+    --new
+    <string name="ILS">Israeli new shekel</string>
+    <string name="INR">Indian rupee</string>
+    <string name="IQD">Iraqi dinar</string>
+    <string name="IRR">Iranian rial</string>
+    <string name="JPY">Japanese yen</string>
+    <string name="KPW">North Korean won	</string>
+    --new
+    <string name="KRW">South Korean won</string>
+    <string name="KWD">Kuwaiti dinar</string>
+    <string name="KZT">Kazakhstani tenge</string>
+    --new
+    <string name="LBP">Lebanese pound</string>
+    <string name="MAD">Moroccan dirham</string>
+    <string name="MXN">Mexican peso</string>
+    <string name="MYR">Malaysian ringgit</string>
+    --new
+    <string name="NGN">Nigerian naira</string>
+    --new
+    <string name="NOK">Norwegian krone</string>
+    --new
+    <string name="NZD">New Zealand dollar</string>
+    <string name="OMR">Omani rial</string>
+    --new
+    <string name="PEN">Peruvian sol</string>
+    <string name="PHP">Philippine peso</string>
+    --new
+    <string name="PYG">Paraguayan guaraní</string>
+    --new
+    <string name="QAR">Qatari riyal</string>
+    <string name="RSD">Serbian dinar</string>
+    --new
+    <string name="SAR">Saudi riyal</string>
+    <string name="SEK">Swedish krona/kronor</string>
+    <string name="SGD">Singapore dollar</string>
+    <string name="SYP">Syrian pound</string>
+    <string name="THB">Thai baht</string>
+    <string name="TMT">Turkmenistan manat</string>
+    --new
+    <string name="TND">Tunisian dinar</string>
+    <string name="TRY">Turkish lira</string>
+    <string name="UAH">Ukrainian hryvnia</string>
+    <string name="UYU">Uruguayan peso</string>
+    <string name="UZS">Uzbekistan som</string>
+    --new
+    <string name="VES">Venezuelan bolívar soberano</string>
+    --new
+    <string name="VND">Vietnamese đồng</string>
+    <string name="ZAR">South African rand</string>
+
+    //units
+    <string name="metric">Metric</string>
+    <string name="imperial">Imperial</string>
 </resources>

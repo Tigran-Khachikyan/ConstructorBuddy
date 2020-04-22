@@ -1,22 +1,20 @@
 package com.calcprojects.constructorbuddy.ui
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.model.Material
+import com.calcprojects.constructorbuddy.model.figures.Substance
 
 
 class AdapterSpinnerMat(
-    context: Context, res: Int = R.layout.holder_material, materials: Array<Material>
+    context: Context, res: Int = R.layout.holder_material, materials: Array<Substance>
 ) :
-    ArrayAdapter<Material>(context, res, materials) {
+    ArrayAdapter<Substance>(context, res, materials) {
 
     private val resource = res
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {

@@ -20,10 +20,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.model.Material
-import com.calcprojects.constructorbuddy.model.Shape
-import com.calcprojects.constructorbuddy.model.Shape.*
-import com.calcprojects.constructorbuddy.model.StateUIActivity
+import com.calcprojects.constructorbuddy.model.figures.Substance
+import com.calcprojects.constructorbuddy.model.figures.Form
+import com.calcprojects.constructorbuddy.model.figures.Form.*
+import com.calcprojects.constructorbuddy.ui.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.*
 import com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator
 import kotlinx.android.synthetic.main.fragment_calculator.*
@@ -53,9 +53,9 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         )
     }
     private lateinit var viewModel: CalcViewModel
-    private var shape: Shape? = null
+    private var shape: Form? = null
     private lateinit var adapterRecShape: AdapterRecyclerShapes
-    private val materials by lazy { Material.values() }
+    private val materials by lazy { Substance.values() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +72,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         val shapeName = arguments?.let {
             CalculatorFragmentArgs.fromBundle(it).shapeSelected
         }
-        shape = shapeName?.let { Shape.valueOf(it) }
+        shape = shapeName?.let { Form.valueOf(it) }
     }
 
     override fun onCreateView(
@@ -100,11 +100,11 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         spinner.initialize(adapter, viewModel)
 
         //editText init
-        etField1.initWithTextView(tvField1)
-        etField2.initWithTextView(tvField2)
-        etField3.initWithTextView(tvField3)
+      /*  etField1.initWithTextView(tvField1)
+        etField2.initWithTextView(tvField2)*/
+      /*  etField3.initWithTextView(tvField3)
         etField4.initWithTextView(tvField4)
-        etField5.initWithTextView(tvField5)
+        etField5.initWithTextView(tvField5)*/
 
         btn_byLength.setOnClickListener {
             viewModel.setType(true)
@@ -138,17 +138,17 @@ class CalculatorFragment : Fragment(), CoroutineScope {
             btn_byLength.setSelectedOption(it)
             btn_byWeight.setSelectedOption(!it)
 
-            tvField1.text =
+          /*  tvField1.text =
                 if (it) requireContext().getString(R.string.length) + " (L):"
                 else requireContext().getString(R.string.weight) + " (Wg):"
             etField1.text.clear()
-            tvField1.warning(false)
+            tvField1.warning(false)*/
         })
 
         viewModel.getShape().observe(viewLifecycleOwner, Observer
         {
-            setIntroText(it)
-            showFields(it)
+            /*setIntroText(it)
+            showFields(it)*/
         })
 
         viewModel.getModel().observe(viewLifecycleOwner, Observer {
@@ -192,7 +192,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
 
     }
 
-    private fun clearInput() {
+  /*  private fun clearInput() {
         etField1.text.clear()
         etField2.text.clear()
         etField3.text.clear()
@@ -203,7 +203,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         tvField3.warning(false)
         tvField4.warning(false)
         tvField5.warning(false)
-    }
+    }*/
 
     private fun EditText.getValue(layout: ConstraintLayout, tv: TextView): Double? {
         return if (layout.visibility == View.VISIBLE) {
@@ -218,7 +218,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
 
     private fun ConstraintLayout.show() = run { visibility = View.VISIBLE }
 
-    private fun showFields(shape: Shape) {
+  /*  private fun showFields(shape: Shape) {
 
         clearInput()
         layInp1.show()
@@ -292,7 +292,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         }
         tvField5.text = if (shape == BEAM) "$thickness (T2):" else ""
 
-    }
+    }*/
 
     private fun RecyclerView.initialize(
         adapter: AdapterRecyclerShapes,
@@ -308,7 +308,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
             PagerSnapHelper(),
             onSnapPositionChangeListener = object : OnSnapPositionChangeListener {
                 override fun onSnapPositionChange(position: Int) {
-                    viewModel?.setShape(Shape.values()[position])
+                    viewModel?.setShape(Form.values()[position])
                 }
             })
         indicator?.attachToRecyclerView(this)
@@ -371,7 +371,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         super.onStop()
         Log.d("hhas", "CALC: onStop()")
 
-        activity?.run { setTheme(R.style.AppTheme) }
+        activity?.run { setTheme(R.style.NoActionTheme) }
 
     }
 

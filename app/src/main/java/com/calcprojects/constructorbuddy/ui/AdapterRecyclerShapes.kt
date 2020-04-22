@@ -8,21 +8,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.model.Shape
+import com.calcprojects.constructorbuddy.model.figures.Form
 
 
 class AdapterRecyclerShapes(
     private val context: Context,
     private val isMarked: Boolean,
-    private val func: (Shape) -> Unit
+    private val func: (Form) -> Unit
 ) :
     RecyclerView.Adapter<AdapterRecyclerShapes.Holder>() {
 
     private var clicked = false
     var selectedPosition: Int? = null
-    private val images: Array<Shape> by lazy { Shape.values() }
+    private val images: Array<Form> by lazy { Form.values() }
 
-    inner class Holder(itemView: View, val func: (Shape) -> Unit) :
+    inner class Holder(itemView: View, val func: (Form) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.imageView_shape)
         val name: TextView = itemView.findViewById(R.id.textView_shapeName)

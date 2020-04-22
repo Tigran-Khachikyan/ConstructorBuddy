@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.model.Shape
-import com.calcprojects.constructorbuddy.model.StateUIActivity
+import com.calcprojects.constructorbuddy.model.figures.Form
+import com.calcprojects.constructorbuddy.ui.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.*
 import kotlinx.android.synthetic.main.fragment_shapes.*
 import kotlinx.coroutines.*
@@ -42,7 +42,7 @@ class ShapesFragment : Fragment(), CoroutineScope {
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
-    private lateinit var func: (Shape) -> Unit
+    private lateinit var func: (Form) -> Unit
     private lateinit var adapter: AdapterRecyclerShapes
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +66,7 @@ class ShapesFragment : Fragment(), CoroutineScope {
 
         job = Job()
         MainViewModel.setState(state)
-        func = { s: Shape ->
+        func = { s: Form ->
             launch {
                 startCalculation(s, view.findNavController())
             }
@@ -83,7 +83,7 @@ class ShapesFragment : Fragment(), CoroutineScope {
         recycler_shape_fr.adapter = adapter
     }
 
-    private suspend fun startCalculation(shape: Shape, navController: NavController) {
+    private suspend fun startCalculation(shape: Form, navController: NavController) {
         delay(1200)
         val action = ShapesFragmentDirections.actionStartCalculation(shape.name)
         navController.navigate(action)

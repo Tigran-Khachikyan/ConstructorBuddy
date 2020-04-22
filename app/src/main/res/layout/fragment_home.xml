@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@android:color/holo_blue_dark"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/iv_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/conDescHomeImage"
+        android:src="@mipmap/building"
+        app:layout_constraintBottom_toTopOf="@id/tv_intro_home"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_intro_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="Start your buildinasdasjdajdhajsdvajsdvaa
+ asd asda sd asd a dasd as d ad as da sd as d a asd a sd ad a da
+         sd ada dasd a sda d asd  asd s d as d"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/btn_start"
+        app:layout_constraintTop_toBottomOf="@id/iv_home"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/btn_start"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        style="@style/button_big"
+        android:text="@string/getStarted"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_intro_home" />
 
-</FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
