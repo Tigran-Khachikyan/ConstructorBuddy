@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/destination_preferences">
+    <fragment
+        android:id="@+id/destination_preferences"
+        android:name="com.calcprojects.constructorbuddy.ui.settings.Preferences"
+        android:label="Preferences" >
+        <action
+            android:id="@+id/open_material_settings"
+            app:destination="@id/destination_preferencesNested" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_preferencesNested"
+        android:name="com.calcprojects.constructorbuddy.ui.settings.PreferencesNested"
+        android:label="PreferencesNested" >
+        <argument
+            android:name="rootKey"
+            android:defaultValue="key_nested_screen"
+            app:argType="string" />
+    </fragment>
+</navigation>

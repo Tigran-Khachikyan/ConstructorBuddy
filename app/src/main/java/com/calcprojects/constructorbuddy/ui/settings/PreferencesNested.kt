@@ -12,7 +12,7 @@ import com.calcprojects.constructorbuddy.model.units.Unit
 
 class PreferencesNested : PreferenceFragmentCompat() {
 
-    private val args: PreferencesArgs by navArgs()
+    private val args: PreferencesNestedArgs by navArgs()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 
@@ -23,12 +23,12 @@ class PreferencesNested : PreferenceFragmentCompat() {
     }
 
 
- /*   override fun onNavigateToScreen(preferenceScreen: PreferenceScreen?) {
-        super.onNavigateToScreen(preferenceScreen)
+    /*   override fun onNavigateToScreen(preferenceScreen: PreferenceScreen?) {
+           super.onNavigateToScreen(preferenceScreen)
 
-        findNavController().navigate(
-            PreferencesDirections.changeRoot(preferenceScreen!!.key)
-        )
-    }*/
+           findNavController().navigate(
+               PreferencesDirections.changeRoot(preferenceScreen!!.key)
+           )
+       }*/
 
 }

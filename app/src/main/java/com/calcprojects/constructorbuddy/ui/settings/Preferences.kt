@@ -38,11 +38,10 @@ class Preferences : PreferenceFragmentCompat() {
 
     }
 
-
     override fun onNavigateToScreen(preferenceScreen: PreferenceScreen?) {
         super.onNavigateToScreen(preferenceScreen)
 
-        findNavController().navigate(PreferencesDirections.keyNestedScreen())
+        findNavController().navigate(PreferencesDirections.openMaterialSettings())
     }
 
 }
