@@ -15,17 +15,30 @@
         app:layout_constraintBottom_toTopOf="@id/tv_intro_home"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
-        android:id="@+id/tv_intro_home"
+        android:id="@+id/tv_intro_homes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
-        android:text="Start your buildinasdasjdajdhajsdvajsdvaa
- asd asda sd asd a dasd as d ad as da sd as d a asd a sd ad a da
-         sd ada dasd a sda d asd  asd s d as d"
-        android:textSize="16sp"
+        android:text="Dear colleague,"
+        android:layout_marginBottom="0dp"
+        android:textSize="20sp"
+        app:layout_goneMarginBottom="6dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_intro_home"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/tv_intro_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="22dp"
+        android:paddingEnd="22dp"
+        android:text="I will be very thankful having an opportunity to demonstrate my engineer's skills in action. Hope this letter finds you in good mood. I look forward to receiving a positive reply from you.\n Just start it!"
+        android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@id/btn_start"
         app:layout_constraintTop_toBottomOf="@id/iv_home"
         tools:layout_editor_absoluteX="0dp" />

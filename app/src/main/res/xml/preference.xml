@@ -1,18 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout="@layout/fragment_settings"
+    app:key="key_top_screen"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <PreferenceCategory app:title="measure units">
 
        <ListPreference
            app:key="key_units"
+           app:dialogIcon="@drawable/ic_save"
+           android:dialogTitle="select the measurement system."
            android:title="Units"
            app:summary="Sel the units systems"/>
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="pricing options">
+    <PreferenceCategory
+        app:title="pricing options">
 
+        <SwitchPreferenceCompat
+            app:key="key_price_switcher"
+            app:title="Include Price"
+            app:summary="Add price calculation in result computation."/>
+
+        <ListPreference
+            app:key="key_rates"
+            android:title="Currencies"
+            app:dialogIcon="@drawable/ic_save"
+            android:dialogTitle="choose base rate."
+            app:summary="Select a base currency for pricing calculation."
+            app:dependency="key_price_switcher"/>
+
+        <SwitchPreferenceCompat
+            app:key="key_auto_manually_switcher"
+            app:title="Pricing sources"
+            app:dependency="key_price_switcher"
+            app:summary="Set prices for materials manually."/>
+
+        <PreferenceScreen
+            app:dependency="key_auto_manually_switcher"
+            app:key="key_nested_screen"
+            app:title="Materials">
+
+            <EditTextPreference
+                app:title="@string/aluminium"
+                app:summary="aluminium price 45.6 for USD"
+                app:key="key_aluminium"/>
+
+            <EditTextPreference
+                app:title="@string/aluminium"
+                app:summary="aluminium price 45.6 for USD"
+                app:key="key_alumisnium"/>
+
+            <Preference
+                app:title="@string/aluminium"
+                app:summary="aluminium price 45.6 for USD"
+                app:key="key_asssluminium"/>
+
+        </PreferenceScreen>
 
     </PreferenceCategory>
 </PreferenceScreen>

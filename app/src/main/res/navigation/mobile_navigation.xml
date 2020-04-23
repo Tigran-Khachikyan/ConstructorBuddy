@@ -86,4 +86,20 @@
         android:name="com.calcprojects.constructorbuddy.ui.result.ResultFragment"
         android:label="result"
         tools:layout="@layout/fragment_result"/>
+    <fragment
+        android:id="@+id/preferences"
+        android:name="com.calcprojects.constructorbuddy.ui.settings.Preferences"
+        android:label="Preferences" >
+        <action
+            android:id="@+id/key_nested_screen"
+            app:destination="@id/preferencesNested" />
+        <argument
+            android:name="rootKey"
+            app:argType="string"
+            android:defaultValue="key_nested_screen" />
+    </fragment>
+    <fragment
+        android:id="@+id/preferencesNested"
+        android:name="com.calcprojects.constructorbuddy.ui.settings.PreferencesNested"
+        android:label="PreferencesNested" />
 </navigation>

@@ -76,9 +76,11 @@ class SplashFragment : Fragment(), CoroutineScope {
         launch {
             delay(1500)
             Log.d("ghstd", "after DELAY(): navController: ${navController.hashCode()}")
-
-            navController = findNavController(this@SplashFragment)
-            navController?.navigate(SplashFragmentDirections.actionFinishSplash())
+            try {
+                navController = findNavController(this@SplashFragment)
+                navController?.navigate(SplashFragmentDirections.actionFinishSplash())
+            } catch (ex: Exception) {
+            }
         }
     }
 
