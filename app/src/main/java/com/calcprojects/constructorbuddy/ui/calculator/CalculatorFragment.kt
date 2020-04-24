@@ -129,9 +129,9 @@ class CalculatorFragment : Fragment(), CoroutineScope {
 
         }
 
-        btn_clear.setOnClickListener {
+     /*   btn_clear.setOnClickListener {
             it.findNavController().navigate(CalculatorFragmentDirections.actionOpenSettings())
-        }
+        }*/
 
         viewModel.getType().observe(viewLifecycleOwner, Observer {
 

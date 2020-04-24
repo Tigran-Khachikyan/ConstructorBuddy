@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.appbar.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -26,9 +26,9 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -90,141 +90,12 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!--  <androidx.constraintlayout.widget.ConstraintLayout
-                  android:id="@+id/layInp1"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_margin="2dp">
-
-                  <TextView
-                      android:id="@+id/tvField1"
-                      style="@style/textView_field"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintHorizontal_weight="1"
-                      app:layout_constraintLeft_toLeftOf="parent"
-                      app:layout_constraintRight_toLeftOf="@id/etField1"
-                      app:layout_constraintTop_toTopOf="parent" />
-
-                  <EditText
-                      android:id="@+id/etField1"
-                      style="@style/editText_field"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintHorizontal_weight="2"
-                      app:layout_constraintLeft_toRightOf="@id/tvField1"
-                      app:layout_constraintRight_toRightOf="parent"
-                      app:layout_constraintTop_toTopOf="parent" />
-
-              </androidx.constraintlayout.widget.ConstraintLayout>
-
-              <androidx.constraintlayout.widget.ConstraintLayout
-                  android:id="@+id/layInp2"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_margin="2dp">
-
-                  <TextView
-                      android:id="@+id/tvField2"
-                      style="@style/textView_field"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintHorizontal_weight="1"
-                      app:layout_constraintLeft_toLeftOf="parent"
-                      app:layout_constraintRight_toLeftOf="@id/etField2"
-                      app:layout_constraintTop_toTopOf="parent" />
-
-                  <EditText
-                      android:id="@+id/etField2"
-                      style="@style/editText_field"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintHorizontal_weight="2"
-                      app:layout_constraintLeft_toRightOf="@id/tvField2"
-                      app:layout_constraintRight_toRightOf="parent"
-                      app:layout_constraintTop_toTopOf="parent" />
-
-              </androidx.constraintlayout.widget.ConstraintLayout>
-
-              <androidx.constraintlayout.widget.ConstraintLayout
-                  android:id="@+id/layInp3"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_margin="2dp">
-
-                  <TextView
-                      android:id="@+id/tvField3"
-                      style="@style/textView_field"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintHorizontal_weight="1"
-                      app:layout_constraintLeft_toLeftOf="parent"
-                      app:layout_constraintRight_toLeftOf="@id/etField3"
-                      app:layout_constraintTop_toTopOf="parent" />
-
-                  <EditText
-                      android:id="@+id/etField3"
-                      style="@style/editText_field"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintHorizontal_weight="2"
-                      app:layout_constraintLeft_toRightOf="@id/tvField3"
-                      app:layout_constraintRight_toRightOf="parent"
-                      app:layout_constraintTop_toTopOf="parent" />
-
-              </androidx.constraintlayout.widget.ConstraintLayout>
-
-              <androidx.constraintlayout.widget.ConstraintLayout
-                  android:id="@+id/layInp4"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_margin="2dp">
-
-                  <TextView
-                      android:id="@+id/tvField4"
-                      style="@style/textView_field"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintHorizontal_weight="1"
-                      app:layout_constraintLeft_toLeftOf="parent"
-                      app:layout_constraintRight_toLeftOf="@id/etField4"
-                      app:layout_constraintTop_toTopOf="parent" />
-
-                  <EditText
-                      android:id="@+id/etField4"
-                      style="@style/editText_field"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintHorizontal_weight="2"
-                      app:layout_constraintLeft_toRightOf="@id/tvField4"
-                      app:layout_constraintRight_toRightOf="parent"
-                      app:layout_constraintTop_toTopOf="parent" />
-
-              </androidx.constraintlayout.widget.ConstraintLayout>
-
-              <androidx.constraintlayout.widget.ConstraintLayout
-                  android:id="@+id/layInp5"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_margin="2dp">
-
-                  <TextView
-                      android:id="@+id/tvField5"
-                      style="@style/textView_field"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintHorizontal_weight="1"
-                      app:layout_constraintLeft_toLeftOf="parent"
-                      app:layout_constraintRight_toLeftOf="@id/etField5"
-                      app:layout_constraintTop_toTopOf="parent" />
-
-                  <EditText
-                      android:id="@+id/etField5"
-                      style="@style/editText_field"
-                      app:layout_constraintBottom_toBottomOf="parent"
-                      app:layout_constraintHorizontal_weight="2"
-                      app:layout_constraintLeft_toRightOf="@id/tvField5"
-                      app:layout_constraintRight_toRightOf="parent"
-                      app:layout_constraintTop_toTopOf="parent" />
-
-              </androidx.constraintlayout.widget.ConstraintLayout>-->
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/lay_input"
                 android:layout_width="match_parent"
                 android:backgroundTintMode="screen"
                 android:background="@color/colorPrimary"
+                android:paddingBottom="?android:attr/actionBarSize"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/layout_images">
 
@@ -377,35 +248,19 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_buttons"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                app:layout_constraintTop_toBottomOf="@id/lay_input">
-
-                <Button
-                    android:id="@+id/btn_clear"
-                    style="@style/button_options"
-                    android:text="@string/clear"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/btn_calculate"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/btn_calculate"
-                    style="@style/button_options"
-                    android:text="@string/calculate"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/btn_clear"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </androidx.core.widget.NestedScrollView>
 
-</com.google.android.material.appbar.CollapsingToolbarLayout>
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/btn_calculate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorAccent"
+        android:layout_margin="8dp"
+        android:text="@string/calculate"
+        app:icon="@drawable/ic_save"
+        app:layout_anchor="@id/nested_scrollView"
+        app:layout_anchorGravity="bottom|end" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
