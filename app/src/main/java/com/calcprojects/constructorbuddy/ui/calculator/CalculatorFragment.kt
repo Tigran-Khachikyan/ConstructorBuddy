@@ -41,7 +41,6 @@ import kotlin.coroutines.CoroutineContext
 
 class CalculatorFragment : Fragment(), CoroutineScope {
 
-
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = Main + Job()

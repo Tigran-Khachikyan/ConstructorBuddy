@@ -7,6 +7,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MaterialComponents.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MaterialComponents.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MaterialComponents.LargeComponent</item>
     </style>
 
 
@@ -50,11 +53,21 @@
         <item name="endIconMode">clear_text</item>
         <item name="helperTextTextColor">@android:color/holo_blue_bright</item>
         <item name="errorTextColor">@android:color/holo_red_dark</item>
-        <item name="endIconDrawable">@android:drawable/ic_notification_clear_all</item>
-        <item name="endIconTint">@android:color/holo_red_light</item>
+        <item name="endIconDrawable">@drawable/ic_cancel</item>
+        <item name="endIconTint">@color/colorPrimaryLight</item>
         <item name="android:layout_marginTop">12dp</item>
         <item name="android:layout_marginEnd">12dp</item>
         <item name="android:layout_marginStart">12dp</item>
+        <item name="shapeAppearanceOverlay">@style/cut</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="cut" parent="ShapeAppearance.MaterialComponents.MediumComponent" >
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSizeTopLeft">24dp</item>
+        <item name="cornerSizeBottomRight">24dp</item>
+        <item name="cornerSizeTopRight">12dp</item>
+        <item name="cornerSizeBottomLeft">12dp</item>
     </style>
 
     <style name="inputText">

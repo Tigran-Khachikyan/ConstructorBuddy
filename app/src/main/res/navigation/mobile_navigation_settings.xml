@@ -10,7 +10,11 @@
         android:label="Preferences" >
         <action
             android:id="@+id/open_material_settings"
-            app:destination="@id/destination_preferencesNested" />
+            app:destination="@id/destination_preferencesNested"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/destination_preferencesNested"
