@@ -1,13 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".ui.result.ResultFragment">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_image_result"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="42dp"
+            android:background="@mipmap/city"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/lay_in_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp">
+
+                <TextView
+                    android:id="@+id/tv_res_length_weight"
+                    style="@style/textView_result"
+                    android:text="LENGTH: 254,654.3 cm"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_res_total_area"
+                    style="@style/textView_result"
+                    android:text="AREA: 444,654.3 cm2"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_res_length_weight" />
+
+                <TextView
+                    android:id="@+id/tv_res_price"
+                    style="@style/textView_result"
+                    android:text="PRICE: 45,624.3 AMD"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_res_total_area" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_init_data"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_result">
+
+
+            <TextView
+                android:id="@+id/tv_init_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/initial_data"
+                android:textAllCaps="true"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ScrollView
+                android:id="@+id/scroll_view_init_data"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/iv_shape_res"
+                app:layout_constraintTop_toBottomOf="@id/tv_init_data">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_init_length_weight"
+                        style="@style/textView_initial_data"
+                        android:text="Weight: 565,566.3 kg" />
+
+                    <TextView
+                        android:id="@+id/tv_init_Width"
+                        style="@style/textView_initial_data"
+                        android:text="Width: 565,566.3 kg" />
+
+                    <TextView
+                        android:id="@+id/tv_init_height"
+                        style="@style/textView_initial_data"
+                        android:text="Height: 565,566.3 kg" />
+
+                    <TextView
+                        android:id="@+id/tv_init_thickness"
+                        style="@style/textView_initial_data"
+                        android:text="Thickness: 565,566.3 kg" />
+
+                    <TextView
+                        android:id="@+id/tv_init_thickness2"
+                        style="@style/textView_initial_data"
+                        android:text="Thickness2: 565,566.3 kg" />
+
+                    <TextView
+                        android:id="@+id/tv_init_price"
+                        style="@style/textView_initial_data"
+                        android:text="Price: 256.3 AMD/kg" />
+
+                    <TextView
+                        android:id="@+id/tv_init_rate"
+                        style="@style/textView_initial_data"
+                        android:text="Rate: AMD/USD = 480.2" />
+
+                </LinearLayout>
+
+            </ScrollView>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_shape_res"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@mipmap/angle"
+                app:civ_border_color="@color/colorPrimaryDark"
+                app:civ_border_width="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toRightOf="@id/scroll_view_init_data"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:backgroundTint="@color/colorAccent"
+        android:text="SAVE"
+        app:icon="@drawable/ic_save"
+        app:layout_anchor="@id/card_result"
+        app:layout_anchorGravity="bottom|end" />
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:backgroundTint="@color/colorAccent"
+        android:padding="6dp"
+        android:text="@string/result"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccent"
+        android:textSize="32sp"
+
+        android:textStyle="bold"
+        app:icon="@drawable/ic_save"
+        app:layout_anchor="@id/card_result"
+        app:layout_anchorGravity="top|start" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

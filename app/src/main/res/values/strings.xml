@@ -136,4 +136,8 @@
     //units
     <string name="metric">Metric</string>
     <string name="imperial">Imperial</string>
+
+    //result
+    <string name="result">Result</string>
+    <string name="initial_data">Initial data</string>
 </resources>
