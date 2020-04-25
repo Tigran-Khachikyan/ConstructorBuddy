@@ -140,4 +140,5 @@
     //result
     <string name="result">Result</string>
     <string name="initial_data">Initial data</string>
+    <string name="count">Count</string>
 </resources>

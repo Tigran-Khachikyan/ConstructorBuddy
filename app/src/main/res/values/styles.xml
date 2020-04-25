@@ -55,9 +55,9 @@
         <item name="errorTextColor">@android:color/holo_red_dark</item>
         <item name="endIconDrawable">@drawable/ic_cancel</item>
         <item name="endIconTint">@color/colorPrimaryLight</item>
-        <item name="android:layout_marginTop">12dp</item>
-        <item name="android:layout_marginEnd">12dp</item>
-        <item name="android:layout_marginStart">12dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
         <item name="shapeAppearanceOverlay">@style/cut</item>
         <item name="cornerSize">16dp</item>
     </style>

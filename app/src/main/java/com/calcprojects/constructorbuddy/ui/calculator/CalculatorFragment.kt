@@ -24,19 +24,13 @@ import com.calcprojects.constructorbuddy.model.figures.Form
 import com.calcprojects.constructorbuddy.model.figures.Form.*
 import com.calcprojects.constructorbuddy.ui.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.*
+import com.google.android.material.textfield.TextInputLayout
 import com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator
 import kotlinx.android.synthetic.main.fragment_calculator.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
-
-/**
- * A simple [Fragment] subclass.
- */
-
 
 class CalculatorFragment : Fragment(), CoroutineScope {
 
@@ -51,7 +45,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         )
     }
     private lateinit var viewModel: CalcViewModel
-    private var shape: Form? = null
+    private var form: Form? = null
     private lateinit var adapterRecShape: AdapterRecyclerShapes
     private val materials by lazy { Substance.values() }
 
@@ -59,57 +53,41 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         super.onCreate(savedInstanceState)
 
         job = Job()
-        launch {
-            delay(SCREEN_DELAY_TIME.toLong())
-        }
 
-        Log.d("hhas", "CALC: onCreate()")
-
-
-        viewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
         val shapeName = arguments?.let {
             CalculatorFragmentArgs.fromBundle(it).shapeSelected
         }
-        shape = shapeName?.let { Form.valueOf(it) }
+        form = shapeName?.let { valueOf(it) }
+        viewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
+        Log.d("shjsd", "form: $form")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-
-        Log.d("hhas", "CALC: onCreateView()")
-
         return inflater.inflate(R.layout.fragment_calculator, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("hhas", "CALC: onViewCreated()")
-
         //recycler init
         adapterRecShape = AdapterRecyclerShapes(requireContext(), true) {}
-        recycler_shapes_marked.initialize(
-            adapterRecShape, values().indexOf(shape), viewModel, indicator
-        )
+        recycler_shapes_marked.initialize(adapterRecShape, viewModel, indicator)
+        form?.let {
+            viewModel.setForm(it)
+            recycler_shapes_marked.scrollToPosition(values().indexOf(it))
+        }
 
         //spinner init
         val adapter = AdapterSpinnerMat(requireContext(), materials = materials)
         spinner.initialize(adapter, viewModel)
 
-        //editText init
-        /*  etField1.initWithTextView(tvField1)
-          etField2.initWithTextView(tvField2)*/
-        /*  etField3.initWithTextView(tvField3)
-          etField4.initWithTextView(tvField4)
-          etField5.initWithTextView(tvField5)*/
-
-        btn_byLength.setOnClickListener {
-            viewModel.setType(true)
-        }
-
-        btn_byWeight.setOnClickListener {
-            viewModel.setType(false)
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.radByLength -> viewModel.setType(true)
+                R.id.radByWeight -> viewModel.setType(false)
+            }
         }
 
         btn_calculate.setOnClickListener {
@@ -127,26 +105,21 @@ class CalculatorFragment : Fragment(), CoroutineScope {
 
         }
 
-        /*   btn_clear.setOnClickListener {
-               it.findNavController().navigate(CalculatorFragmentDirections.actionOpenSettings())
-           }*/
-
         viewModel.getType().observe(viewLifecycleOwner, Observer {
 
-            btn_byLength.setSelectedOption(it)
-            btn_byWeight.setSelectedOption(!it)
-
-            /*  tvField1.text =
-                  if (it) requireContext().getString(R.string.length) + " (L):"
-                  else requireContext().getString(R.string.weight) + " (Wg):"
-              etField1.text.clear()
-              tvField1.warning(false)*/
+            field1.hint =
+                if (it) requireContext().getString(R.string.length) + " (L)"
+                else requireContext().getString(R.string.weight) + " (Wg)"
+            field1.editText?.text?.clear()
+            field1.clearFocus()
         })
 
-        viewModel.getShape().observe(viewLifecycleOwner, Observer
+        viewModel.getForm().observe(viewLifecycleOwner, Observer
         {
-            /*setIntroText(it)
-            showFields(it)*/
+            Log.d("shjsd", "it: $it")
+
+            setTextInputLayoutHintText(it)
+            setTextInputLayoutVisibility(it)
         })
 
         viewModel.getModel().observe(viewLifecycleOwner, Observer {
@@ -168,7 +141,6 @@ class CalculatorFragment : Fragment(), CoroutineScope {
             }*/
         })
 
-
         topAppBar_calc_fragment.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.toSettings -> findNavController().navigate(CalculatorFragmentDirections.actionOpenSettings())
@@ -177,40 +149,13 @@ class CalculatorFragment : Fragment(), CoroutineScope {
             }
             return@setOnMenuItemClickListener false
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("hhas", "CALC: onStart()")
 
     }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("hhas", "CALC: onPause()")
-
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.removeSources()
-        Log.d("hhas", "CALC: onDestroyView()")
-
     }
-
-    /*  private fun clearInput() {
-          etField1.text.clear()
-          etField2.text.clear()
-          etField3.text.clear()
-          etField4.text.clear()
-          etField5.text.clear()
-          tvField1.warning(false)
-          tvField2.warning(false)
-          tvField3.warning(false)
-          tvField4.warning(false)
-          tvField5.warning(false)
-      }*/
 
     private fun EditText.getValue(layout: ConstraintLayout, tv: TextView): Double? {
         return if (layout.visibility == View.VISIBLE) {
@@ -221,101 +166,102 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         } else null
     }
 
-    private fun ConstraintLayout.hide() = run { visibility = View.GONE }
+    private fun TextInputLayout.hide() = run {
+        editText?.text?.clear()
+        clearFocus()
+        visibility = View.GONE
+    }
 
-    private fun ConstraintLayout.show() = run { visibility = View.VISIBLE }
+    private fun TextInputLayout.show() = run { visibility = View.VISIBLE }
 
-    /*  private fun showFields(shape: Shape) {
+    private fun setTextInputLayoutVisibility(form: Form) {
 
-          clearInput()
-          layInp1.show()
-          layInp2.show()
-          when (shape) {
+        field1.show()
+        field2.show()
+        when (form) {
 
-              ANGLE -> {
-                  layInp3.show();layInp4.show();layInp5.hide()
-              }
-              T_BAR -> {
-                  layInp3.show();layInp4.show();layInp5.hide()
-              }
-              SQUARE_TUBE -> {
-                  layInp3.show();layInp4.show();layInp5.hide()
-              }
-              SQUARE_BAR -> {
-                  layInp3.hide();layInp4.hide();layInp5.hide()
-              }
-              ROUND_BAR -> {
-                  layInp3.hide();layInp4.hide();layInp5.hide()
-              }
-              PIPE -> {
-                  layInp3.show();layInp4.hide();layInp5.hide()
-              }
-              HEXAGONAL_TUBE -> {
-                  layInp3.show();layInp4.hide();layInp5.hide()
-              }
-              HEXAGONAL_BAR -> {
-                  layInp3.hide();layInp4.hide();layInp5.hide()
-              }
-              HEXAGONAL_HEX -> {
-                  layInp3.show();layInp4.hide();layInp5.hide()
-              }
-              FLAT_BAR -> {
-                  layInp3.show();layInp4.hide();layInp5.hide()
-              }
-              CHANNEL -> {
-                  layInp3.show();layInp4.show();layInp5.hide()
-              }
-              BEAM -> {
-                  layInp3.show();layInp4.show();layInp5.show()
-              }
-          }
-      }
+            ANGLE -> {
+                field3.show();field4.show();field5.hide()
+            }
+            T_BAR -> {
+                field3.show();field4.show();field5.hide()
+            }
+            SQUARE_TUBE -> {
+                field3.show();field4.show();field5.hide()
+            }
+            SQUARE_BAR -> {
+                field3.hide();field4.hide();field5.hide()
+            }
+            ROUND_BAR -> {
+                field3.hide();field4.hide();field5.hide()
+            }
+            PIPE -> {
+                field3.show();field4.hide();field5.hide()
+            }
+            HEXAGONAL_TUBE -> {
+                field3.show();field4.hide();field5.hide()
+            }
+            HEXAGONAL_BAR -> {
+                field3.hide();field4.hide();field5.hide()
+            }
+            HEXAGONAL_HEX -> {
+                field3.show();field4.hide();field5.hide()
+            }
+            FLAT_BAR -> {
+                field3.show();field4.hide();field5.hide()
+            }
+            CHANNEL -> {
+                field3.show();field4.show();field5.hide()
+            }
+            BEAM -> {
+                field3.show();field4.show();field5.show()
+            }
+        }
+    }
 
-      private fun setIntroText(shape: Shape) {
+    private fun setTextInputLayoutHintText(form: Form) {
 
-          val width: String by lazy { requireContext().getString(R.string.width) + " (W):" }
-          val height: String by lazy { requireContext().getString(R.string.height) + " (H):" }
-          val diameter: String by lazy { requireContext().getString(R.string.diameter) + " (D):" }
-          val thickness: String by lazy { requireContext().getString(R.string.thickness) }
-          val side: String by lazy { requireContext().getString(R.string.side) + " (S):" }
+        val width: String by lazy { requireContext().getString(R.string.width) + " (W)" }
+        val height: String by lazy { requireContext().getString(R.string.height) + " (H)" }
+        val diameter: String by lazy { requireContext().getString(R.string.diameter) + " (D)" }
+        val thickness: String by lazy { requireContext().getString(R.string.thickness) }
+        val side: String by lazy { requireContext().getString(R.string.side) + " (S)" }
 
-          tvField2.text = when (shape) {
-              PIPE, ROUND_BAR, HEXAGONAL_TUBE -> diameter
-              ANGLE, BEAM, CHANNEL, FLAT_BAR, HEXAGONAL_HEX, SQUARE_TUBE, T_BAR -> width
-              HEXAGONAL_BAR -> height
-              SQUARE_BAR -> side
-          }
-          tvField3.text = when (shape) {
-              ANGLE, BEAM, CHANNEL, FLAT_BAR, SQUARE_TUBE, T_BAR -> height
-              PIPE, HEXAGONAL_HEX -> "$thickness (T):"
-              HEXAGONAL_TUBE -> side
-              HEXAGONAL_BAR, SQUARE_BAR, ROUND_BAR -> ""
-          }
-          tvField4.text = when (shape) {
-              ANGLE, CHANNEL, SQUARE_TUBE, T_BAR -> "$thickness (T):"
-              BEAM -> "$thickness (T1):"
+        field2.hint = when (form) {
+            PIPE, ROUND_BAR, HEXAGONAL_TUBE -> diameter
+            ANGLE, BEAM, CHANNEL, FLAT_BAR, HEXAGONAL_HEX, SQUARE_TUBE, T_BAR -> width
+            HEXAGONAL_BAR -> height
+            SQUARE_BAR -> side
+        }
+        field3.hint = when (form) {
+            ANGLE, BEAM, CHANNEL, FLAT_BAR, SQUARE_TUBE, T_BAR -> height
+            PIPE, HEXAGONAL_HEX -> "$thickness (T)"
+            HEXAGONAL_TUBE -> side
+            HEXAGONAL_BAR, SQUARE_BAR, ROUND_BAR -> ""
+        }
+        field4.hint = when (form) {
+            ANGLE, CHANNEL, SQUARE_TUBE, T_BAR -> "$thickness (T)"
+            BEAM -> "$thickness (T1)"
 
-              FLAT_BAR, HEXAGONAL_BAR, HEXAGONAL_HEX, HEXAGONAL_TUBE, PIPE, ROUND_BAR, SQUARE_BAR -> ""
-          }
-          tvField5.text = if (shape == BEAM) "$thickness (T2):" else ""
+            FLAT_BAR, HEXAGONAL_BAR, HEXAGONAL_HEX, HEXAGONAL_TUBE, PIPE, ROUND_BAR, SQUARE_BAR -> ""
+        }
+        field5.hint = if (form == BEAM) "$thickness (T2)" else ""
 
-      }*/
+    }
 
     private fun RecyclerView.initialize(
         adapter: AdapterRecyclerShapes,
-        startPosition: Int? = null,
         viewModel: CalcViewModel? = null,
         indicator: IndefinitePagerIndicator? = null
     ) {
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
         this.adapter = adapter
-        startPosition?.run { scrollToPosition(this) }
         this.attachSnapHelperWithListener(
             PagerSnapHelper(),
             onSnapPositionChangeListener = object : OnSnapPositionChangeListener {
                 override fun onSnapPositionChange(position: Int) {
-                    viewModel?.setShape(Form.values()[position])
+                    viewModel?.setForm(Form.values()[position])
                 }
             })
         indicator?.attachToRecyclerView(this)
@@ -338,55 +284,25 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         }
     }
 
-    private fun EditText.initWithTextView(tv: TextView) {
-        addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                tv.warning(false)
-            }
-        })
-    }
-
-    private fun Button.setSelectedOption(selected: Boolean) {
-        background = if (selected) {
-            tag = SELECTED
-            context.getDrawable(R.drawable.background_btn_stay_pressed)
-        } else {
-            tag = UNSELECTED
-            context.getDrawable(R.drawable.background_btn)
-        }
-    }
-
     private fun TextView.warning(warn: Boolean) {
         setTextColor(resources.getColor(if (warn) android.R.color.holo_red_dark else android.R.color.black))
     }
 
-
     override fun onResume() {
         super.onResume()
-        Log.d("hhas", "CALC: onResume()")
 
         MainViewModel.setState(state)
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d("hhas", "CALC: onStop()")
 
         activity?.run { setTheme(R.style.NoActionTheme) }
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("hhas", "CALC: onDestroy()")
         job.cancel()
-
     }
 
 }

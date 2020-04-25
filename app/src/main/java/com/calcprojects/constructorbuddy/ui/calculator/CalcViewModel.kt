@@ -9,17 +9,17 @@ import kotlinx.coroutines.launch
 
 class CalcViewModel : ViewModel() {
 
-    private val shape = MutableLiveData<Form>()
+    private val form = MutableLiveData<Form>()
     private val material = MutableLiveData<Substance>()
     private val type = MutableLiveData<Boolean>()
     private val params = MutableLiveData<Array<Double?>>()
     private val model = MediatorLiveData<Model>()
 
-    fun setShape(shape: Form) {
-        this.shape.value = shape
+    fun setForm(form: Form) {
+        this.form.value = form
     }
 
-    fun getShape(): LiveData<Form> = shape
+    fun getForm(): LiveData<Form> = form
 
     fun setMaterial(material: Substance) {
         this.material.value = material
@@ -30,21 +30,21 @@ class CalcViewModel : ViewModel() {
 
             Log.d("asafe", "getModel triggered")
 
-            model.addSource(shape) {
-                model.value = combine(shape, material, type, params)
+            model.addSource(form) {
+                model.value = combine(form, material, type, params)
             }
             model.addSource(material) {
-                model.value = combine(shape, material, type, params)
+                model.value = combine(form, material, type, params)
             }
             model.addSource(params) {
-                model.value = combine(shape, material, type, params)
+                model.value = combine(form, material, type, params)
             }
         }
         return model
     }
 
     fun removeSources() {
-        model.removeSource(shape)
+        model.removeSource(form)
         model.removeSource(material)
         model.removeSource(params)
     }
@@ -65,25 +65,20 @@ class CalcViewModel : ViewModel() {
     }
 
     private fun combine(
-        shapeLD: LiveData<Form>,
+        formLD: LiveData<Form>,
         materialLD: LiveData<Substance>,
         typeLD: LiveData<Boolean>,
         paramsLD: LiveData<Array<Double?>>
     ): Model? {
 
-        Log.d("asafe", "combine triggered")
-
-
-        val shape = shapeLD.value
+        val form = formLD.value
         val mat = materialLD.value
         val type = typeLD.value
         val params = paramsLD.value
 
-        return if (shape != null && mat != null && type != null && params != null) {
+        return if (form != null && mat != null && type != null && params != null) {
 
-            Log.d("asafe", "combine inside")
-
-            /*params[0]?.let { p0 ->
+           /* params[0]?.let { p0 ->
                 params[1]?.let { p1 ->
                     if (type)
                         Model.Builder
