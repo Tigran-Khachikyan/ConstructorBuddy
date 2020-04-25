@@ -19,13 +19,14 @@
             android:background="@mipmap/city"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
             app:cardBackgroundColor="@color/colorPrimaryDark"
             app:cardCornerRadius="12dp"
+            app:shapeAppearanceOverlay="@style/cardCut"
             app:cardElevation="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -63,7 +64,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lay_init_data"

@@ -105,7 +105,7 @@ class SplashFragment : Fragment(), CoroutineScope {
 
     private fun resetStartDestinationToHomeFragment(navController: NavController) {
         val graph = navController.navInflater.inflate(R.navigation.mobile_navigation)
-        graph.startDestination = R.id.destination_home
+        graph.startDestination = R.id.toHome
         navController.graph = graph
     }
 

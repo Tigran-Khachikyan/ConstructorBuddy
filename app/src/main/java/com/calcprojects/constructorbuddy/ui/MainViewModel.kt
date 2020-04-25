@@ -15,11 +15,9 @@ class MainViewModel : ViewModel() {
         private val state = MutableLiveData<StateUIActivity>()
     }
 
-
     fun getState(): LiveData<StateUIActivity> {
         if (state.value == null)
             state.value = StateUIActivity()
-
         return state
     }
 }

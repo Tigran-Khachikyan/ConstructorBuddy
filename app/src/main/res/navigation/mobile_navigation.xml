@@ -6,7 +6,7 @@
     app:startDestination="@id/destination_splash">
 
     <fragment
-        android:id="@+id/destination_home"
+        android:id="@+id/toHome"
         android:name="com.calcprojects.constructorbuddy.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
@@ -20,13 +20,13 @@
     </fragment>
 
     <fragment
-        android:id="@+id/destination_saved"
+        android:id="@+id/toSaved"
         android:name="com.calcprojects.constructorbuddy.ui.saved.SavedFragment"
         android:label="@string/title_saved"
         tools:layout="@layout/fragment_saved" />
 
     <fragment
-        android:id="@+id/destination_settings"
+        android:id="@+id/toSettings"
         android:name="com.calcprojects.constructorbuddy.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
@@ -41,7 +41,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_bottom"
             app:popExitAnim="@anim/slide_out_top"
-            app:popUpTo="@id/destination_home"
+            app:popUpTo="@id/toHome"
             app:popUpToInclusive="false" />
     </fragment>
     <fragment
@@ -63,11 +63,18 @@
             android:defaultValue="null" />
         <action
             android:id="@+id/action_open_settings"
-            app:destination="@id/destination_settings"
+            app:destination="@id/toSettings"
             app:enterAnim="@anim/slide_in_top"
             app:exitAnim="@anim/slide_out_bottom"
             app:popEnterAnim="@anim/slide_in_bottom"
             app:popExitAnim="@anim/slide_out_top" />
+        <action
+            android:id="@+id/actionToSavedModels"
+            app:destination="@id/toSaved"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom" />
     </fragment>
     <fragment
         android:id="@+id/destination_splash"
@@ -75,7 +82,7 @@
         tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_finish_splash"
-            app:destination="@id/destination_home"
+            app:destination="@id/toHome"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popUpTo="@id/destination_splash"

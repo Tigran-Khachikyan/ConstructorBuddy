@@ -100,4 +100,9 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="cardCut">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">60dp</item>
+    </style>
+
 </resources>
