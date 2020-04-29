@@ -8,8 +8,9 @@ import com.calcprojects.constructorbuddy.model.price.Price
 data class Material(
     val substance: Substance,
     @Embedded
-    val price: Price? = null,
+    val price: Price? = null
+){
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "material_id")
     var id: Int = 0
-)
+}

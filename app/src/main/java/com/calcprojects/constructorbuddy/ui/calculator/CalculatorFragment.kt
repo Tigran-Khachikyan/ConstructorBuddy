@@ -2,13 +2,11 @@ package com.calcprojects.constructorbuddy.ui.calculator
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -48,6 +46,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
     private var form: Form? = null
     private lateinit var adapterRecShape: AdapterRecyclerShapes
     private val materials by lazy { Substance.values() }
+    private var valueField1: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +58,6 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         }
         form = shapeName?.let { valueOf(it) }
         viewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
-        Log.d("shjsd", "form: $form")
     }
 
     override fun onCreateView(
@@ -91,17 +89,26 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         }
 
         btn_calculate.setOnClickListener {
-            /*     val par1 = etField1.getValue(layInp1, tvField1)
-                 val par2 = etField2.getValue(layInp2, tvField2)
-                 val par3 = etField3.getValue(layInp3, tvField3)
-                 val par4 = etField4.getValue(layInp4, tvField4)
-                 val par5 = etField5.getValue(layInp5, tvField5)
-                 if (par1 != NO_INPUT && par2 != NO_INPUT && par3 != NO_INPUT && par4 != NO_INPUT
-                     && par5 != NO_INPUT && par1 != null && par2 != null
-                 )
-                     viewModel.setParameters(par1, par2, par3, par4, par5)*/
-
-            it.findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
+            val par1 = field1.getValue()
+            val par2 = field2.getValue()
+            val par3 = field3.getValue()
+            val par4 = field4.getValue()
+            val par5 = field5.getValue()
+            if (
+                par1 != null && par1 != NO_INPUT
+                && par2 != null && par2 != NO_INPUT
+                && par3 != NO_INPUT
+                && par4 != NO_INPUT
+                && par5 != NO_INPUT
+            ) {
+                valueField1 = par1
+                viewModel.setParameters(par1, par2, par3, par4, par5)
+                val success = viewModel.calculate()
+                Log.d("ashjhs","success: $success")
+                if (success) {
+                    it.findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
+                }
+            }
 
         }
 
@@ -112,33 +119,13 @@ class CalculatorFragment : Fragment(), CoroutineScope {
                 else requireContext().getString(R.string.weight) + " (Wg)"
             field1.editText?.text?.clear()
             field1.clearFocus()
+            field1.isErrorEnabled = false
         })
 
         viewModel.getForm().observe(viewLifecycleOwner, Observer
         {
-            Log.d("shjsd", "it: $it")
-
             setTextInputLayoutHintText(it)
             setTextInputLayoutVisibility(it)
-        })
-
-        viewModel.getModel().observe(viewLifecycleOwner, Observer {
-
-            Log.d("asafe", "in Observer: weight: ${it?.weight}")
-
-            /*it?.run {
-                tv_result_weight_length.text =
-                    if (btn_byLength.tag == SELECTED)
-                        "${requireContext().getString(R.string.weight)} = ${decFormatter2p.format(
-                            weight
-                        )}"
-                    else "${requireContext().getString(R.string.length)} = ${decFormatter2p.format(
-                        length
-                    )}"
-
-                Log.d("asafe", "in Observer: length: ${it.length}")
-
-            }*/
         })
 
         topAppBar_calc_fragment.setOnMenuItemClickListener {
@@ -150,24 +137,38 @@ class CalculatorFragment : Fragment(), CoroutineScope {
             return@setOnMenuItemClickListener false
         }
 
+        field1.editText?.doOnTextChanged { _, _, _, _ ->
+            field1.isErrorEnabled = false
+        }
+        field2.editText?.doOnTextChanged { _, _, _, _ ->
+            field2.isErrorEnabled = false
+        }
+        field3.editText?.doOnTextChanged { _, _, _, _ ->
+            field3.isErrorEnabled = false
+        }
+        field4.editText?.doOnTextChanged { _, _, _, _ ->
+            field4.isErrorEnabled = false
+        }
+        field5.editText?.doOnTextChanged { _, _, _, _ ->
+            field5.isErrorEnabled = false
+        }
+
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.removeSources()
-    }
-
-    private fun EditText.getValue(layout: ConstraintLayout, tv: TextView): Double? {
-        return if (layout.visibility == View.VISIBLE) {
-            if (text.toString() != "") text.toString().toDouble() else {
-                tv.warning(true)
+    private fun TextInputLayout.getValue(): Double? {
+        return if (visibility == View.VISIBLE) {
+            if (editText?.text?.toString() != "") {
+                editText?.text.toString().toDouble()
+            } else {
+                isErrorEnabled = true
+                error = resources.getString(R.string.error_text)
                 NO_INPUT
             }
         } else null
     }
 
     private fun TextInputLayout.hide() = run {
-        editText?.text?.clear()
+        //  editText?.text?.clear()
         clearFocus()
         visibility = View.GONE
     }
@@ -176,10 +177,15 @@ class CalculatorFragment : Fragment(), CoroutineScope {
 
     private fun setTextInputLayoutVisibility(form: Form) {
 
+        field1.isErrorEnabled = false
+        field2.isErrorEnabled = false
+        field3.isErrorEnabled = false
+        field4.isErrorEnabled = false
+        field5.isErrorEnabled = false
         field1.show()
         field2.show()
-        when (form) {
 
+        when (form) {
             ANGLE -> {
                 field3.show();field4.show();field5.hide()
             }
@@ -279,18 +285,16 @@ class CalculatorFragment : Fragment(), CoroutineScope {
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                viewModel?.setMaterial(materials[position])
+                viewModel?.setSubstance(materials[position])
             }
         }
     }
 
-    private fun TextView.warning(warn: Boolean) {
-        setTextColor(resources.getColor(if (warn) android.R.color.holo_red_dark else android.R.color.black))
-    }
 
     override fun onResume() {
         super.onResume()
 
+        valueField1?.let { field1.editText?.setText(it.toString()) }
         MainViewModel.setState(state)
     }
 

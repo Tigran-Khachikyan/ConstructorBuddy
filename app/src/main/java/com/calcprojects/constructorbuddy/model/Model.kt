@@ -1,5 +1,6 @@
 package com.calcprojects.constructorbuddy.model
 
+import android.util.Log
 import androidx.room.*
 import com.calcprojects.constructorbuddy.model.figures.Material
 import com.calcprojects.constructorbuddy.model.figures.Shape
@@ -15,12 +16,14 @@ class Model constructor(
     @Embedded
     val material: Material,
     val units: Unit,
-    var weight: Double,
+    var weight: Double
+
+) {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
     var id: Int = 0
-) {
+
     companion object {
         fun createByLength(shape: Shape, material: Material, units: Unit): Model? {
 
@@ -29,15 +32,22 @@ class Model constructor(
             else
                 shape.run { volume?.let { fromGCm3ToLbIn3(material.substance.density) * it } }
 
+            Log.d("ashjhs","weight: $weight")
+            Log.d("ashjhs","volume: ${shape.volume}")
+
+
             return weight?.let { Model(shape, material, units, it) }
         }
 
-        fun createVyWeight(shape: Shape, material: Material, units: Unit, weight: Double): Model? {
+        fun createByWeight(shape: Shape, material: Material, units: Unit, weight: Double): Model? {
 
             shape.length = if (units == Unit.METRIC)
                 shape.area?.let { 1000 * weight / (it * material.substance.density) }
             else
                 shape.area?.let { weight / (it * fromGCm3ToLbIn3(material.substance.density)) }
+
+
+            Log.d("ashjhs","shape.area: ${shape.area}")
 
             return shape.length?.let { Model(shape, material, units, weight) }
         }

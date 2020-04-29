@@ -41,7 +41,6 @@
                 <TextView
                     android:id="@+id/tv_res_length_weight"
                     style="@style/textView_result"
-                    android:text="LENGTH: 254,654.3 cm"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
