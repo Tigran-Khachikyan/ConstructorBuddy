@@ -2,85 +2,75 @@ package com.calcprojects.constructorbuddy.ui.saved
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.ui.ParentViewState
-import com.calcprojects.constructorbuddy.ui.MainViewModel
+import kotlinx.android.synthetic.main.fragment_saved.*
+
 
 class SavedFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: SavedViewModel
+    private var actionMode: ActionMode? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d("hkjg","SAVED _ onCreate")
+        Log.d("hkjg", "SAVED _ onCreate")
 
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-
-        Log.d("hkjg","SAVED _ onCreateView")
-
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(SavedViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_saved, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        Log.d("hkjg","SAVED _ onActivityCreated")
-
+        return inflater.inflate(R.layout.fragment_saved, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("hkjg","SAVED _ onViewCreated")
 
+
+        btnClick.setOnLongClickListener {
+            return@setOnLongClickListener if (actionMode != null) false else {
+                actionMode = (activity as AppCompatActivity).startSupportActionMode(callback)
+                true
+            }
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("hkjg","SAVED _ onStart")
+
+    private val callback = object : ActionMode.Callback {
+
+        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+
+            mode?.menuInflater?.inflate(R.menu.menu_contextual, menu)
+            return true
+        }
+
+        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            return false
+        }
+
+        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+            return when (item?.itemId) {
+                R.id.share -> {
+                    // Handle share icon press
+                    mode?.finish()
+                    true
+                }
+                R.id.delete -> {
+                    // Handle delete icon press
+                    mode?.finish()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        override fun onDestroyActionMode(mode: ActionMode?) {
+            actionMode = null
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d("hkjg","SAVED _ onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("hkjg","SAVED _ onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("hkjg","SAVED _ onStop")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d("hkjg","SAVED _ onDestroyView")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("hkjg","SAVED _ onDestroy")
-    }
 }

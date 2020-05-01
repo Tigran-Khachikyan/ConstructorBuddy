@@ -143,4 +143,7 @@
     <string name="count">Count</string>
     <string name="error_text">Input for this field is mandatory!</string>
     <string name="material">Material</string>
+    <string name="share">Share</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
 </resources>
