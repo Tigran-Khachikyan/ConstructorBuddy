@@ -47,7 +47,6 @@ class CalcViewModel : ViewModel() {
 
     fun calculate(): Boolean {
         val model = getModel(form, substance, typeByLength, params)
-        Log.d("ashjhs", "model: $model")
 
         return model?.let {
             byLength = typeByLength.value

@@ -15,7 +15,7 @@
             android:id="@+id/lay_image_result"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="36dp"
             android:background="@mipmap/city"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,21 +26,32 @@
             android:layout_margin="12dp"
             app:cardBackgroundColor="@color/colorPrimaryDark"
             app:cardCornerRadius="12dp"
-            app:shapeAppearanceOverlay="@style/cardCut"
             app:cardElevation="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/cardCut">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/lay_in_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="16dp"
-                android:paddingTop="16dp">
+                android:paddingBottom="16dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:src="@drawable/ic_share_black_24dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/background_share"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/tv_res_length_weight"
                     style="@style/textView_result"
+                    android:layout_marginTop="24dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -48,7 +59,6 @@
                 <TextView
                     android:id="@+id/tv_res_total_volume"
                     style="@style/textView_result"
-                    android:text="VOLUME: 444,654.3 cm2"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_res_length_weight" />
@@ -56,7 +66,6 @@
                 <TextView
                     android:id="@+id/tv_res_price"
                     style="@style/textView_result"
-                    android:text="PRICE: 45,624.3 AMD"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_res_total_volume" />
@@ -104,39 +113,44 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_init_mat"
+                        style="@style/textView_initial_data" />
+
+                    <TextView
                         android:id="@+id/tv_init_length_weight"
-                        style="@style/textView_initial_data"
-                        android:text="Weight: 565,566.3 kg" />
+                        style="@style/textView_initial_data" />
 
                     <TextView
                         android:id="@+id/tv_init_Width"
-                        style="@style/textView_initial_data"
-                        android:text="Width: 565,566.3 kg" />
+                        style="@style/textView_initial_data" />
 
                     <TextView
                         android:id="@+id/tv_init_height"
-                        style="@style/textView_initial_data"
-                        android:text="Height: 565,566.3 kg" />
+                        style="@style/textView_initial_data" />
+
+                    <TextView
+                        android:id="@+id/tv_init_diameter"
+                        style="@style/textView_initial_data" />
+
+                    <TextView
+                        android:id="@+id/tv_init_side"
+                        style="@style/textView_initial_data" />
 
                     <TextView
                         android:id="@+id/tv_init_thickness"
-                        style="@style/textView_initial_data"
-                        android:text="Thickness: 565,566.3 kg" />
+                        style="@style/textView_initial_data" />
 
                     <TextView
                         android:id="@+id/tv_init_thickness2"
-                        style="@style/textView_initial_data"
-                        android:text="Thickness2: 565,566.3 kg" />
+                        style="@style/textView_initial_data" />
 
                     <TextView
-                        android:id="@+id/tv_init_price"
-                        style="@style/textView_initial_data"
-                        android:text="Price: 256.3 AMD/kg" />
+                        android:id="@+id/tv_init_mat_price"
+                        style="@style/textView_initial_data" />
 
                     <TextView
                         android:id="@+id/tv_init_rate"
-                        style="@style/textView_initial_data"
-                        android:text="Rate: AMD/USD = 480.2" />
+                        style="@style/textView_initial_data" />
 
                 </LinearLayout>
 
@@ -174,15 +188,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:backgroundTint="@color/colorAccent"
         android:padding="6dp"
         android:text="@string/result"
         android:textAllCaps="true"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimaryLight"
         android:textSize="32sp"
 
         android:textStyle="bold"
-        app:icon="@drawable/ic_save"
         app:layout_anchor="@id/card_result"
         app:layout_anchorGravity="top|start" />
 

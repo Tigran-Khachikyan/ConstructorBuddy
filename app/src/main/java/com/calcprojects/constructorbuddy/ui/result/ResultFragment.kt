@@ -48,7 +48,7 @@ class ResultFragment : Fragment(), CoroutineScope {
 
         model?.run {
             val length =
-                resources.getString(R.string.length) + ": " + shape.length?.to2p() + " " + units.density
+                resources.getString(R.string.length) + ": " + shape.length?.to2p() + " " + units.distance
             val weight =
                 resources.getString(R.string.weight) + ": " + weight.to2p() + " " + units.weight
             byLength?.let {
@@ -59,6 +59,44 @@ class ResultFragment : Fragment(), CoroutineScope {
             val volume =
                 resources.getString(R.string.volume) + " : " + shape.volume?.to2p() + " " + units.volume
             tv_res_total_volume.text = volume
+
+            val material =
+                resources.getString(R.string.material) + ": " + resources.getString(material.substance.nameRes)
+            tv_init_mat.text = material
+
+            val width =
+                shape.width?.let { resources.getString(R.string.width) + " : " + it.to2p() + " " + units.distance }
+            tv_init_Width.run { if (width != null) text = width else visibility = View.GONE }
+
+
+            val height =
+                shape.height?.let { resources.getString(R.string.height) + " : " + it.to2p() + " " + units.distance }
+            tv_init_height.run { if (height != null) text = height else visibility = View.GONE }
+
+            val diameter =
+                shape.diameter?.let { resources.getString(R.string.diameter) + " : " + it.to2p() + " " + units.distance }
+            tv_init_diameter.run {
+                if (diameter != null) text = diameter else visibility = View.GONE
+            }
+
+            val side =
+                shape.side?.let { resources.getString(R.string.side) + " : " + it.to2p() + " " + units.distance }
+            tv_init_side.run { if (side != null) text = side else visibility = View.GONE }
+
+
+            val thickness =
+                shape.thickness?.let { resources.getString(R.string.thickness) + " : " + it.to2p() + " " + units.distance }
+            tv_init_thickness.run {
+                if (thickness != null) text = thickness else visibility = View.GONE
+            }
+
+            val thickness2 =
+                shape.thickness2?.let { resources.getString(R.string.thickness) + "2 : " + it.to2p() + " " + units.distance }
+            tv_init_thickness2.run {
+                if (thickness2 != null) text = thickness2 else visibility = View.GONE
+            }
+
+            iv_shape_res.setImageResource(shape.form.imageRes)
         }
 
     }

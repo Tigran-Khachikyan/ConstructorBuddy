@@ -142,4 +142,5 @@
     <string name="initial_data">Initial data</string>
     <string name="count">Count</string>
     <string name="error_text">Input for this field is mandatory!</string>
+    <string name="material">Material</string>
 </resources>
