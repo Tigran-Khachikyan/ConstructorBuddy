@@ -46,9 +46,9 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_res_total_area"
+                    android:id="@+id/tv_res_total_volume"
                     style="@style/textView_result"
-                    android:text="AREA: 444,654.3 cm2"
+                    android:text="VOLUME: 444,654.3 cm2"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_res_length_weight" />
@@ -59,7 +59,7 @@
                     android:text="PRICE: 45,624.3 AMD"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_res_total_area" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_res_total_volume" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

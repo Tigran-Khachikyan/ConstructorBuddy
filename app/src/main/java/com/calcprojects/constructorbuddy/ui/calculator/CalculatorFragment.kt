@@ -104,13 +104,15 @@ class CalculatorFragment : Fragment(), CoroutineScope {
                 valueField1 = par1
                 viewModel.setParameters(par1, par2, par3, par4, par5)
                 val success = viewModel.calculate()
-                Log.d("ashjhs","success: $success")
                 if (success) {
                     it.findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
                 }
             }
-
         }
+
+
+
+
 
         viewModel.getType().observe(viewLifecycleOwner, Observer {
 

@@ -11,6 +11,7 @@ import com.calcprojects.constructorbuddy.ui.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
 import com.calcprojects.constructorbuddy.ui.calculator.CalcViewModel
+import com.calcprojects.constructorbuddy.ui.to2p
 import kotlinx.android.synthetic.main.fragment_result.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -46,10 +47,18 @@ class ResultFragment : Fragment(), CoroutineScope {
         val byLength = CalcViewModel.byLength
 
         model?.run {
+            val length =
+                resources.getString(R.string.length) + ": " + shape.length?.to2p() + " " + units.density
+            val weight =
+                resources.getString(R.string.weight) + ": " + weight.to2p() + " " + units.weight
             byLength?.let {
-                if (it)
-                    tv_res_length_weight.text = shape.length?.toString()
+                tv_res_length_weight.text = if (it) weight else length
+                tv_init_length_weight.text = if (it) length else weight
             }
+
+            val volume =
+                resources.getString(R.string.volume) + " : " + shape.volume?.to2p() + " " + units.volume
+            tv_res_total_volume.text = volume
         }
 
     }

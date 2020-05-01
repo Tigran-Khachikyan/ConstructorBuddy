@@ -4,10 +4,16 @@ import androidx.room.TypeConverter
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.figures.Form
 
-enum class Unit(val nameRes: Int, val distance: String, val weight: String, val density: String) {
+enum class Unit(
+    val nameRes: Int,
+    val distance: String,
+    val weight: String,
+    val density: String,
+    val volume: String
+) {
 
-    METRIC(R.string.metric, "cm", "kg", "g/cm3"),
-    IMPERIAL(R.string.imperial, "inch", "pound", "lb/in3");
+    METRIC(R.string.metric, "cm", "kg", "g/cm3", "cm3"),
+    IMPERIAL(R.string.imperial, "inch", "pound", "lb/in3", "in3");
 }
 
 class UnitTypeConverter {
