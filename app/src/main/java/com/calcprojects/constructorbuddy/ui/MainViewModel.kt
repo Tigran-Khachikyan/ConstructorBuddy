@@ -8,16 +8,17 @@ class MainViewModel : ViewModel() {
 
     companion object {
 
-        fun setState(newState: StateUIActivity) {
-            state.value = newState
+        fun showBottomActionView(show: Boolean, withAnimation: Boolean = false) {
+
+            state.value = Pair(show, withAnimation)
         }
 
-        private val state = MutableLiveData<StateUIActivity>()
+        private val state = MutableLiveData<Pair<Boolean, Boolean>>()
     }
 
-    fun getState(): LiveData<StateUIActivity> {
+    fun getState(): LiveData<Pair<Boolean, Boolean>> {
         if (state.value == null)
-            state.value = StateUIActivity()
+            state.value = Pair(first = true, second = false)
         return state
     }
 }

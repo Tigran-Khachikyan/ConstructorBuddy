@@ -1,20 +1,24 @@
 package com.calcprojects.constructorbuddy.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.transition.Fade
+import androidx.transition.Transition
+import androidx.transition.TransitionManager
 import com.calcprojects.constructorbuddy.R
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainViewModel: MainViewModel
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,17 +32,23 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         mainViewModel.getState().observe(this, Observer {
-            setActivityViewConfigurations(it)
+            nav_view?.run {
+                if (!it.second)
+                    visibility = if (it.first) View.VISIBLE else View.GONE  //without animation
+                else {
+                    if (it.first) {
+                        alpha = 0f
+                        visibility = View.VISIBLE
+                        animate().apply { duration = SCREEN_DELAY_TIME }.alpha(1f).start()
+                    } else {
+                        animate().apply { duration = SCREEN_DELAY_TIME }.alpha(0f).withEndAction {
+                            visibility = View.GONE
+                        }.start()
+                    }
+                }
+            }
+
+
         })
     }
-
-    private fun setActivityViewConfigurations(state: StateUIActivity) {
-        state.run {
-            nav_view.visibility = if (bottomNavViewVisibility) View.VISIBLE else View.GONE
-            systemUiVisibility?.let { sv -> window.decorView.systemUiVisibility = sv }
-            requestedOrientation?.let { ro -> this@MainActivity.requestedOrientation = ro }
-            Log.d("kasasja", "STATE: $state")
-        }
-    }
-
 }

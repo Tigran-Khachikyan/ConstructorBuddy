@@ -1,8 +1,8 @@
 package com.calcprojects.constructorbuddy.ui.calculator
 
+import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.*
@@ -20,7 +20,6 @@ import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.figures.Substance
 import com.calcprojects.constructorbuddy.model.figures.Form
 import com.calcprojects.constructorbuddy.model.figures.Form.*
-import com.calcprojects.constructorbuddy.ui.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.*
 import com.google.android.material.textfield.TextInputLayout
 import com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator
@@ -35,13 +34,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = Main + Job()
-    private val state: StateUIActivity by lazy {
-        StateUIActivity(
-            View.SYSTEM_UI_FLAG_VISIBLE,
-            false,
-            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        )
-    }
+
     private lateinit var viewModel: CalcViewModel
     private var form: Form? = null
     private lateinit var adapterRecShape: AdapterRecyclerShapes
@@ -269,7 +262,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
             PagerSnapHelper(),
             onSnapPositionChangeListener = object : OnSnapPositionChangeListener {
                 override fun onSnapPositionChange(position: Int) {
-                    viewModel?.setForm(Form.values()[position])
+                    viewModel?.setForm(values()[position])
                 }
             })
         indicator?.attachToRecyclerView(this)
@@ -292,23 +285,25 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         }
     }
 
-
     override fun onResume() {
         super.onResume()
 
         valueField1?.let { field1.editText?.setText(it.toString()) }
-        MainViewModel.setState(state)
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        activity?.run { setTheme(R.style.NoActionTheme) }
+        configureActivity()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    private fun configureActivity() {
+        activity?.run {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+        MainViewModel.showBottomActionView(false)
     }
 
 }

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.ui.StateUIActivity
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -22,20 +21,9 @@ import kotlin.coroutines.CoroutineContext
 
 class HomeFragment : Fragment(), CoroutineScope {
 
-    private val state: StateUIActivity by lazy {
-        StateUIActivity(
-            (View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION),
-            true,
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        )
-    }
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = Main + job
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -62,7 +50,7 @@ class HomeFragment : Fragment(), CoroutineScope {
         job = Job()
         launch {
             delay(SCREEN_DELAY_TIME)
-            MainViewModel.setState(state)
+            configureActivity()
         }
     }
 
@@ -71,8 +59,12 @@ class HomeFragment : Fragment(), CoroutineScope {
         job.cancel()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    private fun configureActivity(){
+        activity?.run {
+            window.decorView.systemUiVisibility =
+                (View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+        MainViewModel.showBottomActionView(true)
     }
-
 }
