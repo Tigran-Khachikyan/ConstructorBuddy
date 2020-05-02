@@ -2,16 +2,11 @@ package com.calcprojects.constructorbuddy.ui
 
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.transition.Fade
-import androidx.transition.Transition
-import androidx.transition.TransitionManager
 import com.calcprojects.constructorbuddy.R
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -47,8 +42,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
-
         })
     }
 }

@@ -112,18 +112,18 @@ class Repository(
 
 
     override suspend fun saveModel(model: Model) {
-        TODO("Not yet implemented")
+        modelDao.add(model)
     }
 
     override suspend fun deleteModel(id: Int) {
-        TODO("Not yet implemented")
+        modelDao.remove(id)
     }
 
     override fun getModel(id: Int): Model {
-        TODO("Not yet implemented")
+        return modelDao.get(id)
     }
 
     override fun getAllModels(): LiveData<List<Model>> {
-        TODO("Not yet implemented")
+        return modelDao.getAll()
     }
 }

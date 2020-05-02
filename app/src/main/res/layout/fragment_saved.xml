@@ -4,43 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:fitsSystemWindows="true"
+    android:background="@color/colorSecondary"
     tools:context=".ui.saved.SavedFragment">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar_saved"
         android:layout_width="match_parent"
-        android:layout_height="150dp">
-        <!--
-           <com.google.android.material.appbar.MaterialToolbar
-               android:layout_width="match_parent"
-               android:layout_height="?android:attr/actionBarSize"/>-->
+        android:layout_height="wrap_content"
+        android:background="@color/colorSecondaryDark"
+        android:paddingTop="24dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+            android:layout_height="match_parent"
+
+            android:fitsSystemWindows="true"
+            app:collapsedTitleTextAppearance="@style/TextAppearance.App.CollapsingToolbar.Collapsed"
+            app:contentScrim="?attr/colorPrimaryDark"
+            app:expandedTitleMarginBottom="28dp"
+
+            app:expandedTitleMarginStart="72dp"
+            app:expandedTitleTextAppearance="@style/TextAppearance.App.CollapsingToolbar.Expanded"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:statusBarScrim="?attr/colorPrimaryVariant">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/bridge" />
+                android:src="@mipmap/building_saved" />
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_saved"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                android:background="@android:color/transparent" />
+                app:layout_collapseMode="pin"
+                app:menu="@menu/app_bar_menu"
+                app:subtitle="get your saved items"
+                app:subtitleTextColor="@android:color/white"
+                app:title="Saved Items"
+                app:titleTextColor="@android:color/white" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <Button
-        android:id="@+id/btnClick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_saved"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

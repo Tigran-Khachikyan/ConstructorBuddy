@@ -300,7 +300,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
     @SuppressLint("SourceLockedOrientationActivity")
     private fun configureActivity() {
         activity?.run {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_LAYOUT_FLAGS)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         MainViewModel.showBottomActionView(false)

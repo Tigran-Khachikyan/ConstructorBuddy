@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorPrimaryLight">#9e47ff</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="colorSecondary">#004d40</color>
-    <color name="colorSecondaryDark">#00251a</color>
+    <color name="colorSecondary">#628891</color>
+    <color name="colorSecondaryTrans">#7C355B63</color>
+    <color name="colorSecondaryDark">#355b63</color>
+    <color name="colorSecondarySP">#003447</color>
 </resources>

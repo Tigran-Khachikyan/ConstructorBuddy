@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
@@ -22,12 +23,14 @@ import kotlin.coroutines.CoroutineContext
 class ResultFragment : Fragment(), CoroutineScope {
 
     private lateinit var job: Job
+    private lateinit var resultViewModel: ResultViewModel
     override val coroutineContext: CoroutineContext
         get() = Main + job
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+        resultViewModel = ViewModelProvider(this).get(ResultViewModel::class.java)
         return inflater.inflate(R.layout.fragment_result, container, false)
     }
 
@@ -89,6 +92,12 @@ class ResultFragment : Fragment(), CoroutineScope {
             }
 
             iv_shape_res.setImageResource(shape.form.imageRes)
+        }
+
+        btn_save.setOnClickListener {
+            model?.let {
+                resultViewModel.save(it)
+            }
         }
 
     }
