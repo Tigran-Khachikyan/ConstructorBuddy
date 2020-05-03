@@ -9,7 +9,7 @@ import com.calcprojects.constructorbuddy.model.price.Currency
 interface AppRepository {
     suspend fun saveModel(model: Model)
     suspend fun deleteModel(id: Int)
-    fun getModel(id: Int): Model
+    fun getModel(id: Int): LiveData<Model>
     fun getAllModels(): LiveData<List<Model>>
     suspend fun getPricedMaterial(substance: Substance, currency: Currency): Material
 }

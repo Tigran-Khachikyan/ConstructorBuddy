@@ -2,6 +2,8 @@ package com.calcprojects.constructorbuddy.ui.result
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.calcprojects.constructorbuddy.data.Repository
 import com.calcprojects.constructorbuddy.data.api_currency.ApiCurrency
@@ -26,5 +28,8 @@ class ResultViewModel(application: Application) : AndroidViewModel(application) 
             repo.saveModel(model)
         }
     }
+
+    fun getModel(id: Int): LiveData<Model> = repo.getModel(id)
+
 
 }

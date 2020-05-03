@@ -14,7 +14,7 @@ interface ModelDao {
     fun getAll(): LiveData<List<Model>>
 
     @Query("SELECT * FROM MODELS WHERE _id =:id")
-    fun get(id: Int): Model
+    fun get(id: Int): LiveData<Model>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun add(model: Model)

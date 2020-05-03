@@ -9,6 +9,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.calcprojects.constructorbuddy.R
@@ -22,39 +23,6 @@ class SavedFragment : Fragment() {
     private var actionMode: ActionMode? = null
     private lateinit var savedViewModel: SavedViewModel
     private lateinit var adapterRecyclerSaved: AdapterRecyclerSaved
-    private val callback = object : ActionMode.Callback {
-
-        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            MainViewModel.showBottomActionView(show = false, withAnimation = true)
-            mode?.menuInflater?.inflate(R.menu.menu_contextual, menu)
-            return true
-        }
-
-        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            return false
-        }
-
-        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            return when (item?.itemId) {
-                R.id.share -> {
-                    // Handle share icon press
-                    mode?.finish()
-                    true
-                }
-                R.id.delete -> {
-                    // Handle delete icon press
-                    mode?.finish()
-                    true
-                }
-                else -> false
-            }
-        }
-
-        override fun onDestroyActionMode(mode: ActionMode?) {
-            MainViewModel.showBottomActionView(show = true, withAnimation = true)
-            actionMode = null
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -66,8 +34,15 @@ class SavedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val funcOpenModel: (Int) -> Unit = {
+            Log.d("asaasfwe", "id: $it")
+            val action = SavedFragmentDirections.actionOpenSaved(it)
+            view.findNavController().navigate(action)
+        }
+
+
         adapterRecyclerSaved =
-            AdapterRecyclerSaved(activity, null, appBar_saved)
+            AdapterRecyclerSaved(activity, null, appBar_saved, funcOpenModel)
         recycler_view_saved.setHasFixedSize(true)
         recycler_view_saved.layoutManager =
             GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
@@ -77,8 +52,6 @@ class SavedFragment : Fragment() {
             adapterRecyclerSaved.models = it
             adapterRecyclerSaved.notifyDataSetChanged()
         })
-
-
     }
 
 

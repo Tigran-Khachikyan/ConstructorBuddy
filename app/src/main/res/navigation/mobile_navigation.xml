@@ -23,7 +23,17 @@
         android:id="@+id/toSaved"
         android:name="com.calcprojects.constructorbuddy.ui.saved.SavedFragment"
         android:label="@string/title_saved"
-        tools:layout="@layout/fragment_saved" />
+        tools:layout="@layout/fragment_saved" >
+        <action
+            android:id="@+id/action_open_saved"
+            app:destination="@id/destination_result"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/scale_out"
+            app:popUpTo="@id/toSaved"
+            app:popUpToInclusive="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/toSettings"
@@ -92,5 +102,10 @@
         android:id="@+id/destination_result"
         android:name="com.calcprojects.constructorbuddy.ui.result.ResultFragment"
         android:label="result"
-        tools:layout="@layout/fragment_result"/>
+        tools:layout="@layout/fragment_result">
+        <argument
+            android:name="model_Id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>

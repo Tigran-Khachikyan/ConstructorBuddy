@@ -119,7 +119,7 @@ class Repository(
         modelDao.remove(id)
     }
 
-    override fun getModel(id: Int): Model {
+    override fun getModel(id: Int): LiveData<Model> {
         return modelDao.get(id)
     }
 

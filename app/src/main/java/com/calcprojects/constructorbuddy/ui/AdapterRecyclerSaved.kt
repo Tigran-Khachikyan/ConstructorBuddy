@@ -21,7 +21,8 @@ import de.hdodenhof.circleimageview.CircleImageView
 class AdapterRecyclerSaved(
     private val activity: FragmentActivity?,
     var models: List<Model>?,
-    private val appBar: AppBarLayout
+    private val appBar: AppBarLayout,
+    private val funcOpenModel: (Int) -> Unit
 ) :
     RecyclerView.Adapter<AdapterRecyclerSaved.Holder>() {
 
@@ -84,6 +85,12 @@ class AdapterRecyclerSaved(
                 }
             }
 
+            itemView.setOnClickListener {
+                models?.run {
+                    funcOpenModel(this[adapterPosition].id)
+                }
+            }
+
         }
     }
 
@@ -98,7 +105,7 @@ class AdapterRecyclerSaved(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         models?.run {
-            holder.name.text = this[position].id.toString()
+            holder.name.text = (position + 1).toString()
             holder.image.setImageResource(this[position].shape.form.imageRes)
         }
     }

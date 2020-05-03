@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_calculator_gradient"
-    android:backgroundTintMode="screen"
-    android:paddingTop="24dp"
     tools:context=".ui.calculator.CalculatorFragment">
 
     <com.google.android.material.appbar.AppBarLayout

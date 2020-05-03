@@ -16,8 +16,8 @@ class Model constructor(
     @Embedded
     val material: Material,
     val units: Unit,
-    var weight: Double
-
+    var weight: Double,
+    val createdByLength: Boolean
 ) {
 
     @PrimaryKey(autoGenerate = true)
@@ -32,11 +32,7 @@ class Model constructor(
             else
                 shape.run { volume?.let { fromGCm3ToLbIn3(material.substance.density) * it } }
 
-            Log.d("ashjhs","weight: $weight")
-            Log.d("ashjhs","volume: ${shape.volume}")
-
-
-            return weight?.let { Model(shape, material, units, it) }
+            return weight?.let { Model(shape, material, units, it, true) }
         }
 
         fun createByWeight(shape: Shape, material: Material, units: Unit, weight: Double): Model? {
@@ -46,14 +42,10 @@ class Model constructor(
             else
                 shape.area?.let { weight / (it * fromGCm3ToLbIn3(material.substance.density)) }
 
-
-            Log.d("ashjhs","shape.area: ${shape.area}")
-
-            return shape.length?.let { Model(shape, material, units, weight) }
+            return shape.length?.let { Model(shape, material, units, weight, false) }
         }
     }
 }
-
 
 /*sealed class Builder(
     private var shape: Shape? = null,

@@ -2,12 +2,17 @@ package com.calcprojects.constructorbuddy.ui.result
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.calcprojects.constructorbuddy.R
+import com.calcprojects.constructorbuddy.model.Model
+import com.calcprojects.constructorbuddy.ui.DEFAULT_RES_ARG
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
 import com.calcprojects.constructorbuddy.ui.calculator.CalcViewModel
@@ -22,6 +27,7 @@ import kotlin.coroutines.CoroutineContext
 
 class ResultFragment : Fragment(), CoroutineScope {
 
+    private var modelToSave: Model? = null
     private lateinit var job: Job
     private lateinit var resultViewModel: ResultViewModel
     override val coroutineContext: CoroutineContext
@@ -38,18 +44,40 @@ class ResultFragment : Fragment(), CoroutineScope {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val model = CalcViewModel.modelCalculated
-        val byLength = CalcViewModel.byLength
+        val modelId = arguments?.let { ResultFragmentArgs.fromBundle(it).modelId }
 
-        model?.run {
+        modelId?.let { id ->
+            if (id == DEFAULT_RES_ARG) {
+                modelToSave = CalcViewModel.modelCalculated
+                modelToSave?.let { initialize(it, false) }
+            } else {
+                resultViewModel.getModel(id).observe(viewLifecycleOwner, Observer {
+                    initialize(it, true)
+                })
+            }
+        }
+
+        btn_save.setOnClickListener {
+            modelToSave?.let {
+                resultViewModel.save(it)
+            }
+        }
+
+    }
+
+    private fun initialize(model: Model, fromDB: Boolean) {
+        model.run {
+            Log.d("asaasfwe", "model is not null")
+
+            fromDB.let { if (it) btn_save.visibility = View.GONE }
+
             val length =
                 resources.getString(R.string.length) + ": " + shape.length?.to2p() + " " + units.distance
             val weight =
                 resources.getString(R.string.weight) + ": " + weight.to2p() + " " + units.weight
-            byLength?.let {
-                tv_res_length_weight.text = if (it) weight else length
-                tv_init_length_weight.text = if (it) length else weight
-            }
+            tv_res_length_weight.text = if (createdByLength) weight else length
+            tv_init_length_weight.text = if (createdByLength) length else weight
+
 
             val volume =
                 resources.getString(R.string.volume) + " : " + shape.volume?.to2p() + " " + units.volume
@@ -92,12 +120,6 @@ class ResultFragment : Fragment(), CoroutineScope {
             }
 
             iv_shape_res.setImageResource(shape.form.imageRes)
-        }
-
-        btn_save.setOnClickListener {
-            model?.let {
-                resultViewModel.save(it)
-            }
         }
 
     }
