@@ -17,10 +17,8 @@ import com.calcprojects.constructorbuddy.ui.AdapterRecyclerSaved
 import com.calcprojects.constructorbuddy.ui.MainViewModel
 import kotlinx.android.synthetic.main.fragment_saved.*
 
-
 class SavedFragment : Fragment() {
 
-    private var actionMode: ActionMode? = null
     private lateinit var savedViewModel: SavedViewModel
     private lateinit var adapterRecyclerSaved: AdapterRecyclerSaved
 
@@ -35,14 +33,15 @@ class SavedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val funcOpenModel: (Int) -> Unit = {
-            Log.d("asaasfwe", "id: $it")
             val action = SavedFragmentDirections.actionOpenSaved(it)
             view.findNavController().navigate(action)
         }
 
+        val funcRemoveModel: (Int) -> Unit = { savedViewModel.removeModel(it) }
 
         adapterRecyclerSaved =
-            AdapterRecyclerSaved(activity, null, appBar_saved, funcOpenModel)
+            AdapterRecyclerSaved(activity, null, appBar_saved, funcOpenModel, funcRemoveModel)
+
         recycler_view_saved.setHasFixedSize(true)
         recycler_view_saved.layoutManager =
             GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)

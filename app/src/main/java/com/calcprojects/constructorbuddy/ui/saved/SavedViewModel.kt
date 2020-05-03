@@ -1,15 +1,15 @@
 package com.calcprojects.constructorbuddy.ui.saved
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.util.Log
+import androidx.lifecycle.*
 import com.calcprojects.constructorbuddy.data.Repository
 import com.calcprojects.constructorbuddy.data.api_currency.ApiCurrency
 import com.calcprojects.constructorbuddy.data.api_currency.RetrofitService
 import com.calcprojects.constructorbuddy.data.db.Database
 import com.calcprojects.constructorbuddy.model.Model
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SavedViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -23,6 +23,14 @@ class SavedViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getSavedModels(): LiveData<List<Model>> {
         return repo.getAllModels()
+    }
+
+    fun removeModel(id: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            Log.d("remmm", "removeModel: $id")
+
+            repo.deleteModel(id)
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.calcprojects.constructorbuddy.ui
 
 import android.app.Activity
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,13 +23,19 @@ class AdapterRecyclerSaved(
     private val activity: FragmentActivity?,
     var models: List<Model>?,
     private val appBar: AppBarLayout,
-    private val funcOpenModel: (Int) -> Unit
+    private val funcOpenModel: (Int) -> Unit,
+    private val funcRemoveModel: (Int) -> Unit
 ) :
     RecyclerView.Adapter<AdapterRecyclerSaved.Holder>() {
 
     private var actionMode: ActionMode? = null
 
-    inner class Holder(itemView: View, appBar: AppBarLayout) :
+    inner class Holder(
+        itemView: View,
+        appBar: AppBarLayout,
+        funcOpenModel: (Int) -> Unit,
+        funcRemoveModel: (Int) -> Unit
+    ) :
         RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.tv_saved_number)
         val material: TextView = itemView.findViewById(R.id.tv_saved_material)
@@ -52,6 +59,8 @@ class AdapterRecyclerSaved(
             }
 
             override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                Log.d("remmm", "when")
+
                 return when (item?.itemId) {
                     R.id.share -> {
                         // Handle share icon press
@@ -59,7 +68,13 @@ class AdapterRecyclerSaved(
                         true
                     }
                     R.id.delete -> {
-                        // Handle delete icon press
+
+                        models?.run {
+                            val id = this[adapterPosition].id
+                            Log.d("remmm", "id: $id")
+
+                            funcRemoveModel(id)
+                        }
                         mode?.finish()
                         true
                     }
@@ -75,7 +90,6 @@ class AdapterRecyclerSaved(
                 actionMode = null
             }
         }
-
 
         init {
             itemView.setOnLongClickListener {
@@ -98,7 +112,7 @@ class AdapterRecyclerSaved(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.holder_saved_models, parent, false)
-        return Holder(view, appBar)
+        return Holder(view, appBar, funcOpenModel, funcRemoveModel)
     }
 
     override fun getItemCount(): Int = models?.size ?: 0

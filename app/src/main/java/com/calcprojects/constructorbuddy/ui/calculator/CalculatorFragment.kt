@@ -82,6 +82,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         }
 
         btn_calculate.setOnClickListener {
+
             val par1 = field1.getValue()
             val par2 = field2.getValue()
             val par3 = field3.getValue()
@@ -102,10 +103,6 @@ class CalculatorFragment : Fragment(), CoroutineScope {
                 }
             }
         }
-
-
-
-
 
         viewModel.getType().observe(viewLifecycleOwner, Observer {
 
