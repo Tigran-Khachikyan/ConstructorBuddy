@@ -2,10 +2,7 @@ package com.calcprojects.constructorbuddy.ui.saved
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -37,11 +34,11 @@ class SavedFragment : Fragment() {
             view.findNavController().navigate(action)
         }
 
-        val funcRemoveModel: (Int) -> Unit = { savedViewModel.removeModel(it) }
+        val funcRemoveModels: (List<Int>) -> Unit = { savedViewModel.removeModel(it) }
 
         activity?.let {
             adapterRecyclerSaved =
-                AdapterRecyclerSaved(it, null, appBar_saved, funcOpenModel, funcRemoveModel)
+                AdapterRecyclerSaved(it, null, appBar_saved, funcOpenModel, funcRemoveModels)
         }
 
         recycler_view_saved.setHasFixedSize(true)

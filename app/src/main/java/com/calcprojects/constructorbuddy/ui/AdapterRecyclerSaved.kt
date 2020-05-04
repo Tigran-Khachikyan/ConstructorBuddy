@@ -14,6 +14,7 @@ import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Model
 import com.google.android.material.appbar.AppBarLayout
 import de.hdodenhof.circleimageview.CircleImageView
+import java.lang.StringBuilder
 
 
 class AdapterRecyclerSaved(
@@ -21,7 +22,7 @@ class AdapterRecyclerSaved(
     var models: List<Model>?,
     private val appBar: AppBarLayout,
     private val funcOpenModel: (Int) -> Unit,
-    private val funcRemoveModel: (Int) -> Unit
+    private val funcRemoveModels: (List<Int>) -> Unit
 ) :
     RecyclerView.Adapter<AdapterRecyclerSaved.Holder>() {
 
@@ -31,7 +32,7 @@ class AdapterRecyclerSaved(
     inner class Holder(
         itemView: View,
         funcOpenModel: (Int) -> Unit,
-        funcRemoveModel: (Int) -> Unit
+        funcRemoveModels: (List<Int>) -> Unit
     ) :
         RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.tv_saved_number)
@@ -56,14 +57,19 @@ class AdapterRecyclerSaved(
             }
 
             override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-                Log.d("remmm", "when")
-
                 return when (item?.itemId) {
                     R.id.share -> {
-                        models?.let {
+                        models?.let { m ->
                             val sendIntent = Intent().apply {
                                 action = Intent.ACTION_SEND
-                                val text = it[adapterPosition].getResultToSend(activity)
+
+                                val textList =
+                                    selectedList?.map { adPos -> m[adPos].getResultToSend(activity) }
+                                val text = textList?.run {
+                                    val strBuilder = StringBuilder()
+                                    forEach { strBuilder.append(it) }
+                                    strBuilder.toString()
+                                }
                                 putExtra(Intent.EXTRA_TEXT, text)
                                 type = "text/plain"
                             }
@@ -76,10 +82,8 @@ class AdapterRecyclerSaved(
                     R.id.delete -> {
 
                         models?.run {
-                            val id = this[adapterPosition].id
-                            Log.d("remmm", "id: $id")
-
-                            funcRemoveModel(id)
+                            val arrayOfModelId = selectedList?.map { adPos -> this[adPos].id }
+                            arrayOfModelId?.let { funcRemoveModels(it) }
                         }
                         mode?.finish()
                         true
@@ -122,7 +126,7 @@ class AdapterRecyclerSaved(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.holder_saved_models, parent, false)
-        return Holder(view, funcOpenModel, funcRemoveModel)
+        return Holder(view, funcOpenModel, funcRemoveModels)
     }
 
     override fun getItemCount(): Int = models?.size ?: 0

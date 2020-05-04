@@ -1,7 +1,6 @@
 package com.calcprojects.constructorbuddy.ui.saved
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.calcprojects.constructorbuddy.data.Repository
 import com.calcprojects.constructorbuddy.data.api_currency.ApiCurrency
@@ -25,11 +24,9 @@ class SavedViewModel(application: Application) : AndroidViewModel(application) {
         return repo.getAllModels()
     }
 
-    fun removeModel(id: Int) {
+    fun removeModel(ids: List<Int>) {
         viewModelScope.launch(Dispatchers.Default) {
-            Log.d("remmm", "removeModel: $id")
-
-            repo.deleteModel(id)
+            repo.deleteModels(ids)
         }
     }
 

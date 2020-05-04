@@ -3,7 +3,6 @@ package com.calcprojects.constructorbuddy.data
 import android.content.Context
 import androidx.lifecycle.LiveData
 import com.calcprojects.constructorbuddy.data.api_currency.ApiCurrency
-import com.calcprojects.constructorbuddy.data.api_currency.Rates
 import com.calcprojects.constructorbuddy.data.db.ModelDao
 import com.calcprojects.constructorbuddy.data.firebase.*
 import com.calcprojects.constructorbuddy.model.Model
@@ -12,7 +11,6 @@ import com.calcprojects.constructorbuddy.model.figures.Substance
 import com.calcprojects.constructorbuddy.model.price.Currency
 import com.calcprojects.constructorbuddy.model.price.Price
 import com.calcprojects.constructorbuddy.model.price.getMapFromRates
-import com.calcprojects.constructorbuddy.model.price.getRatesFromMap
 import com.google.firebase.firestore.DocumentSnapshot
 import java.util.*
 import kotlin.collections.HashMap
@@ -115,8 +113,10 @@ class Repository(
         modelDao.add(model)
     }
 
-    override suspend fun deleteModel(id: Int) {
-        modelDao.remove(id)
+    override suspend fun deleteModels(ids: List<Int>) {
+        ids.forEach {
+            modelDao.remove(it)
+        }
     }
 
     override fun getModel(id: Int): LiveData<Model> {
