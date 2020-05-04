@@ -19,7 +19,7 @@ abstract class Database : RoomDatabase() {
                 val newInstance = Room.databaseBuilder(
                     context.applicationContext,
                     Database::class.java,
-                    "CONSTRUCTOR_DB"
+                    "BUILDER_DB"
                 ).build()
                 instance = newInstance
                 return newInstance

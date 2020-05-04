@@ -3,7 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_saved">Saved</string>
     <string name="title_settings">Settings</string>
-    <string name="title_shapes">Chose the shape!</string>
+    <string name="title_shapes">Choose the shape!</string>
     <string name="title_Calculator">Calculator</string>
 
     //shapes
@@ -146,4 +146,9 @@
     <string name="share">Share</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+
+
+    <string name="shape">Shape</string>
+
+
 </resources>

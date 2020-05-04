@@ -1,11 +1,10 @@
 package com.calcprojects.constructorbuddy.ui
 
-import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -13,14 +12,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Model
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.MaterialToolbar
 import de.hdodenhof.circleimageview.CircleImageView
 
 
 class AdapterRecyclerSaved(
-    private val activity: FragmentActivity?,
+    private val activity: FragmentActivity,
     var models: List<Model>?,
     private val appBar: AppBarLayout,
     private val funcOpenModel: (Int) -> Unit,
@@ -29,10 +26,10 @@ class AdapterRecyclerSaved(
     RecyclerView.Adapter<AdapterRecyclerSaved.Holder>() {
 
     private var actionMode: ActionMode? = null
+    private var selectedList: ArrayList<Int>? = null
 
     inner class Holder(
         itemView: View,
-        appBar: AppBarLayout,
         funcOpenModel: (Int) -> Unit,
         funcRemoveModel: (Int) -> Unit
     ) :
@@ -46,11 +43,11 @@ class AdapterRecyclerSaved(
         private val callback = object : ActionMode.Callback {
 
             override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                MainViewModel.showBottomActionView(show = false, withAnimation = true)
-                coverLayout.visibility = View.VISIBLE
-                appBar.layoutParams.height = 0
-                iconChecked.setImageResource(R.drawable.ic_check)
+
+                selectedList = arrayListOf()
+                (selectedList as ArrayList<Int>).add(adapterPosition)
                 mode?.menuInflater?.inflate(R.menu.menu_contextual, menu)
+                notifyDataSetChanged()
                 return true
             }
 
@@ -63,7 +60,16 @@ class AdapterRecyclerSaved(
 
                 return when (item?.itemId) {
                     R.id.share -> {
-                        // Handle share icon press
+                        models?.let {
+                            val sendIntent = Intent().apply {
+                                action = Intent.ACTION_SEND
+                                val text = it[adapterPosition].getResultToSend(activity)
+                                putExtra(Intent.EXTRA_TEXT, text)
+                                type = "text/plain"
+                            }
+                            val shareIntent = Intent.createChooser(sendIntent, null)
+                            activity.startActivity(shareIntent)
+                        }
                         mode?.finish()
                         true
                     }
@@ -83,11 +89,10 @@ class AdapterRecyclerSaved(
             }
 
             override fun onDestroyActionMode(mode: ActionMode?) {
-                MainViewModel.showBottomActionView(show = true, withAnimation = true)
-                coverLayout.visibility = View.GONE
-                appBar.layoutParams.height = AppBarLayout.LayoutParams.WRAP_CONTENT
-                iconChecked.setImageResource(R.drawable.ic_uncheck)
+                selectedList = null
                 actionMode = null
+                setActivityState(actionMode)
+                notifyDataSetChanged()
             }
         }
 
@@ -95,13 +100,18 @@ class AdapterRecyclerSaved(
             itemView.setOnLongClickListener {
                 return@setOnLongClickListener if (actionMode != null) false else {
                     actionMode = (activity as AppCompatActivity).startSupportActionMode(callback)
+                    setActivityState(actionMode)
                     true
                 }
             }
 
             itemView.setOnClickListener {
-                models?.run {
-                    funcOpenModel(this[adapterPosition].id)
+                models?.let { mod ->
+                    selectedList?.run {
+                        if (contains(adapterPosition)) remove(adapterPosition)
+                        else add(adapterPosition)
+                        notifyDataSetChanged()
+                    } ?: funcOpenModel(mod[adapterPosition].id)
                 }
             }
 
@@ -112,15 +122,37 @@ class AdapterRecyclerSaved(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.holder_saved_models, parent, false)
-        return Holder(view, appBar, funcOpenModel, funcRemoveModel)
+        return Holder(view, funcOpenModel, funcRemoveModel)
     }
 
     override fun getItemCount(): Int = models?.size ?: 0
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
+        holder.pressState(selectedList, position)
+    }
+
+    private fun Holder.pressState(selectedList: ArrayList<Int>?, position: Int) {
         models?.run {
-            holder.name.text = (position + 1).toString()
-            holder.image.setImageResource(this[position].shape.form.imageRes)
+            name.text = (position + 1).toString()
+            image.setImageResource(this[position].shape.form.imageRes)
+            coverLayout.visibility = selectedList?.run {
+
+                iconChecked.setImageResource(
+                    if (contains(position)) R.drawable.ic_check
+                    else R.drawable.ic_uncheck
+                )
+                View.VISIBLE
+            } ?: View.GONE
+        }
+    }
+
+    private fun setActivityState(actionMode: ActionMode?) {
+        if (actionMode != null) {
+            MainViewModel.showBottomActionView(show = false, withAnimation = true)
+            appBar.setPadding(0, -108, 0, 0)
+        } else {
+            MainViewModel.showBottomActionView(show = true, withAnimation = true)
+            appBar.setPadding(0, 48, 0, 0)
         }
     }
 }

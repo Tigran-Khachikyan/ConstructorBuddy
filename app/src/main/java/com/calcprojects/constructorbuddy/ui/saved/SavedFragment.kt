@@ -39,8 +39,10 @@ class SavedFragment : Fragment() {
 
         val funcRemoveModel: (Int) -> Unit = { savedViewModel.removeModel(it) }
 
-        adapterRecyclerSaved =
-            AdapterRecyclerSaved(activity, null, appBar_saved, funcOpenModel, funcRemoveModel)
+        activity?.let {
+            adapterRecyclerSaved =
+                AdapterRecyclerSaved(it, null, appBar_saved, funcOpenModel, funcRemoveModel)
+        }
 
         recycler_view_saved.setHasFixedSize(true)
         recycler_view_saved.layoutManager =
