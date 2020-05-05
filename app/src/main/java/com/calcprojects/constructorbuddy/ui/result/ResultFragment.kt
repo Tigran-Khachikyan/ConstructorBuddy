@@ -9,14 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Model
-import com.calcprojects.constructorbuddy.ui.DEFAULT_RES_ARG
-import com.calcprojects.constructorbuddy.ui.MainViewModel
-import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
+import com.calcprojects.constructorbuddy.ui.*
 import com.calcprojects.constructorbuddy.ui.calculator.CalcViewModel
-import com.calcprojects.constructorbuddy.ui.to2p
 import kotlinx.android.synthetic.main.fragment_result.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -74,7 +70,7 @@ class ResultFragment : Fragment(), CoroutineScope {
             val length =
                 resources.getString(R.string.length) + ": " + shape.length?.to2p() + " " + units.distance
             val weight =
-                resources.getString(R.string.weight) + ": " + weight.to2p() + " " + units.weight
+                resources.getString(R.string.weight) + ": " + weight.to3p() + " " + units.weight
             tv_res_length_weight.text = if (createdByLength) weight else length
             tv_init_length_weight.text = if (createdByLength) length else weight
 

@@ -12,9 +12,8 @@ const val DEFAULT_RES_ARG = -1
 const val KEY_UNITS = "key_units"
 const val KEY_RATES = "key_rates"
 
-val decFormatter2p = DecimalFormat("#,###.##")
-
-fun Double.to2p(): String = decFormatter2p.format(this)
+fun Double.to2p(): String = DecimalFormat("#,###.##").format(this)
+fun Double.to3p(): String = DecimalFormat("#,###.###").format(this)
 
 fun Int.name(context: Context): String? {
     return try {

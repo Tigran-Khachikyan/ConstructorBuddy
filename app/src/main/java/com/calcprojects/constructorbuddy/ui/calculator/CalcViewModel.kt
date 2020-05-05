@@ -12,7 +12,7 @@ class CalcViewModel : ViewModel() {
 
     private val form = MutableLiveData<Form>()
     private val substance = MutableLiveData<Substance>()
-    private val typeByLength = MutableLiveData<Boolean>()
+    private val typeByLength = MutableLiveData<Boolean>().apply { value = true }
     private val unit = MutableLiveData<Boolean>()
     private val params = MutableLiveData<Array<Double?>>()
     private val typeAndUnit = MediatorLiveData<Pair<Boolean, Boolean>?>()
@@ -31,11 +31,6 @@ class CalcViewModel : ViewModel() {
         typeByLength.value = byLength
     }
 
-    fun getType(): LiveData<Boolean> {
-        if (typeByLength.value == null) typeByLength.value = true
-        return typeByLength
-    }
-
     fun setParameters(par1: Double, par2: Double, par3: Double?, par4: Double?, par5: Double?) {
         params.value = arrayOf(par1, par2, par3, par4, par5)
     }
@@ -43,8 +38,6 @@ class CalcViewModel : ViewModel() {
     fun setUnit(metric: Boolean) {
         unit.value = metric
     }
-
-    fun getUnit(): LiveData<Boolean> = unit
 
     fun getTypeAndUnit(): LiveData<Pair<Boolean, Boolean>?> {
         typeAndUnit.addSource(typeByLength) {
@@ -56,19 +49,17 @@ class CalcViewModel : ViewModel() {
         return typeAndUnit
     }
 
-    fun removeSources(){
+    fun removeSources() {
         typeAndUnit.removeSource(typeByLength)
         typeAndUnit.removeSource(unit)
     }
 
     private fun combine(
-        typeLD: LiveData<Boolean>,
-        unitLD: LiveData<Boolean>
+        typeLD: LiveData<Boolean>, unitLD: LiveData<Boolean>
     ): Pair<Boolean, Boolean>? {
-        var type = typeLD.value
-        val unit = unitLD.value
-        if (type == null) type = true
-        return unit?.let { Pair(type, it) }
+        return unitLD.value?.let { u ->
+            typeLD.value?.let { Pair(it, u) }
+        }
     }
 
     companion object {
