@@ -8,6 +8,10 @@ const val SELECTED: Boolean = true
 const val UNSELECTED: Boolean = false
 const val SCREEN_DELAY_TIME = 800L
 const val DEFAULT_RES_ARG = -1
+
+const val KEY_UNITS = "key_units"
+const val KEY_RATES = "key_rates"
+
 val decFormatter2p = DecimalFormat("#,###.##")
 
 fun Double.to2p(): String = decFormatter2p.format(this)

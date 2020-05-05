@@ -1,6 +1,5 @@
 package com.calcprojects.constructorbuddy.ui.calculator
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.calcprojects.constructorbuddy.model.figures.Substance
 import com.calcprojects.constructorbuddy.model.Model
@@ -8,14 +7,15 @@ import com.calcprojects.constructorbuddy.model.figures.Form
 import com.calcprojects.constructorbuddy.model.figures.Material
 import com.calcprojects.constructorbuddy.model.figures.Shape
 import com.calcprojects.constructorbuddy.model.units.Unit
-import kotlinx.android.synthetic.main.fragment_calculator.*
 
 class CalcViewModel : ViewModel() {
 
     private val form = MutableLiveData<Form>()
     private val substance = MutableLiveData<Substance>()
     private val typeByLength = MutableLiveData<Boolean>()
+    private val unit = MutableLiveData<Boolean>()
     private val params = MutableLiveData<Array<Double?>>()
+    private val typeAndUnit = MediatorLiveData<Pair<Boolean, Boolean>?>()
 
     fun setForm(form: Form) {
         this.form.value = form
@@ -40,16 +40,45 @@ class CalcViewModel : ViewModel() {
         params.value = arrayOf(par1, par2, par3, par4, par5)
     }
 
+    fun setUnit(metric: Boolean) {
+        unit.value = metric
+    }
+
+    fun getUnit(): LiveData<Boolean> = unit
+
+    fun getTypeAndUnit(): LiveData<Pair<Boolean, Boolean>?> {
+        typeAndUnit.addSource(typeByLength) {
+            typeAndUnit.value = combine(typeByLength, unit)
+        }
+        typeAndUnit.addSource(unit) {
+            typeAndUnit.value = combine(typeByLength, unit)
+        }
+        return typeAndUnit
+    }
+
+    fun removeSources(){
+        typeAndUnit.removeSource(typeByLength)
+        typeAndUnit.removeSource(unit)
+    }
+
+    private fun combine(
+        typeLD: LiveData<Boolean>,
+        unitLD: LiveData<Boolean>
+    ): Pair<Boolean, Boolean>? {
+        var type = typeLD.value
+        val unit = unitLD.value
+        if (type == null) type = true
+        return unit?.let { Pair(type, it) }
+    }
+
     companion object {
         var modelCalculated: Model? = null
-        var byLength: Boolean? = null
     }
 
     fun calculate(): Boolean {
-        val model = getModel(form, substance, typeByLength, params)
+        val model = getModel(form, substance, typeByLength, params, unit)
 
         return model?.let {
-            byLength = typeByLength.value
             modelCalculated = it
             true
         } ?: false
@@ -59,22 +88,23 @@ class CalcViewModel : ViewModel() {
         formLD: LiveData<Form>,
         materialLD: LiveData<Substance>,
         byLength: LiveData<Boolean>,
-        paramsLD: LiveData<Array<Double?>>
+        paramsLD: LiveData<Array<Double?>>,
+        unitLD: LiveData<Boolean>
     ): Model? {
 
         val form = formLD.value
         val mat = materialLD.value
         val type = byLength.value
         val params = paramsLD.value
+        val metric = unitLD.value
 
         var model: Model? = null
 
-        if (form != null && mat != null && type != null && params != null) {
+        if (form != null && mat != null && type != null && params != null && metric != null) {
             if (params[0] != null && params[1] != null) {
 
+                val unit = if (metric) Unit.METRIC else Unit.IMPERIAL
                 val material = Material(mat)
-                val unit = Unit.METRIC
-
                 val shape = Shape(form)
                 when (shape.form) {
                     Form.SQUARE_TUBE, Form.ANGLE, Form.CHANNEL, Form.T_BAR -> {

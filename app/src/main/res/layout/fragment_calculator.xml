@@ -132,6 +132,14 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/tv_unit1"
+                    android:text="lb"
+                    style="@style/unit_Texts"
+                    app:layout_constraintTop_toTopOf="@id/field1"
+                    app:layout_constraintBottom_toBottomOf="@id/field1"
+                    app:layout_constraintRight_toRightOf="@id/field1" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/field2"
                     style="@style/inputLayout"
@@ -153,6 +161,14 @@
                         android:textColor="@android:color/white" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tv_unit2"
+                    android:text="in"
+                    style="@style/unit_Texts"
+                    app:layout_constraintTop_toTopOf="@id/field2"
+                    app:layout_constraintBottom_toBottomOf="@id/field2"
+                    app:layout_constraintRight_toRightOf="@id/field2" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/field3"
@@ -176,6 +192,14 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/tv_unit3"
+                    android:text="cm"
+                    style="@style/unit_Texts"
+                    app:layout_constraintTop_toTopOf="@id/field3"
+                    app:layout_constraintBottom_toBottomOf="@id/field3"
+                    app:layout_constraintRight_toRightOf="@id/field3" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/field4"
                     style="@style/inputLayout"
@@ -198,6 +222,15 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/tv_unit4"
+                    android:text="kg"
+                    style="@style/unit_Texts"
+                    app:layout_constraintTop_toTopOf="@id/field4"
+                    app:layout_constraintBottom_toBottomOf="@id/field4"
+                    app:layout_constraintRight_toRightOf="@id/field4" />
+
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/field5"
                     style="@style/inputLayout"
@@ -219,6 +252,15 @@
                         android:textColor="@android:color/white" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tv_unit5"
+                    android:text="lb"
+                    style="@style/unit_Texts"
+                    app:layout_constraintTop_toTopOf="@id/field5"
+                    app:layout_constraintBottom_toBottomOf="@id/field5"
+                    app:layout_constraintRight_toRightOf="@id/field5" />
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/field6"

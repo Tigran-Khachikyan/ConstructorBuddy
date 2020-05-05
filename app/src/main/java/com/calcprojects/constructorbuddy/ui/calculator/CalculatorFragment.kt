@@ -1,8 +1,10 @@
 package com.calcprojects.constructorbuddy.ui.calculator
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.*
@@ -11,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +23,7 @@ import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.figures.Substance
 import com.calcprojects.constructorbuddy.model.figures.Form
 import com.calcprojects.constructorbuddy.model.figures.Form.*
+import com.calcprojects.constructorbuddy.model.units.Unit
 import com.calcprojects.constructorbuddy.ui.*
 import com.google.android.material.textfield.TextInputLayout
 import com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator
@@ -29,8 +33,10 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
-class CalculatorFragment : Fragment(), CoroutineScope {
+class CalculatorFragment : Fragment(), CoroutineScope,
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private lateinit var defSharedPreference: SharedPreferences
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = Main + Job()
@@ -40,17 +46,22 @@ class CalculatorFragment : Fragment(), CoroutineScope {
     private lateinit var adapterRecShape: AdapterRecyclerShapes
     private val materials by lazy { Substance.values() }
     private var valueField1: Double? = null
+    private var unitDefault: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         job = Job()
+        viewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
 
+        defSharedPreference = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        unitDefault = defSharedPreference.getString(KEY_UNITS, null)?.let { it == Unit.METRIC.name }
+        unitDefault?.let { viewModel.setUnit(it) }
+        defSharedPreference.registerOnSharedPreferenceChangeListener(this)
         val shapeName = arguments?.let {
             CalculatorFragmentArgs.fromBundle(it).shapeSelected
         }
         form = shapeName?.let { valueOf(it) }
-        viewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -64,15 +75,18 @@ class CalculatorFragment : Fragment(), CoroutineScope {
 
         //recycler init
         adapterRecShape = AdapterRecyclerShapes(requireContext(), true) {}
-        recycler_shapes_marked.initialize(adapterRecShape, viewModel, indicator)
+        recycler_shapes_marked.addListeners(adapterRecShape, viewModel, indicator)
         form?.let {
             viewModel.setForm(it)
             recycler_shapes_marked.scrollToPosition(values().indexOf(it))
         }
 
         //spinner init
-        val adapter = AdapterSpinnerMat(requireContext(), materials = materials)
-        spinner.initialize(adapter, viewModel)
+        val spinnerAdapter = unitDefault?.let {
+            AdapterSpinnerMat(requireContext(), materials = materials, metric = it)
+        }
+        spinnerAdapter?.let { spinner.addListeners(it, viewModel) }
+
 
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -104,14 +118,33 @@ class CalculatorFragment : Fragment(), CoroutineScope {
             }
         }
 
-        viewModel.getType().observe(viewLifecycleOwner, Observer {
+        viewModel.getTypeAndUnit().observe(viewLifecycleOwner, Observer {
 
-            field1.hint =
-                if (it) requireContext().getString(R.string.length) + " (L)"
-                else requireContext().getString(R.string.weight) + " (Wg)"
-            field1.editText?.text?.clear()
-            field1.clearFocus()
-            field1.isErrorEnabled = false
+            it?.run {
+                val byLength = first
+                val metric = second
+
+                field1.hint =
+                    if (byLength) requireContext().getString(R.string.length) + " (L)"
+                    else requireContext().getString(R.string.weight) + " (Wg)"
+
+                field1.editText?.text?.clear()
+                field1.clearFocus()
+                field1.isErrorEnabled = false
+
+                val weight = if (metric) Unit.METRIC.weight else Unit.IMPERIAL.weight
+                val length = if (metric) Unit.METRIC.distance else Unit.IMPERIAL.distance.take(2)
+                tv_unit1.text = if (byLength) length else weight
+                tv_unit2.text = length
+                tv_unit3.text = length
+                tv_unit4.text = length
+                tv_unit5.text = length
+
+                spinnerAdapter?.unitSelected = second
+                spinnerAdapter?.notifyDataSetChanged()
+            }
+
+
         })
 
         viewModel.getForm().observe(viewLifecycleOwner, Observer
@@ -129,22 +162,30 @@ class CalculatorFragment : Fragment(), CoroutineScope {
             return@setOnMenuItemClickListener false
         }
 
-        field1.editText?.doOnTextChanged { _, _, _, _ ->
-            field1.isErrorEnabled = false
-        }
-        field2.editText?.doOnTextChanged { _, _, _, _ ->
-            field2.isErrorEnabled = false
-        }
-        field3.editText?.doOnTextChanged { _, _, _, _ ->
-            field3.isErrorEnabled = false
-        }
-        field4.editText?.doOnTextChanged { _, _, _, _ ->
-            field4.isErrorEnabled = false
-        }
-        field5.editText?.doOnTextChanged { _, _, _, _ ->
-            field5.isErrorEnabled = false
-        }
+        field1.addListeners(tv_unit1)
+        field2.addListeners(tv_unit2)
+        field3.addListeners(tv_unit3)
+        field4.addListeners(tv_unit4)
+        field5.addListeners(tv_unit5)
 
+    }
+
+    private fun TextInputLayout.addListeners(unitTv: TextView) {
+        editText?.run {
+            doOnTextChanged { text, _, _, _ ->
+                isErrorEnabled = false
+                text?.run {
+                    unitTv.visibility =
+                        if (length < 7) View.VISIBLE
+                        else View.GONE
+                }
+            }
+            setOnFocusChangeListener { _, hasFocus ->
+                unitTv.visibility =
+                    if (!hasFocus && text.toString() == "" || text.length > 6) View.GONE
+                    else View.VISIBLE
+            }
+        }
     }
 
     private fun TextInputLayout.getValue(): Double? {
@@ -159,13 +200,17 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         } else null
     }
 
-    private fun TextInputLayout.hide() = run {
+    private fun TextInputLayout.hide(unitTv: TextView) = run {
         //  editText?.text?.clear()
         clearFocus()
         visibility = View.GONE
+        unitTv.visibility = View.GONE
     }
 
-    private fun TextInputLayout.show() = run { visibility = View.VISIBLE }
+    private fun TextInputLayout.show(unitTv: TextView) = run {
+        unitTv.visibility = View.GONE
+        visibility = View.VISIBLE
+    }
 
     private fun setTextInputLayoutVisibility(form: Form) {
 
@@ -174,45 +219,45 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         field3.isErrorEnabled = false
         field4.isErrorEnabled = false
         field5.isErrorEnabled = false
-        field1.show()
-        field2.show()
+        field1.show(tv_unit1)
+        field2.show(tv_unit2)
 
         when (form) {
             ANGLE -> {
-                field3.show();field4.show();field5.hide()
+                field3.show(tv_unit3);field4.show(tv_unit4);field5.hide(tv_unit5)
             }
             T_BAR -> {
-                field3.show();field4.show();field5.hide()
+                field3.show(tv_unit3);field4.show(tv_unit4);field5.hide(tv_unit5)
             }
             SQUARE_TUBE -> {
-                field3.show();field4.show();field5.hide()
+                field3.show(tv_unit3);field4.show(tv_unit4);field5.hide(tv_unit5)
             }
             SQUARE_BAR -> {
-                field3.hide();field4.hide();field5.hide()
+                field3.hide(tv_unit3);field4.hide(tv_unit4);field5.hide(tv_unit5)
             }
             ROUND_BAR -> {
-                field3.hide();field4.hide();field5.hide()
+                field3.hide(tv_unit3);field4.hide(tv_unit4);field5.hide(tv_unit5)
             }
             PIPE -> {
-                field3.show();field4.hide();field5.hide()
+                field3.show(tv_unit3);field4.hide(tv_unit4);field5.hide(tv_unit5)
             }
             HEXAGONAL_TUBE -> {
-                field3.show();field4.hide();field5.hide()
+                field3.show(tv_unit3);field4.hide(tv_unit4);field5.hide(tv_unit5)
             }
             HEXAGONAL_BAR -> {
-                field3.hide();field4.hide();field5.hide()
+                field3.hide(tv_unit3);field4.hide(tv_unit4);field5.hide(tv_unit5)
             }
             HEXAGONAL_HEX -> {
-                field3.show();field4.hide();field5.hide()
+                field3.show(tv_unit3);field4.hide(tv_unit4);field5.hide(tv_unit5)
             }
             FLAT_BAR -> {
-                field3.show();field4.hide();field5.hide()
+                field3.show(tv_unit3);field4.hide(tv_unit4);field5.hide(tv_unit5)
             }
             CHANNEL -> {
-                field3.show();field4.show();field5.hide()
+                field3.show(tv_unit3);field4.show(tv_unit4);field5.hide(tv_unit5)
             }
             BEAM -> {
-                field3.show();field4.show();field5.show()
+                field3.show(tv_unit3);field4.show(tv_unit4);field5.show(tv_unit5)
             }
         }
     }
@@ -247,7 +292,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
 
     }
 
-    private fun RecyclerView.initialize(
+    private fun RecyclerView.addListeners(
         adapter: AdapterRecyclerShapes,
         viewModel: CalcViewModel? = null,
         indicator: IndefinitePagerIndicator? = null
@@ -265,7 +310,7 @@ class CalculatorFragment : Fragment(), CoroutineScope {
         indicator?.attachToRecyclerView(this)
     }
 
-    private fun Spinner.initialize(
+    private fun Spinner.addListeners(
         adapter: AdapterSpinnerMat,
         viewModel: CalcViewModel? = null,
         startPosition: Int? = null
@@ -292,15 +337,31 @@ class CalculatorFragment : Fragment(), CoroutineScope {
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
+        defSharedPreference.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        viewModel.removeSources()
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
     private fun configureActivity() {
         activity?.run {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_LAYOUT_FLAGS)
+            window.decorView.systemUiVisibility =
+                (View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_LAYOUT_FLAGS)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         MainViewModel.showBottomActionView(false)
     }
 
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (key == "key_units") {
+            val metric = sharedPreferences?.getString(key, null)
+                ?.let { it == Unit.METRIC.name }
+            Log.d("asasdad", "metric : $metric")
+            metric?.let { viewModel.setUnit(it) }
+        }
+    }
 }

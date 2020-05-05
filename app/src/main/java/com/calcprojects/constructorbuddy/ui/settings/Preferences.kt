@@ -8,6 +8,8 @@ import androidx.preference.PreferenceScreen
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.price.Currency
 import com.calcprojects.constructorbuddy.model.units.Unit
+import com.calcprojects.constructorbuddy.ui.KEY_RATES
+import com.calcprojects.constructorbuddy.ui.KEY_UNITS
 
 class Preferences : PreferenceFragmentCompat() {
 
@@ -15,25 +17,25 @@ class Preferences : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preference, rootKey)
 
         //units
-        val listUnits: ListPreference? = findPreference("key_units")
+        val listUnits: ListPreference? = findPreference(KEY_UNITS)
         val unitEntry =
             Unit.values().map { resources.getString(it.nameRes) }.toTypedArray()
         val unitEntryValues = Unit.values().map { it.name }.toTypedArray()
         listUnits?.apply {
             entries = unitEntry
             entryValues = unitEntryValues
-            setDefaultValue(entryValues[0])
+            setDefaultValue(Unit.METRIC.name)
         }
 
         //currencies
-        val listRates: ListPreference? = findPreference("key_rates")
+        val listRates: ListPreference? = findPreference(KEY_RATES)
         val ratesEntry =
             Currency.values().map { resources.getString(it.nameRes) }.toTypedArray()
         val ratesEntryValues = Currency.values().map { it.name }.toTypedArray()
         listRates?.apply {
             entries = ratesEntry
             entryValues = ratesEntryValues
-            setDefaultValue(entryValues[0])
+            setDefaultValue(Currency.USD.name)
         }
 
     }

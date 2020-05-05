@@ -69,6 +69,15 @@
         <item name="cornerSizeBottomLeft">12dp</item>
     </style>
 
+    <style name="unit_Texts">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:visibility">gone</item>
+        <item name="layout_constraintVertical_bias">0.4</item>
+        <item name="android:layout_marginEnd">40dp</item>
+    </style>
+
     <style name="inputText">
         <item name="android:textSize">24sp</item>
         <item name="android:inputType">numberDecimal</item>
