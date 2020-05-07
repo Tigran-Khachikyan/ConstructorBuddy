@@ -9,7 +9,6 @@ data class Price(
     var base: Currency,
     var value: Double,
     var unit: String
-
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "price_id")

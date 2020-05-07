@@ -1,6 +1,7 @@
 package com.calcprojects.constructorbuddy.data
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.calcprojects.constructorbuddy.data.api_currency.ApiCurrency
 import com.calcprojects.constructorbuddy.data.db.ModelDao
@@ -27,9 +28,16 @@ class Repository(
     private val modelDao: ModelDao
 ) : AppRepository {
 
-    override suspend fun getPricedMaterial(substance: Substance, currency: Currency): Material {
+    override suspend fun getAutoPricedMaterial(substance: Substance, currency: Currency): Material {
+        Log.d("kasynsdf","entered in getAutoPricedMaterial")
+
+
         val snapShot = FireStoreApi.getMaterialPrices()
+        Log.d("kasynsdf","snapShot: $snapShot")
+
         val price = snapShot?.let { getPricesFromSnapshot(it, substance.name) }
+        Log.d("kasynsdf","price: $price")
+
         price?.apply {
             val newValue = getRates()?.let {
                 getPriceForNewRate(value, base, currency, it)
@@ -40,6 +48,13 @@ class Repository(
             }
         }
         return Material(substance, price)
+    }
+
+    override suspend fun getManuallyPricedMaterial(
+        sub: Substance, cur: Currency, pr: Price
+    ): Material {
+
+        return Material(Substance.ALUMINIUM, null)
     }
 
     private suspend fun getRates(): HashMap<String, Double>? {

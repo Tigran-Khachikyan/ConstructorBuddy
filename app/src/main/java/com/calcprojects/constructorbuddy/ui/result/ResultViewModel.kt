@@ -1,15 +1,16 @@
 package com.calcprojects.constructorbuddy.ui.result
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.calcprojects.constructorbuddy.data.Repository
 import com.calcprojects.constructorbuddy.data.api_currency.ApiCurrency
 import com.calcprojects.constructorbuddy.data.api_currency.RetrofitService
 import com.calcprojects.constructorbuddy.data.db.Database
 import com.calcprojects.constructorbuddy.model.Model
+import com.calcprojects.constructorbuddy.model.figures.Material
+import com.calcprojects.constructorbuddy.model.figures.Substance
+import com.calcprojects.constructorbuddy.model.price.Currency
+import com.calcprojects.constructorbuddy.model.price.Price
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -30,6 +31,4 @@ class ResultViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun getModel(id: Int): LiveData<Model> = repo.getModel(id)
-
-
 }

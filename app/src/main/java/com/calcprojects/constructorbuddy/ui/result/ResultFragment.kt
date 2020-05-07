@@ -1,5 +1,6 @@
 package com.calcprojects.constructorbuddy.ui.result
 
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceManager
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Model
 import com.calcprojects.constructorbuddy.ui.*
@@ -24,6 +26,7 @@ import kotlin.coroutines.CoroutineContext
 class ResultFragment : Fragment(), CoroutineScope {
 
     private var modelToSave: Model? = null
+    private lateinit var priceSharedPreferences: SharedPreferences
     private lateinit var job: Job
     private lateinit var resultViewModel: ResultViewModel
     override val coroutineContext: CoroutineContext
@@ -33,9 +36,9 @@ class ResultFragment : Fragment(), CoroutineScope {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         resultViewModel = ViewModelProvider(this).get(ResultViewModel::class.java)
+        priceSharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         return inflater.inflate(R.layout.fragment_result, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -142,6 +145,5 @@ class ResultFragment : Fragment(), CoroutineScope {
         }
         MainViewModel.showBottomActionView(show = true, withAnimation = true)
     }
-
 
 }

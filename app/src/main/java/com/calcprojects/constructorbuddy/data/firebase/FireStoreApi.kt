@@ -1,10 +1,13 @@
 package com.calcprojects.constructorbuddy.data.firebase
 
+import android.util.Log
 import com.calcprojects.constructorbuddy.data.api_currency.Rates
 import com.calcprojects.constructorbuddy.data.firebase.FBCollection.*
 import com.calcprojects.constructorbuddy.model.price.getMapFromRates
 import com.google.firebase.firestore.*
+import kotlinx.coroutines.tasks.await
 import java.io.Serializable
+import java.lang.Exception
 import java.util.*
 
 private const val CACHE = "Cached Rates"
@@ -21,7 +24,7 @@ object FireStoreApi {
 
     private val fireStoreDb by lazy { FirebaseFirestore.getInstance() }
 
-    fun insertRatesIntoFireStore(rates: Rates, base: String) {
+    suspend fun insertRatesIntoFireStore(rates: Rates, base: String) {
 
         val nowDate = Calendar.getInstance().time
         val now = nowDate.getStringTimeStampWithDate()
@@ -39,19 +42,36 @@ object FireStoreApi {
         }
     }
 
-    fun getFromCache(): DocumentSnapshot? {
-        return fireStoreDb.collection(CURRENCY_LATEST.name).document(CACHE).get(Source.CACHE).result
+    suspend fun getFromCache(): DocumentSnapshot? {
+        return try {
+            fireStoreDb.collection(CURRENCY_LATEST.name).document(CACHE).get(Source.CACHE).await()
+        } catch (ex: Exception) {
+            Log.d("kasynsdf", "message: ${ex.message}")
+            null
+        }
     }
 
-    fun getMaterialPrices(): DocumentSnapshot? {
-        return fireStoreDb.collection(MATERIALS.name).document(PRICING).get().result
+    suspend fun getMaterialPrices(): DocumentSnapshot? {
+        return try {
+            fireStoreDb.collection(MATERIALS.name).document(PRICING).get().await()
+        } catch (ex: Exception) {
+            Log.d("kasynsdf", "message: ${ex.message}")
+            null
+        }
     }
 
-    private fun writeToFireStore(docId: String, map: HashMap<String, Serializable>) {
-        fireStoreDb.collection(CURRENCY_LATEST.name)
-            .document(docId)
-            .set(map)
-            .addOnCompleteListener {}
-            .addOnFailureListener {}
+    private suspend fun writeToFireStore(
+        docId: String,
+        map: HashMap<String, Serializable>
+    ): Boolean {
+        return try {
+            fireStoreDb.collection(CURRENCY_LATEST.name)
+                .document(docId)
+                .set(map)
+                .await()
+            true
+        } catch (ex: Exception) {
+            false
+        }
     }
 }

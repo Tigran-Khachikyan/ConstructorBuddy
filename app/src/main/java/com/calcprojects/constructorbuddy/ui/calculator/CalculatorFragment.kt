@@ -23,6 +23,8 @@ import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.figures.Substance
 import com.calcprojects.constructorbuddy.model.figures.Form
 import com.calcprojects.constructorbuddy.model.figures.Form.*
+import com.calcprojects.constructorbuddy.model.price.Currency
+import com.calcprojects.constructorbuddy.model.price.Price
 import com.calcprojects.constructorbuddy.model.units.Unit
 import com.calcprojects.constructorbuddy.ui.*
 import com.google.android.material.textfield.TextInputLayout
@@ -36,7 +38,7 @@ import kotlin.coroutines.CoroutineContext
 class CalculatorFragment : Fragment(), CoroutineScope,
     SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private lateinit var defSharedPreference: SharedPreferences
+    private lateinit var preferences: SharedPreferences
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = Main + Job()
@@ -54,10 +56,10 @@ class CalculatorFragment : Fragment(), CoroutineScope,
         job = Job()
         viewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
 
-        defSharedPreference = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        unitDefault = defSharedPreference.getString(KEY_UNITS, null)?.let { it == Unit.METRIC.name }
+        preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        unitDefault = preferences.getString(KEY_UNITS, null)?.let { it == Unit.METRIC.name }
         unitDefault?.let { viewModel.setUnit(it) }
-        defSharedPreference.registerOnSharedPreferenceChangeListener(this)
+        preferences.registerOnSharedPreferenceChangeListener(this)
         val shapeName = arguments?.let {
             CalculatorFragmentArgs.fromBundle(it).shapeSelected
         }
@@ -111,10 +113,13 @@ class CalculatorFragment : Fragment(), CoroutineScope,
             ) {
                 valueField1 = par1
                 viewModel.setParameters(par1, par2, par3, par4, par5)
-                val success = viewModel.calculate()
-                if (success) {
-                    it.findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
-                }
+                includePricingOptions()
+
+                viewModel.calculate().observe(viewLifecycleOwner, Observer { succeed ->
+                    Log.d("kasynsdf","succeed: $succeed")
+                    if (succeed)
+                        findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
+                })
             }
         }
 
@@ -143,7 +148,6 @@ class CalculatorFragment : Fragment(), CoroutineScope,
                 spinnerAdapter?.unitSelected = second
                 spinnerAdapter?.notifyDataSetChanged()
             }
-
 
         })
 
@@ -337,7 +341,7 @@ class CalculatorFragment : Fragment(), CoroutineScope,
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
-        defSharedPreference.unregisterOnSharedPreferenceChangeListener(this)
+        preferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 
     override fun onDestroyView() {
@@ -363,5 +367,17 @@ class CalculatorFragment : Fragment(), CoroutineScope,
             Log.d("asasdad", "metric : $metric")
             metric?.let { viewModel.setUnit(it) }
         }
+    }
+
+    private fun includePricingOptions() {
+
+        val priceSwitcher = preferences.getBoolean(KEY_PRICE_SWITCHER, false)
+        val ratesName = preferences.getString(KEY_RATES, null)
+        val currency = if (priceSwitcher) ratesName?.let { Currency.valueOf(ratesName) } else null
+
+        val manuallySwitcher = preferences.getBoolean(KEY_MANUALLY_SWITCHER, false)
+        val price: Price? = if (manuallySwitcher) null else null
+
+        viewModel.setPricingOptions(currency, price)
     }
 }
