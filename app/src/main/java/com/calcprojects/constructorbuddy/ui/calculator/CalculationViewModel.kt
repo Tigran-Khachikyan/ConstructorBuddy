@@ -1,7 +1,6 @@
 package com.calcprojects.constructorbuddy.ui.calculator
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.calcprojects.constructorbuddy.data.Repository
 import com.calcprojects.constructorbuddy.data.api_currency.ApiCurrency
@@ -19,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CalcViewModel(application: Application) : AndroidViewModel(application) {
+class CalculationViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repo: Repository by lazy {
         Repository(
@@ -87,14 +86,11 @@ class CalcViewModel(application: Application) : AndroidViewModel(application) {
         succeed.value = false
         viewModelScope.launch(Dispatchers.IO) {
             val model = getModel(form, substance, typeByLength, params, unit, currency, price)
-            Log.d("kasynsdf", "model in scope: $model")
 
             withContext(Dispatchers.Main) {
-                Log.d("kasynsdf", "entered withContext: $model")
 
                 succeed.value = model?.let { true } ?: false
                 modelCalculated = model
-                Log.d("kasynsdf", "model in withContext: $model")
             }
         }
         return succeed
@@ -160,13 +156,9 @@ class CalcViewModel(application: Application) : AndroidViewModel(application) {
                     }
                 }
 
-                val material = currency?.let { cur ->
-                    price?.let { repo.getManuallyPricedMaterial(sub, cur, it) }
-                        ?: repo.getAutoPricedMaterial(sub, cur)
-                } ?: Material(sub)
-                Log.d("kasynsdf", "price: $price")
-                Log.d("kasynsdf", "currency: $currency")
-                Log.d("kasynsdf", "material: $material")
+                val material =
+                    currency?.let { cur -> repo.getMaterialPricedWithServerData(sub, cur, price) }
+                        ?: Material(sub)
 
                 model = if (type) {
                     shape.length = params[0]
@@ -181,7 +173,6 @@ class CalcViewModel(application: Application) : AndroidViewModel(application) {
 
 
     // ---------------------------------------------------------------------------------------
-
 
     fun setPricingOptions(_selectedCurrency: Currency?, _priceManually: Price?) {
         currency.value = _selectedCurrency

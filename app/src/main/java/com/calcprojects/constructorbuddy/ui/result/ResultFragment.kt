@@ -14,7 +14,7 @@ import androidx.preference.PreferenceManager
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Model
 import com.calcprojects.constructorbuddy.ui.*
-import com.calcprojects.constructorbuddy.ui.calculator.CalcViewModel
+import com.calcprojects.constructorbuddy.ui.calculator.CalculationViewModel
 import kotlinx.android.synthetic.main.fragment_result.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -47,7 +47,7 @@ class ResultFragment : Fragment(), CoroutineScope {
 
         modelId?.let { id ->
             if (id == DEFAULT_RES_ARG) {
-                modelToSave = CalcViewModel.modelCalculated
+                modelToSave = CalculationViewModel.modelCalculated
                 modelToSave?.let { initialize(it, false) }
             } else {
                 resultViewModel.getModel(id).observe(viewLifecycleOwner, Observer {

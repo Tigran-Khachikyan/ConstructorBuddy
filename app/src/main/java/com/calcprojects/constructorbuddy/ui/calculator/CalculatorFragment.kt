@@ -11,7 +11,6 @@ import android.widget.*
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,7 +42,7 @@ class CalculatorFragment : Fragment(), CoroutineScope,
     override val coroutineContext: CoroutineContext
         get() = Main + Job()
 
-    private lateinit var viewModel: CalcViewModel
+    private lateinit var viewModel: CalculationViewModel
     private var form: Form? = null
     private lateinit var adapterRecShape: AdapterRecyclerShapes
     private val materials by lazy { Substance.values() }
@@ -54,7 +53,7 @@ class CalculatorFragment : Fragment(), CoroutineScope,
         super.onCreate(savedInstanceState)
 
         job = Job()
-        viewModel = ViewModelProvider(this).get(CalcViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(CalculationViewModel::class.java)
 
         preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         unitDefault = preferences.getString(KEY_UNITS, null)?.let { it == Unit.METRIC.name }
@@ -276,7 +275,7 @@ class CalculatorFragment : Fragment(), CoroutineScope,
 
     private fun RecyclerView.addListeners(
         adapter: AdapterRecyclerShapes,
-        viewModel: CalcViewModel? = null,
+        viewModel: CalculationViewModel? = null,
         indicator: IndefinitePagerIndicator? = null
     ) {
         setHasFixedSize(true)
@@ -293,7 +292,7 @@ class CalculatorFragment : Fragment(), CoroutineScope,
     }
 
     private fun Spinner.addListeners(
-        adapter: AdapterSpinnerMat, viewModel: CalcViewModel? = null, startPosition: Int? = null
+        adapter: AdapterSpinnerMat, viewModel: CalculationViewModel? = null, startPosition: Int? = null
     ) {
         this.adapter = adapter
         startPosition?.run { setSelection(this) }

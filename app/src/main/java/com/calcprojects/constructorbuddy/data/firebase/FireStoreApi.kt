@@ -1,9 +1,14 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.calcprojects.constructorbuddy.data.firebase
 
 import android.util.Log
 import com.calcprojects.constructorbuddy.data.api_currency.Rates
 import com.calcprojects.constructorbuddy.data.firebase.FBCollection.*
+import com.calcprojects.constructorbuddy.model.price.Currency
+import com.calcprojects.constructorbuddy.model.price.Price
 import com.calcprojects.constructorbuddy.model.price.getMapFromRates
+import com.calcprojects.constructorbuddy.ui.LOG_EXCEPTION
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.tasks.await
 import java.io.Serializable
@@ -17,9 +22,8 @@ const val BASE = "Base"
 const val DATE_TIME = "Long Date"
 const val RATES = "Rates"
 const val PRICING = "Pricing"
-const val NO_NETWORK = 123
-const val API_SOURCE_PROBLEM = 255
-const val OK = 777
+private const val BASE_CURRENCY = "base"
+private const val UNIT = "unit"
 
 object FireStoreApi {
 
@@ -31,58 +35,87 @@ object FireStoreApi {
         }
     }
 
-    suspend fun insertRatesIntoFireStore(rates: Rates, base: String) {
+    suspend fun writeRatesIntoFireStore(rates: Rates, base: String) {
 
         val nowDate = Calendar.getInstance().time
         val now = nowDate.getStringTimeStampWithDate()
         val nowShort = now.split(' ')[0]
 
-        getMapFromRates(rates)?.let {
-            val resultMap = hashMapOf(
+        val resultMap = getMapFromRates(rates)?.let {
+            hashMapOf(
                 DATE to nowShort,
                 DATE_TIME to now,
                 BASE to base,
                 RATES to it
             )
-            writeToFireStore(now, resultMap)
-            writeToFireStore(CACHE, resultMap)
+        }
+        resultMap?.let {
+            insertRatesMapIntoFireBase(now, it)
+            insertRatesMapIntoFireBase(CACHE, it)
         }
     }
 
-    suspend fun getFromCache(): DocumentSnapshot? {
-
-        Log.d("kasynsdf", "cache size: ${fireStoreDb.firestoreSettings.cacheSizeBytes}")
-
-
+    suspend fun getRatesFromFireStore(): DocumentSnapshot? {
         return try {
-            fireStoreDb.collection(CURRENCY_LATEST.name).document(CACHE).get(Source.CACHE).await()
+            fireStoreDb.collection(CURRENCY_LATEST.name).document(CACHE).get().await()
         } catch (ex: Exception) {
-            Log.d("kasynsdf", "message: ${ex.message}")
+            Log.d(LOG_EXCEPTION, "ERROR message getRatesFromFireStore: ${ex.message}")
             null
         }
     }
 
-    suspend fun getMaterialPrices(): DocumentSnapshot? {
+    suspend fun getPricesFromFireStore(): DocumentSnapshot? {
         return try {
             fireStoreDb.collection(MATERIALS.name).document(PRICING).get().await()
         } catch (ex: Exception) {
-            Log.d("kasynsdf", "message: ${ex.message}")
+            Log.d(LOG_EXCEPTION, "ERROR message getPricesFromFireStore: ${ex.message}")
             null
         }
     }
 
-    private suspend fun writeToFireStore(
-        docId: String,
-        map: HashMap<String, Serializable>
+    private suspend fun insertRatesMapIntoFireBase(
+        documentId: String, ratesMap: HashMap<String, Serializable>
     ): Boolean {
         return try {
             fireStoreDb.collection(CURRENCY_LATEST.name)
-                .document(docId)
-                .set(map)
+                .document(documentId)
+                .set(ratesMap)
                 .await()
             true
         } catch (ex: Exception) {
+            Log.d(LOG_EXCEPTION, "ERROR message insertRatesMapIntoFireBase: ${ex.message}")
             false
+        }
+    }
+
+    fun getRatesFromSnapshot(snapshot: DocumentSnapshot): HashMap<String, Double>? {
+        return try {
+            snapshot.get(RATES) as HashMap<String, Double>
+        } catch (ex: Exception) {
+            Log.d(LOG_EXCEPTION, "ERROR message getRatesFromSnapshot: ${ex.message}")
+            null
+        }
+    }
+
+    fun DocumentSnapshot.getTime(): Date? {
+        val value = this[DATE_TIME] as String
+        return value.getDateWithServerTimeStamp()
+    }
+
+    fun getPriceFromSnapshot(snapshot: DocumentSnapshot, field: String): Price? {
+        return try {
+            val value = try {
+                snapshot.get(field) as Double
+            } catch (ex: Exception) {
+                (snapshot.get(field) as Long).toDouble()
+            }
+            val base = snapshot.get(BASE_CURRENCY) as String
+            val baseCurrency = Currency.valueOf(base)
+            val unit = snapshot.get(UNIT) as String
+            Price(baseCurrency, value, unit)
+        } catch (ex: Exception) {
+            Log.d(LOG_EXCEPTION, "ERROR message getPricesFromSnapshot: ${ex.message}")
+            null
         }
     }
 }

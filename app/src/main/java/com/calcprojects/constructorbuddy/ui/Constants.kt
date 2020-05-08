@@ -13,6 +13,8 @@ const val KEY_UNITS = "key_units"
 const val KEY_RATES = "key_rates"
 const val KEY_PRICE_SWITCHER = "key_price_switcher"
 const val KEY_MANUALLY_SWITCHER = "key_auto_manually_switcher"
+const val LOG_EXCEPTION = "asbadbsd51"
+const val LOG_VAL = "ljhbasp81w"
 
 fun Double.to2p(): String = DecimalFormat("#,###.##").format(this)
 fun Double.to3p(): String = DecimalFormat("#,###.###").format(this)

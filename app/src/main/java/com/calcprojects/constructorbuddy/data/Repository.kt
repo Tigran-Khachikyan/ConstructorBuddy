@@ -6,20 +6,21 @@ import androidx.lifecycle.LiveData
 import com.calcprojects.constructorbuddy.data.api_currency.ApiCurrency
 import com.calcprojects.constructorbuddy.data.db.ModelDao
 import com.calcprojects.constructorbuddy.data.firebase.*
+import com.calcprojects.constructorbuddy.data.firebase.FireStoreApi.getPriceFromSnapshot
+import com.calcprojects.constructorbuddy.data.firebase.FireStoreApi.getRatesFromSnapshot
+import com.calcprojects.constructorbuddy.data.firebase.FireStoreApi.getTime
 import com.calcprojects.constructorbuddy.model.Model
 import com.calcprojects.constructorbuddy.model.figures.Material
 import com.calcprojects.constructorbuddy.model.figures.Substance
 import com.calcprojects.constructorbuddy.model.price.Currency
 import com.calcprojects.constructorbuddy.model.price.Price
 import com.calcprojects.constructorbuddy.model.price.getMapFromRates
-import com.google.firebase.firestore.DocumentSnapshot
+import com.calcprojects.constructorbuddy.ui.LOG_EXCEPTION
 import java.util.*
 import kotlin.collections.HashMap
 
 
 private const val UPDATE_INTERVAL = 60 * 60 * 2
-private const val BASE_CURRENCY = "base"
-private const val UNIT = "unit"
 
 @Suppress("UNCHECKED_CAST")
 class Repository(
@@ -28,120 +29,81 @@ class Repository(
     private val modelDao: ModelDao
 ) : AppRepository {
 
-    override suspend fun getAutoPricedMaterial(substance: Substance, currency: Currency): Material {
-        Log.d("kasynsdf", "entered in getAutoPricedMaterial")
-
-
-        val snapShot = FireStoreApi.getMaterialPrices()
-        Log.d("kasynsdf", "snapShot: $snapShot")
-
-        val price = snapShot?.let { getPricesFromSnapshot(it, substance.name) }
-        Log.d("kasynsdf", "price From SnapShot: $price")
+    override suspend fun getMaterialPricedWithServerData(
+        substance: Substance, currencyTo: Currency, priceManually: Price?
+    ): Material {
+        val price = priceManually ?: run {
+            val snapShot = FireStoreApi.getPricesFromFireStore()
+            snapShot?.let { getPriceFromSnapshot(it, substance.name) }
+        }
+        Log.d(LOG_EXCEPTION, "price in getMat... before: $price")
 
         price?.apply {
-            val newValue = getRates()?.let {
-                Log.d("kasynsdff", "getRates AMD = ${it["AMD"]}")
-                Log.d("kasynsdff", "value: $value")
-                Log.d("kasynsdff", "base: $base")
-                Log.d("kasynsdff", "currency: $currency")
+            val newPriceValue =
+                getRatesMap()?.let {
+                    Log.d(LOG_EXCEPTION, "getRatesMap AMD: ${it["AMD"]}")
 
-                getPriceForNewRate(value, base, currency, it)
-            }
-            newValue?.let {
+                    getConvertedPriceValue(value, base, currencyTo, it)
+                }
+            newPriceValue?.let {
                 value = it
-                base = currency
+                base = currencyTo
             }
         }
+        Log.d(LOG_EXCEPTION, "price in getMat... after: $price")
+
         return Material(substance, price)
     }
 
-    override suspend fun getManuallyPricedMaterial(
-        sub: Substance, cur: Currency, pr: Price
-    ): Material {
-
-        return Material(Substance.ALUMINIUM, null)
-    }
-
-    private suspend fun getRates(): HashMap<String, Double>? {
-
-        Log.d("kasynsdf", "entered getValues()")
+    private suspend fun getRatesMap(): HashMap<String, Double>? {
 
         val nowDate = Calendar.getInstance().time
-        //Network ok
-        return if (hasNetwork(context)) {
+        val docSnapshot = FireStoreApi.getRatesFromFireStore()
+        Log.d(LOG_EXCEPTION, "HAS NETWORK: ${hasNetwork(context)}")
 
-            Log.d("kasynsdf", "Has Network")
+        return if (hasNetwork(context)) {  //HAS NETWORK
+            docSnapshot?.let { snapshot ->
 
-            val docSnapshot = FireStoreApi.getFromCache()
-            Log.d("kasynsdf", "docSnapshot: $docSnapshot")
+                val latestUpdateTime = snapshot.getTime()
+                val duration = latestUpdateTime?.let { duration(it, nowDate) }
+                Log.d(LOG_EXCEPTION, "duration - INTERVAL: ${duration!! - UPDATE_INTERVAL}")
 
-            docSnapshot?.run {
-
-                val latestDateTime = getTime()
-                val duration = latestDateTime?.let { duration(it, nowDate) }
-                Log.d("kasynsdf", "duration: $duration")
-                Log.d("kasynsdf", "duration > INTERVAL na: ${duration!! - UPDATE_INTERVAL}")
-                if (duration != null && duration < UPDATE_INTERVAL)
-                    getRatesFromSnapshot(this)
-                else {  //catch new rates
+                if (duration != null && duration < UPDATE_INTERVAL) // STILL NEW RATES IN FB SERVER
+                {
+                    val i = getRatesFromSnapshot(snapshot)
+                    Log.d(LOG_EXCEPTION, "getRatesFromSnapshot : $i")
+                    i
+                } else {  //NEED TO BE UPDATED
                     try {
-                        val response = api.getLatestRatesAsync().await()
-                        Log.d("kasynsdf", "response: $response")
-
+                        val response = api.getRatesAsync().await()
                         val base = response.response.base
                         val rates = response.response.rates
-                        Log.d("kasynsdf", "base: $base")
+                        Log.d(LOG_EXCEPTION, "base from API: ${base}")
+                        Log.d(LOG_EXCEPTION, "rates from API: ${rates}")
 
-                        Log.d("kasynsdf", "ratesAPI: $rates")
-
-                        FireStoreApi.insertRatesIntoFireStore(rates, base)
+                        FireStoreApi.writeRatesIntoFireStore(rates, base)
                         getMapFromRates(rates)
-                    } catch (ex: Exception) {
-                        Log.d("kasynsdf", "API ex message: ${ex.message}")
-
-                        //there is a problem with source, get CACHED from Firestore
-                        try {
-                            getRatesFromSnapshot(this)
-                        } catch (ex: Exception) {
-                            //fireStore CACHE error
-                            null
-                        }
+                    } catch (ex: Exception) { //PROBLEM WITH API SERVER
+                        getRatesFromSnapshot(snapshot) //GET FROM FB OLD RATES
                     }
                 }
             }
-        } else {  //NO Network - Firestore Cache
-            try {
-                FireStoreApi.getFromCache()?.let { getRatesFromSnapshot(it) }
-            } catch (ex: Exception) {
-                null
+        } else  //NO Network - GET FROM CACHE
+            docSnapshot?.let {
+                Log.d(LOG_EXCEPTION, "FROM CACHE CASE")
+                getRatesFromSnapshot(it)
             }
-        }
     }
 
-    private fun getRatesFromSnapshot(snapshot: DocumentSnapshot): HashMap<String, Double> {
-        return snapshot.get(RATES) as HashMap<String, Double>
-    }
-
-    private fun DocumentSnapshot.getTime(): Date? {
-        val value = this[DATE_TIME] as String
-        return value.getDateWithServerTimeStamp()
-    }
-
-    private fun getPricesFromSnapshot(snapshot: DocumentSnapshot, field: String): Price {
-        val value = snapshot.get(field) as Double
-        val base = snapshot.get(BASE_CURRENCY) as String
-        val baseCurrency = Currency.valueOf(base)
-        val unit = snapshot.get(UNIT) as String
-        return Price(baseCurrency, value, unit)
-    }
-
-    private fun getPriceForNewRate(
-        price: Double, curEstimated: Currency, curWanted: Currency, rateMap: HashMap<String, Double>
+    private fun getConvertedPriceValue(
+        priceValueFrom: Double,
+        currencyFrom: Currency,
+        currencyTo: Currency,
+        ratesMap: HashMap<String, Double>
     ): Double? {
-        val rateEstimated = rateMap[curEstimated.name]
-        val rateWanted = rateMap[curWanted.name]
-        return if (rateEstimated != null && rateWanted != null)
-            price * rateWanted / rateEstimated else null
+        val rateFrom = ratesMap[currencyFrom.name]
+        val rateTo = ratesMap[currencyTo.name]
+        return rateFrom?.let { from -> rateTo?.let { to -> priceValueFrom * to / from } }
     }
 
     override suspend fun saveModel(model: Model) = modelDao.add(model)
