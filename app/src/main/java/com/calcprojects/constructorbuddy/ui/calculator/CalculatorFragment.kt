@@ -98,29 +98,7 @@ class CalculatorFragment : Fragment(), CoroutineScope,
         }
 
         btn_calculate.setOnClickListener {
-
-            val par1 = field1.getValue()
-            val par2 = field2.getValue()
-            val par3 = field3.getValue()
-            val par4 = field4.getValue()
-            val par5 = field5.getValue()
-            if (
-                par1 != null && par1 != NO_INPUT
-                && par2 != null && par2 != NO_INPUT
-                && par3 != NO_INPUT
-                && par4 != NO_INPUT
-                && par5 != NO_INPUT
-            ) {
-                valueField1 = par1
-                viewModel.setParameters(par1, par2, par3, par4, par5)
-                includePricingOptions()
-
-                viewModel.calculate().observe(viewLifecycleOwner, Observer { succeed ->
-                    Log.d("kasynsdf","succeed: $succeed")
-                    if (succeed)
-                        findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
-                })
-            }
+            calculate()
         }
 
         viewModel.getTypeAndUnit().observe(viewLifecycleOwner, Observer {
@@ -315,9 +293,7 @@ class CalculatorFragment : Fragment(), CoroutineScope,
     }
 
     private fun Spinner.addListeners(
-        adapter: AdapterSpinnerMat,
-        viewModel: CalcViewModel? = null,
-        startPosition: Int? = null
+        adapter: AdapterSpinnerMat, viewModel: CalcViewModel? = null, startPosition: Int? = null
     ) {
         this.adapter = adapter
         startPosition?.run { setSelection(this) }
@@ -379,5 +355,30 @@ class CalculatorFragment : Fragment(), CoroutineScope,
         val price: Price? = if (manuallySwitcher) null else null
 
         viewModel.setPricingOptions(currency, price)
+    }
+
+    private fun calculate(){
+        val par1 = field1.getValue()
+        val par2 = field2.getValue()
+        val par3 = field3.getValue()
+        val par4 = field4.getValue()
+        val par5 = field5.getValue()
+        if (
+            par1 != null && par1 != NO_INPUT
+            && par2 != null && par2 != NO_INPUT
+            && par3 != NO_INPUT
+            && par4 != NO_INPUT
+            && par5 != NO_INPUT
+        ) {
+            valueField1 = par1
+            viewModel.setParameters(par1, par2, par3, par4, par5)
+            includePricingOptions()
+
+            viewModel.calculate().observe(viewLifecycleOwner, Observer { succeed ->
+                Log.d("kasynsdf","succeed: $succeed")
+                if (succeed)
+                    findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
+            })
+        }
     }
 }

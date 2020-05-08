@@ -11,6 +11,7 @@ import java.lang.Exception
 import java.util.*
 
 private const val CACHE = "Cached Rates"
+private const val CACHE_SIZE = 1024 * 1024L
 const val DATE = "Short Date"
 const val BASE = "Base"
 const val DATE_TIME = "Long Date"
@@ -22,7 +23,13 @@ const val OK = 777
 
 object FireStoreApi {
 
-    private val fireStoreDb by lazy { FirebaseFirestore.getInstance() }
+    private val fireStoreDb by lazy {
+        FirebaseFirestore.getInstance().apply {
+            firestoreSettings = FirebaseFirestoreSettings.Builder()
+                .setCacheSizeBytes(CACHE_SIZE)
+                .build()
+        }
+    }
 
     suspend fun insertRatesIntoFireStore(rates: Rates, base: String) {
 
@@ -43,6 +50,10 @@ object FireStoreApi {
     }
 
     suspend fun getFromCache(): DocumentSnapshot? {
+
+        Log.d("kasynsdf", "cache size: ${fireStoreDb.firestoreSettings.cacheSizeBytes}")
+
+
         return try {
             fireStoreDb.collection(CURRENCY_LATEST.name).document(CACHE).get(Source.CACHE).await()
         } catch (ex: Exception) {

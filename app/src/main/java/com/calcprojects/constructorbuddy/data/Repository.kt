@@ -29,17 +29,22 @@ class Repository(
 ) : AppRepository {
 
     override suspend fun getAutoPricedMaterial(substance: Substance, currency: Currency): Material {
-        Log.d("kasynsdf","entered in getAutoPricedMaterial")
+        Log.d("kasynsdf", "entered in getAutoPricedMaterial")
 
 
         val snapShot = FireStoreApi.getMaterialPrices()
-        Log.d("kasynsdf","snapShot: $snapShot")
+        Log.d("kasynsdf", "snapShot: $snapShot")
 
         val price = snapShot?.let { getPricesFromSnapshot(it, substance.name) }
-        Log.d("kasynsdf","price: $price")
+        Log.d("kasynsdf", "price From SnapShot: $price")
 
         price?.apply {
             val newValue = getRates()?.let {
+                Log.d("kasynsdff", "getRates AMD = ${it["AMD"]}")
+                Log.d("kasynsdff", "value: $value")
+                Log.d("kasynsdff", "base: $base")
+                Log.d("kasynsdff", "currency: $currency")
+
                 getPriceForNewRate(value, base, currency, it)
             }
             newValue?.let {
@@ -59,25 +64,41 @@ class Repository(
 
     private suspend fun getRates(): HashMap<String, Double>? {
 
+        Log.d("kasynsdf", "entered getValues()")
+
         val nowDate = Calendar.getInstance().time
         //Network ok
         return if (hasNetwork(context)) {
+
+            Log.d("kasynsdf", "Has Network")
+
             val docSnapshot = FireStoreApi.getFromCache()
+            Log.d("kasynsdf", "docSnapshot: $docSnapshot")
+
             docSnapshot?.run {
 
                 val latestDateTime = getTime()
                 val duration = latestDateTime?.let { duration(it, nowDate) }
-
+                Log.d("kasynsdf", "duration: $duration")
+                Log.d("kasynsdf", "duration > INTERVAL na: ${duration!! - UPDATE_INTERVAL}")
                 if (duration != null && duration < UPDATE_INTERVAL)
                     getRatesFromSnapshot(this)
                 else {  //catch new rates
                     try {
                         val response = api.getLatestRatesAsync().await()
+                        Log.d("kasynsdf", "response: $response")
+
                         val base = response.response.base
                         val rates = response.response.rates
+                        Log.d("kasynsdf", "base: $base")
+
+                        Log.d("kasynsdf", "ratesAPI: $rates")
+
                         FireStoreApi.insertRatesIntoFireStore(rates, base)
                         getMapFromRates(rates)
                     } catch (ex: Exception) {
+                        Log.d("kasynsdf", "API ex message: ${ex.message}")
+
                         //there is a problem with source, get CACHED from Firestore
                         try {
                             getRatesFromSnapshot(this)
@@ -123,22 +144,12 @@ class Repository(
             price * rateWanted / rateEstimated else null
     }
 
+    override suspend fun saveModel(model: Model) = modelDao.add(model)
 
-    override suspend fun saveModel(model: Model) {
-        modelDao.add(model)
-    }
+    override suspend fun deleteModels(ids: List<Int>) = ids.forEach { modelDao.remove(it) }
 
-    override suspend fun deleteModels(ids: List<Int>) {
-        ids.forEach {
-            modelDao.remove(it)
-        }
-    }
+    override fun getModel(id: Int): LiveData<Model> = modelDao.get(id)
 
-    override fun getModel(id: Int): LiveData<Model> {
-        return modelDao.get(id)
-    }
+    override fun getAllModels(): LiveData<List<Model>> = modelDao.getAll()
 
-    override fun getAllModels(): LiveData<List<Model>> {
-        return modelDao.getAll()
-    }
 }

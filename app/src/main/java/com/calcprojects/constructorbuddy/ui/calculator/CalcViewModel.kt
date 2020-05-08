@@ -84,13 +84,17 @@ class CalcViewModel(application: Application) : AndroidViewModel(application) {
 
     fun calculate(): LiveData<Boolean> {
 
+        succeed.value = false
         viewModelScope.launch(Dispatchers.IO) {
             val model = getModel(form, substance, typeByLength, params, unit, currency, price)
             Log.d("kasynsdf", "model in scope: $model")
 
-            model?.let {
-                modelCalculated = it
-                withContext(Dispatchers.Main) { succeed.value = true }
+            withContext(Dispatchers.Main) {
+                Log.d("kasynsdf", "entered withContext: $model")
+
+                succeed.value = model?.let { true } ?: false
+                modelCalculated = model
+                Log.d("kasynsdf", "model in withContext: $model")
             }
         }
         return succeed
@@ -159,17 +163,16 @@ class CalcViewModel(application: Application) : AndroidViewModel(application) {
                 val material = currency?.let { cur ->
                     price?.let { repo.getManuallyPricedMaterial(sub, cur, it) }
                         ?: repo.getAutoPricedMaterial(sub, cur)
-                }
+                } ?: Material(sub)
                 Log.d("kasynsdf", "price: $price")
                 Log.d("kasynsdf", "currency: $currency")
                 Log.d("kasynsdf", "material: $material")
 
                 model = if (type) {
                     shape.length = params[0]
-
-                    material?.let { Model.createByLength(shape, it, unit) }
+                    Model.createByLength(shape, material, unit)
                 } else {
-                    material?.let { Model.createByWeight(shape, it, unit, params[0]!!) }
+                    Model.createByWeight(shape, material, unit, params[0]!!)
                 }
             }
         }
