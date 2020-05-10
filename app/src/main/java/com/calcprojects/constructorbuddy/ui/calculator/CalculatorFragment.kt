@@ -11,6 +11,8 @@ import android.widget.*
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,13 +50,13 @@ class CalculatorFragment : Fragment(), CoroutineScope,
     private val materials by lazy { Substance.values() }
     private var valueField1: Double? = null
     private var unitDefault: Boolean? = null
+    private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         job = Job()
         viewModel = ViewModelProvider(this).get(CalculationViewModel::class.java)
-
         preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         unitDefault = preferences.getString(KEY_UNITS, null)?.let { it == Unit.METRIC.name }
         unitDefault?.let { viewModel.setUnit(it) }
@@ -74,6 +76,9 @@ class CalculatorFragment : Fragment(), CoroutineScope,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        navController = view.findNavController()
+
 
         //recycler init
         adapterRecShape = AdapterRecyclerShapes(requireContext(), true) {}
@@ -293,7 +298,9 @@ class CalculatorFragment : Fragment(), CoroutineScope,
     }
 
     private fun Spinner.addListeners(
-        adapter: AdapterSpinnerMat, viewModel: CalculationViewModel? = null, startPosition: Int? = null
+        adapter: AdapterSpinnerMat,
+        viewModel: CalculationViewModel? = null,
+        startPosition: Int? = null
     ) {
         this.adapter = adapter
         startPosition?.run { setSelection(this) }
@@ -357,7 +364,7 @@ class CalculatorFragment : Fragment(), CoroutineScope,
         viewModel.setPricingOptions(currency, price)
     }
 
-    private fun calculate(){
+    private fun calculate() {
         val par1 = field1.getValue()
         val par2 = field2.getValue()
         val par3 = field3.getValue()
@@ -375,9 +382,14 @@ class CalculatorFragment : Fragment(), CoroutineScope,
             includePricingOptions()
 
             viewModel.calculate().observe(viewLifecycleOwner, Observer { succeed ->
-                Log.d("kasynsdf","succeed: $succeed")
-                if (succeed)
-                    findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
+                Log.d("kasynsdf", "succeed: $succeed")
+                if (succeed) {
+                    try {
+                        navController?.navigate(CalculatorFragmentDirections.actionShowResult())
+                    }catch (ex: Exception){
+                        Log.d(LOG_EXCEPTION, "ERROR navController: ${ex.message}")
+                    }
+                }
             })
         }
     }
