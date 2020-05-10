@@ -7,7 +7,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.PreferenceManager
 import com.calcprojects.constructorbuddy.R
+import com.calcprojects.constructorbuddy.model.units.Unit
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         nav_view.setupWithNavController(findNavController(R.id.nav_host_fragment))
+        initPreferenceDefaultOptions()
     }
 
     override fun onResume() {
@@ -43,5 +46,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun initPreferenceDefaultOptions() {
+        PreferenceManager.setDefaultValues(this, R.xml.preference, false)
     }
 }

@@ -157,7 +157,7 @@ class CalculationViewModel(application: Application) : AndroidViewModel(applicat
                 }
 
                 val material =
-                    currency?.let { cur -> repo.getMaterialPricedWithServerData(sub, cur, price) }
+                    currency?.let { cur -> repo.getMaterialPricedWithServerData(sub, cur, metric, price) }
                         ?: Material(sub)
 
                 model = if (type) {

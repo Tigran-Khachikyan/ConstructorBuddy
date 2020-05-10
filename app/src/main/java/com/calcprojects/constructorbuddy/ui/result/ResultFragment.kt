@@ -82,6 +82,12 @@ class ResultFragment : Fragment(), CoroutineScope {
                 resources.getString(R.string.volume) + " : " + shape.volume?.to2p() + " " + units.volume
             tv_res_total_volume.text = volume
 
+            val price =
+                resources.getString(R.string.price) + " : " + price?.value?.to2p() + " " + price?.base?.name
+            tv_res_price.let {
+                if (this.price != null) it.text = price else it.visibility = View.GONE
+            }
+
             val material =
                 resources.getString(R.string.material) + ": " + resources.getString(material.substance.nameRes)
             tv_init_mat.text = material

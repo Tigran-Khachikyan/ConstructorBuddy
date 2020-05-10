@@ -62,6 +62,7 @@ class CalculatorFragment : Fragment(), CoroutineScope,
         val shapeName = arguments?.let {
             CalculatorFragmentArgs.fromBundle(it).shapeSelected
         }
+        viewModel.setType(true)
         form = shapeName?.let { valueOf(it) }
     }
 

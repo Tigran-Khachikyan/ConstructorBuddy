@@ -118,7 +118,6 @@ class AdapterRecyclerSaved(
                     } ?: funcOpenModel(mod[adapterPosition].id)
                 }
             }
-
         }
     }
 
@@ -139,6 +138,7 @@ class AdapterRecyclerSaved(
         models?.run {
             name.text = (position + 1).toString()
             image.setImageResource(this[position].shape.form.imageRes)
+            date.text = this[position].dateOfCreation
             coverLayout.visibility = selectedList?.run {
 
                 iconChecked.setImageResource(

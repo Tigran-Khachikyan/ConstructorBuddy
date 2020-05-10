@@ -15,6 +15,8 @@ import com.calcprojects.constructorbuddy.model.figures.Substance
 import com.calcprojects.constructorbuddy.model.price.Currency
 import com.calcprojects.constructorbuddy.model.price.Price
 import com.calcprojects.constructorbuddy.model.price.getMapFromRates
+import com.calcprojects.constructorbuddy.model.units.Unit
+import com.calcprojects.constructorbuddy.model.units.fromKGToPound
 import com.calcprojects.constructorbuddy.ui.LOG_EXCEPTION
 import java.util.*
 import kotlin.collections.HashMap
@@ -30,7 +32,10 @@ class Repository(
 ) : AppRepository {
 
     override suspend fun getMaterialPricedWithServerData(
-        substance: Substance, currencyTo: Currency, priceManually: Price?
+        substance: Substance,
+        currencyTo: Currency,
+        metric: Boolean,
+        priceManually: Price?
     ): Material {
         val price = priceManually ?: run {
             val snapShot = FireStoreApi.getPricesFromFireStore()
@@ -43,7 +48,7 @@ class Repository(
                 getRatesMap()?.let {
                     Log.d(LOG_EXCEPTION, "getRatesMap AMD: ${it["AMD"]}")
 
-                    getConvertedPriceValue(value, base, currencyTo, it)
+                    getConvertedPriceValue(value, base, currencyTo, metric, it)
                 }
             newPriceValue?.let {
                 value = it
@@ -99,11 +104,15 @@ class Repository(
         priceValueFrom: Double,
         currencyFrom: Currency,
         currencyTo: Currency,
+        metric: Boolean,
         ratesMap: HashMap<String, Double>
     ): Double? {
+
+        //BASE UNIT FROM SERVER IS KG, SO WE NEED TO CONVERT INTO POUND IF METRIC IS FALSE
         val rateFrom = ratesMap[currencyFrom.name]
         val rateTo = ratesMap[currencyTo.name]
-        return rateFrom?.let { from -> rateTo?.let { to -> priceValueFrom * to / from } }
+        val valuePerKg = rateFrom?.let { from -> rateTo?.let { to -> priceValueFrom * to / from } }
+        return valuePerKg?.let { if (metric) it else fromKGToPound(it) }
     }
 
     override suspend fun saveModel(model: Model) = modelDao.add(model)

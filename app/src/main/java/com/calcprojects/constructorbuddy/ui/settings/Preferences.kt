@@ -24,7 +24,6 @@ class Preferences : PreferenceFragmentCompat() {
         listUnits?.apply {
             entries = unitEntry
             entryValues = unitEntryValues
-            setDefaultValue(Unit.METRIC.name)
         }
 
         //currencies
@@ -35,7 +34,6 @@ class Preferences : PreferenceFragmentCompat() {
         listRates?.apply {
             entries = ratesEntry
             entryValues = ratesEntryValues
-            setDefaultValue(Currency.USD.name)
         }
 
     }

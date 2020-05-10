@@ -11,6 +11,7 @@
            app:dialogIcon="@drawable/ic_save"
            android:dialogTitle="select the measurement system."
            android:title="Units"
+           android:defaultValue="METRIC"
            app:summary="Sel the units systems"/>
 
     </PreferenceCategory>
@@ -28,6 +29,7 @@
             android:title="Currencies"
             app:dialogIcon="@drawable/ic_save"
             android:dialogTitle="choose base rate."
+            android:defaultValue="USD"
             app:summary="Select a base currency for pricing calculation."
             app:dependency="key_price_switcher"/>
 

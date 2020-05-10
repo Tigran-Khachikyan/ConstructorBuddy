@@ -8,6 +8,7 @@ import com.calcprojects.constructorbuddy.data.firebase.FBCollection.*
 import com.calcprojects.constructorbuddy.model.price.Currency
 import com.calcprojects.constructorbuddy.model.price.Price
 import com.calcprojects.constructorbuddy.model.price.getMapFromRates
+import com.calcprojects.constructorbuddy.model.units.Unit
 import com.calcprojects.constructorbuddy.ui.LOG_EXCEPTION
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.tasks.await
@@ -102,17 +103,17 @@ object FireStoreApi {
         return value.getDateWithServerTimeStamp()
     }
 
-    fun getPriceFromSnapshot(snapshot: DocumentSnapshot, field: String): Price? {
+    fun getPriceFromSnapshot(snapshot: DocumentSnapshot, fieldMaterialName: String): Price? {
         return try {
             val value = try {
-                snapshot.get(field) as Double
+                snapshot.get(fieldMaterialName) as Double
             } catch (ex: Exception) {
-                (snapshot.get(field) as Long).toDouble()
+                (snapshot.get(fieldMaterialName) as Long).toDouble()
             }
             val base = snapshot.get(BASE_CURRENCY) as String
             val baseCurrency = Currency.valueOf(base)
-            val unit = snapshot.get(UNIT) as String
-            Price(baseCurrency, value, unit)
+
+            Price(baseCurrency, value)
         } catch (ex: Exception) {
             Log.d(LOG_EXCEPTION, "ERROR message getPricesFromSnapshot: ${ex.message}")
             null

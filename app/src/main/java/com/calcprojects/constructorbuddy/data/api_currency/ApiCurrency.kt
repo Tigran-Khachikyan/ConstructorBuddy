@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 interface ApiCurrency {
 
-    @GET("latest")
+    @GET("alatest")
     fun getRatesAsync(): Deferred<ResponseCurMetal>
 }
 
