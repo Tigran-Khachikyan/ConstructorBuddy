@@ -143,7 +143,6 @@ class CalculatorFragment : Fragment(), CoroutineScope,
         topAppBar_calc_fragment.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.toSettings -> findNavController().navigate(CalculatorFragmentDirections.actionOpenSettings())
-                R.id.toHome -> activity?.onBackPressed()
                 R.id.toSaved -> findNavController().navigate(CalculatorFragmentDirections.actionToSavedModels())
             }
             return@setOnMenuItemClickListener false
@@ -336,8 +335,8 @@ class CalculatorFragment : Fragment(), CoroutineScope,
     @SuppressLint("SourceLockedOrientationActivity")
     private fun configureActivity() {
         activity?.run {
-            window.decorView.systemUiVisibility =
-                (View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_LAYOUT_FLAGS)
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_VISIBLE)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         MainViewModel.showBottomActionView(false)
@@ -386,7 +385,7 @@ class CalculatorFragment : Fragment(), CoroutineScope,
                 if (succeed) {
                     try {
                         navController?.navigate(CalculatorFragmentDirections.actionShowResult())
-                    }catch (ex: Exception){
+                    } catch (ex: Exception) {
                         Log.d(LOG_EXCEPTION, "ERROR navController: ${ex.message}")
                     }
                 }

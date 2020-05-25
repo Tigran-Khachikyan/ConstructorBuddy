@@ -14,9 +14,9 @@ interface AppRepository {
 
     suspend fun deleteModels(ids: List<Int>)
 
-    fun getModel(id: Int): LiveData<Model>
+    fun getModel(id: Int): LiveData<Model?>
 
-    fun getAllModels(): LiveData<List<Model>>
+    fun getAllModels(): LiveData<List<Model>?>
 
     suspend fun getMaterialPricedWithServerData(
         substance: Substance, currencyTo: Currency, metric: Boolean, priceManually: Price?

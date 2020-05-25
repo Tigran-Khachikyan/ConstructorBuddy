@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     tools:context=".ui.shapes.ShapesFragment">
@@ -10,13 +11,15 @@
     <TextView
         android:id="@+id/textView_shapes_intro"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="24dp"
         android:textColor="@android:color/white"
-        android:text="@string/chooseTheShape"
         android:gravity="center"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_shape_fr"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/holder_shape"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

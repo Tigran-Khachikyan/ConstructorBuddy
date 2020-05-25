@@ -12,8 +12,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/conDescHomeImage"
         android:src="@mipmap/building"
-        app:layout_constraintBottom_toTopOf="@id/tv_intro_home"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_intro_homes"
+        android:layout_marginTop="14dp"/>
 
 
     <TextView
@@ -21,35 +22,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:text="Dear User,,,"
-        android:layout_marginBottom="0dp"
-        android:textSize="20sp"
-        app:layout_goneMarginBottom="6dp"
-        app:layout_constraintBottom_toTopOf="@id/tv_intro_home"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <TextView
-        android:id="@+id/tv_intro_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingStart="22dp"
-        android:paddingEnd="22dp"
-        android:textSize="15sp"
+        android:paddingStart="36dp"
+        android:paddingEnd="36dp"
+        android:text="@string/home_intro_text"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:fontFamily="@font/orbitron_bold"
         app:layout_constraintBottom_toTopOf="@id/btn_start"
-        app:layout_constraintTop_toBottomOf="@id/iv_home"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintTop_toBottomOf="@id/iv_home" />
+
 
     <Button
         android:id="@+id/btn_start"
         style="@style/button_big"
         android:text="@string/getStarted"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_intro_homes"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_intro_home" />
+        android:layout_marginBottom="70dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,5 +30,5 @@ class ResultViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun getModel(id: Int): LiveData<Model> = repo.getModel(id)
+    fun getModel(id: Int): LiveData<Model?> = repo.getModel(id)
 }

@@ -22,6 +22,7 @@
         <SwitchPreferenceCompat
             app:key="key_price_switcher"
             app:title="Include Price"
+            android:defaultValue="false"
             app:summary="Add price calculation in result computation."/>
 
         <ListPreference
@@ -36,6 +37,7 @@
         <SwitchPreferenceCompat
             app:key="key_auto_manually_switcher"
             app:title="Pricing sources"
+            android:defaultValue="false"
             app:dependency="key_price_switcher"
             app:summary="Set prices for materials manually."/>
 

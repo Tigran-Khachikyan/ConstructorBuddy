@@ -16,12 +16,13 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="elevation">24dp</item>
+        <item name="android:fontFamily">@font/orbitron_bold</item>
         <item name="android:layout_marginBottom">24dp</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
         <item name="strokeWidth">2dp</item>
-        <item name="rippleColor">@color/colorAccent</item>
+        <item name="rippleColor">@color/colorPrimaryDark</item>
         <item name="strokeColor">@color/colorPrimaryLight</item>
         <item name="android:padding">10dp</item>
     </style>
@@ -30,6 +31,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/orbitron_bold</item>
         <item name="elevation">8dp</item>
         <item name="android:layout_margin">10dp</item>
         <item name="android:textColor">@color/colorAccent</item>
@@ -45,15 +47,16 @@
     <style name="inputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/colorAccent</item>
         <item name="boxStrokeWidth">2dp</item>
-        <item name="hintTextColor">@android:color/holo_orange_light</item>
-        <item name="android:textColorHint">@android:color/holo_green_light</item>
+        <item name="hintTextColor">@android:color/holo_green_light</item>
+        <item name="android:textColorHint">@color/colorSecondarySP</item>
         <item name="endIconMode">clear_text</item>
         <item name="helperTextTextColor">@android:color/holo_blue_bright</item>
-        <item name="errorTextColor">@android:color/holo_red_dark</item>
-        <item name="errorIconTint">@android:color/holo_red_dark</item>
+        <item name="errorTextColor">@color/errorColor</item>
+        <item name="errorIconTint">@color/errorColor</item>
         <item name="errorIconDrawable">@drawable/ic_error</item>
         <item name="endIconDrawable">@drawable/ic_cancel</item>
         <item name="endIconTint">@color/colorPrimaryLight</item>
+        <item name="android:fontFamily">@font/orbitron_bold</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginEnd">8dp</item>
         <item name="android:layout_marginStart">8dp</item>
@@ -74,15 +77,17 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textSize">22sp</item>
         <item name="android:visibility">gone</item>
+        <item name="android:fontFamily">@font/orbitron_bold</item>
         <item name="layout_constraintVertical_bias">0.4</item>
         <item name="android:layout_marginEnd">40dp</item>
     </style>
 
     <style name="inputText">
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">19sp</item>
         <item name="android:inputType">numberDecimal</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:cursorVisible">true</item>
+        <item name="android:fontFamily">@font/orbitron_bold</item>
         <item name="android:textCursorDrawable">@color/colorAccent</item>
     </style>
 
@@ -92,11 +97,12 @@
         <item name="android:gravity">center</item>
         <item name="android:paddingStart">6dp</item>
         <item name="android:paddingEnd">6dp</item>
+        <item name="android:fontFamily">@font/orbitron_bold</item>
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
@@ -104,6 +110,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/orbitron_bold</item>
         <item name="android:paddingStart">6dp</item>
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:paddingEnd">6dp</item>

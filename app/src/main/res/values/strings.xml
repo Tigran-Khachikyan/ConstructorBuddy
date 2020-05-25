@@ -44,7 +44,7 @@
     <string name="price">Price</string>
 
     <string name="clear">clear</string>
-    <string name="calculate">calculate</string>
+    <string name="calculate">Calculate</string>
     <string name="inputError">Must be completed!</string>
     <string name="chooseTheShape">choose the shape!</string>
     <string name="byLength">by Length</string>
@@ -149,6 +149,8 @@
 
 
     <string name="shape">Shape</string>
+
+    <string name="home_intro_text">Start constructing with the help of our formulas and cost predictions.</string>
 
 
 </resources>

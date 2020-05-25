@@ -119,8 +119,8 @@ class Repository(
 
     override suspend fun deleteModels(ids: List<Int>) = ids.forEach { modelDao.remove(it) }
 
-    override fun getModel(id: Int): LiveData<Model> = modelDao.get(id)
+    override fun getModel(id: Int): LiveData<Model?> = modelDao.get(id)
 
-    override fun getAllModels(): LiveData<List<Model>> = modelDao.getAll()
+    override fun getAllModels(): LiveData<List<Model>?> = modelDao.getAll()
 
 }

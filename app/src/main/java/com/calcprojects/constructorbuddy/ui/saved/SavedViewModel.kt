@@ -20,7 +20,7 @@ class SavedViewModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
-    fun getSavedModels(): LiveData<List<Model>> {
+    fun getSavedModels(): LiveData<List<Model>?> {
         return repo.getAllModels()
     }
 

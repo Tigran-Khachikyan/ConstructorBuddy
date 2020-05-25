@@ -51,7 +51,9 @@ class ResultFragment : Fragment(), CoroutineScope {
                 modelToSave?.let { initialize(it, false) }
             } else {
                 resultViewModel.getModel(id).observe(viewLifecycleOwner, Observer {
-                    initialize(it, true)
+                    it?.let {
+                        initialize(it, true)
+                    }
                 })
             }
         }

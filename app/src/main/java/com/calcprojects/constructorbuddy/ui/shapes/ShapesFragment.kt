@@ -51,8 +51,8 @@ class ShapesFragment : Fragment(), CoroutineScope {
         adapter = AdapterRecyclerShapes(requireContext(), false, func)
 
         recycler_shape_fr.setHasFixedSize(true)
-        recycler_shape_fr.layoutManager =
-            GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
+//        recycler_shape_fr.layoutManager =
+//            GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
         recycler_shape_fr.adapter = adapter
     }
 
@@ -78,12 +78,8 @@ class ShapesFragment : Fragment(), CoroutineScope {
     @SuppressLint("SourceLockedOrientationActivity")
     private fun configureActivity() {
         activity?.run {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    // Hide the nav bar and status bar
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN)
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_VISIBLE)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
         MainViewModel.showBottomActionView(false)

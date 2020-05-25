@@ -91,7 +91,8 @@
                 android:padding="6dp"
                 android:text="@string/initial_data"
                 android:textAllCaps="true"
-                android:textColor="@color/colorPrimaryLight"
+                android:fontFamily="@font/orbitron_bold"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -181,12 +182,16 @@
         android:layout_margin="8dp"
         android:backgroundTint="@color/colorAccent"
         android:text="@string/save"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/orbitron_bold"
         app:icon="@drawable/ic_save"
         app:layout_anchor="@id/card_result"
         app:layout_anchorGravity="bottom|end" />
 
     <TextView
         android:id="@+id/tv_result"
+        android:fontFamily="@font/orbitron_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
