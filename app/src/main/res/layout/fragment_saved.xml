@@ -4,18 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorSecondary"
+    android:background="@android:color/white"
     tools:context=".ui.saved.SavedFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar_saved"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorSecondaryDark"
+        android:background="@color/colorSecondary"
         android:paddingTop="24dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
@@ -41,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:menu="@menu/app_bar_menu"
+                android:backgroundTint="@color/colorPrimary"
                 app:subtitle="get your saved items"
                 app:subtitleTextColor="@android:color/white"
                 app:title="Saved Items"
@@ -53,6 +54,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_saved"
+        android:background="@color/colorSecondaryLight"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

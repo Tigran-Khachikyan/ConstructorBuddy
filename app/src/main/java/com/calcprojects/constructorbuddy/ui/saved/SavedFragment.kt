@@ -61,8 +61,7 @@ class SavedFragment : Fragment() {
     private fun configureActivity() {
         activity?.run {
             window.statusBarColor = resources.getColor(R.color.colorSecondaryDark)
-            window.decorView.systemUiVisibility =
-                (View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_VISIBLE)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
         MainViewModel.showBottomActionView(true)

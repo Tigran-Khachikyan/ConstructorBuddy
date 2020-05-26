@@ -8,8 +8,9 @@
     <color name="colorPrimaryLight">#439889</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorSecondary">#628891</color>
-    <color name="colorSecondaryTrans">#7C355B63</color>
-    <color name="colorSecondaryDark">#355b63</color>
+    <color name="colorSecondaryLight">#A7C6CD</color>
+    <color name="colorSecondaryTrans">#5F507D87</color>
     <color name="colorSecondarySP">#00251a</color>
     <color name="errorColor">#7a0000</color>
+    <color name="colorSecondaryDark">#112A3F</color>
 </resources>
