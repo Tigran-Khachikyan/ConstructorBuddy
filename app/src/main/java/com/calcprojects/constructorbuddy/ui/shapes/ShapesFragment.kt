@@ -1,87 +1,76 @@
 package com.calcprojects.constructorbuddy.ui.shapes
 
-import android.annotation.SuppressLint
-import android.content.pm.ActivityInfo
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
-
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.figures.Form
-import com.calcprojects.constructorbuddy.ui.*
+import com.calcprojects.constructorbuddy.ui.AdapterRecyclerShapes
+import com.calcprojects.constructorbuddy.ui.ConfigFragment
+import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
 import kotlinx.android.synthetic.main.fragment_shapes.*
-import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
  */
-class ShapesFragment : Fragment(), CoroutineScope {
+class ShapesFragment : ConfigFragment() {
 
-    private lateinit var job: Job
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-    private lateinit var func: (Form) -> Unit
-    private lateinit var adapter: AdapterRecyclerShapes
+    private var job: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-
-        configureActivity()
         return inflater.inflate(R.layout.fragment_shapes, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        job = Job()
-        func = { s: Form ->
-            launch {
-                startCalculation(s, view.findNavController())
-            }
-        }
-
-        adapter = AdapterRecyclerShapes(requireContext(), false, func)
-
-        recycler_shape_fr.setHasFixedSize(true)
-//        recycler_shape_fr.layoutManager =
-//            GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
-        recycler_shape_fr.adapter = adapter
-    }
-
-    private suspend fun startCalculation(shape: Form, navController: NavController) {
-        delay(1200)
-        val action = ShapesFragmentDirections.actionStartCalculation(shape.name)
-        navController.navigate(action)
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-
-        adapter.selectedPosition = null
-        adapter.notifyDataSetChanged()
+        setScreenConfigurations()
+        recycler_shape_fr.initialize()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        job.cancel()
+
+        job?.cancel()
     }
 
-    @SuppressLint("SourceLockedOrientationActivity")
-    private fun configureActivity() {
-        activity?.run {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_VISIBLE)
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+    override fun setScreenConfigurations() {
+        setScreenOrientationVertical(false)
+        setSystemVisibilityFullScreen(false)
+        setBottomNavViewVisible(false)
+    }
+
+    private fun RecyclerView.initialize() {
+
+        val func = { form: Form ->
+            job = CoroutineScope(Main).launch {
+                startCalculation(form)
+            }
         }
-        MainViewModel.showBottomActionView(false)
+        setHasFixedSize(true)
+        adapter = AdapterRecyclerShapes(requireContext(), false, func)
+    }
+
+    private suspend fun startCalculation(form: Form) {
+
+        delay(SCREEN_DELAY_TIME)
+        try {
+            val navController = NavHostFragment.findNavController(this)
+            val action = ShapesFragmentDirections.actionStartCalculation(form.name)
+            navController.navigate(action)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
     }
 }

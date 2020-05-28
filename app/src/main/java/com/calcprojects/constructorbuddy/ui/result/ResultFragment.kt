@@ -3,18 +3,19 @@ package com.calcprojects.constructorbuddy.ui.result
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Model
 import com.calcprojects.constructorbuddy.ui.*
 import com.calcprojects.constructorbuddy.ui.calculator.CalculationViewModel
+import com.calcprojects.constructorbuddy.ui.calculator.CalculatorFragmentDirections
 import kotlinx.android.synthetic.main.fragment_result.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -48,29 +49,36 @@ class ResultFragment : Fragment(), CoroutineScope {
         modelId?.let { id ->
             if (id == DEFAULT_RES_ARG) {
                 modelToSave = CalculationViewModel.modelCalculated
-                modelToSave?.let { initialize(it, false) }
+                modelToSave?.let { initializeViews(it, false) }
             } else {
                 resultViewModel.getModel(id).observe(viewLifecycleOwner, Observer {
                     it?.let {
-                        initialize(it, true)
+                        initializeViews(it, true)
                     }
                 })
             }
         }
-
-        btn_save.setOnClickListener {
-            modelToSave?.let {
-                resultViewModel.save(it)
-            }
-        }
-
     }
 
-    private fun initialize(model: Model, fromDB: Boolean) {
-        model.run {
-            Log.d("asaasfwe", "model is not null")
+    override fun onResume() {
+        super.onResume()
+        job = Job()
+        launch {
+            delay(SCREEN_DELAY_TIME)
+            configureActivity()
+        }
+    }
 
-            fromDB.let { if (it) btn_save.visibility = View.GONE }
+    override fun onPause() {
+        super.onPause()
+        job.cancel()
+    }
+
+    private fun initializeViews(model: Model, fromDB: Boolean) {
+
+        model.run {
+
+            if (fromDB) btn_save.visibility = View.GONE
 
             val length =
                 resources.getString(R.string.length) + ": " + shape.length?.to2p() + " " + units.distance
@@ -127,22 +135,18 @@ class ResultFragment : Fragment(), CoroutineScope {
             }
 
             iv_shape_res.setImageResource(shape.form.imageRes)
+
+            btn_save.setOnClickListener {
+                resultViewModel.save(this)
+            }
+
+           /* topAppBar_res_fragment.setOnMenuItemClickListener {
+                if (it.itemId == R.id.share)
+                    (activity as MainActivity).shareModels(arrayListOf(this))
+                return@setOnMenuItemClickListener false
+            }*/
         }
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        job = Job()
-        launch {
-            delay(SCREEN_DELAY_TIME)
-            configureActivity()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        job.cancel()
     }
 
     private fun configureActivity() {
@@ -151,7 +155,7 @@ class ResultFragment : Fragment(), CoroutineScope {
                 (View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-        MainViewModel.showBottomActionView(show = true, withAnimation = true)
+       // MainViewModel.showBottomActionView(show = true, withAnimation = true)
     }
 
 }

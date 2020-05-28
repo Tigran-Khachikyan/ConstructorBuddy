@@ -43,7 +43,6 @@ class CalculatorFragment : Fragment(), CoroutineScope,
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = Main + Job()
-
     private lateinit var viewModel: CalculationViewModel
     private var form: Form? = null
     private lateinit var adapterRecShape: AdapterRecyclerShapes
@@ -339,7 +338,7 @@ class CalculatorFragment : Fragment(), CoroutineScope,
                     or View.SYSTEM_UI_FLAG_VISIBLE)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
-        MainViewModel.showBottomActionView(false)
+    //    MainViewModel.showBottomActionView(false)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

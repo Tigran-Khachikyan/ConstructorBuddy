@@ -151,6 +151,8 @@
     <string name="shape">Shape</string>
 
     <string name="home_intro_text">Start constructing with the help of our formulas and cost predictions.</string>
+    <string name="titleSend">new models to share</string>
+    <string name="result_sub_title">Get calculated model.</string>
 
 
 </resources>

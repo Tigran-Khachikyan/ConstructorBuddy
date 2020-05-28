@@ -59,9 +59,16 @@ class AdapterRecyclerShapes(
     private fun Holder.animate(selPos: Int?, curPos: Int) {
         selPos?.let {
             if (curPos != it)
-                itemView.animate().alpha(0.35F).scaleX(0.9F).scaleY(0.9F).apply { duration = 1000 }
+                itemView.animate()
+                    .alpha(0.35F)
+                    .scaleX(0.9F)
+                    .scaleY(0.9F)
+                    .apply { duration = SCREEN_DELAY_TIME }
             else
-                itemView.animate().scaleX(1.2F).scaleY(1.2F).apply { duration = 1000 }
+                itemView.animate()
+                    .scaleX(1.2F)
+                    .scaleY(1.2F)
+                    .apply { duration = SCREEN_DELAY_TIME }
         }
     }
 }

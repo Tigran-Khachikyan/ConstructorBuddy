@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.ui.AdapterRecyclerSaved
-import com.calcprojects.constructorbuddy.ui.MainViewModel
 import kotlinx.android.synthetic.main.fragment_saved.*
 
 class SavedFragment : Fragment() {
@@ -64,7 +63,7 @@ class SavedFragment : Fragment() {
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_VISIBLE)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-        MainViewModel.showBottomActionView(true)
+       // MainViewModel.showBottomActionView(true)
     }
 
 }

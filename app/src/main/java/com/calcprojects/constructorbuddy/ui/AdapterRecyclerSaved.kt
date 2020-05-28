@@ -152,10 +152,10 @@ class AdapterRecyclerSaved(
 
     private fun setActivityState(actionMode: ActionMode?) {
         if (actionMode != null) {
-            MainViewModel.showBottomActionView(show = false, withAnimation = true)
+            //MainViewModel.showBottomActionView(show = false, withAnimation = true)
             appBar.setPadding(0, -108, 0, 0)
         } else {
-            MainViewModel.showBottomActionView(show = true, withAnimation = true)
+           // MainViewModel.showBottomActionView(show = true, withAnimation = true)
             appBar.setPadding(0, 48, 0, 0)
         }
     }

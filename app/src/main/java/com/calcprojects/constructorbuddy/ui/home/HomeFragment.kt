@@ -1,34 +1,25 @@
 package com.calcprojects.constructorbuddy.ui.home
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.ui.MainViewModel
+import com.calcprojects.constructorbuddy.ui.ConfigFragment
 import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
+import com.calcprojects.constructorbuddy.ui.splash.SplashFragmentDirections
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
-class HomeFragment : Fragment(), CoroutineScope {
+class HomeFragment : ConfigFragment() {
 
     private lateinit var job: Job
-    override val coroutineContext: CoroutineContext
-        get() = Main + job
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -36,35 +27,36 @@ class HomeFragment : Fragment(), CoroutineScope {
         super.onViewCreated(view, savedInstanceState)
 
         btn_start.setOnClickListener {
+
             try {
-                view.findNavController().navigate(HomeFragmentDirections.actionGetStarted())
+                val navController = NavHostFragment.findNavController(this)
+                navController.navigate(HomeFragmentDirections.actionGetStarted())
             } catch (ex: Exception) {
-                Log.d("exx", "${ex.message}")
+                ex.printStackTrace()
             }
+
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
 
-        job = Job()
-        launch {
+        job = CoroutineScope(Main).launch {
             delay(SCREEN_DELAY_TIME)
-            configureActivity()
+            setScreenConfigurations()
         }
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
+
         job.cancel()
     }
 
-    private fun configureActivity(){
-        activity?.run {
-            window.decorView.systemUiVisibility =
-                (View.SYSTEM_UI_FLAG_VISIBLE /*or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION*/)
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
-        MainViewModel.showBottomActionView(true)
+    override fun setScreenConfigurations() {
+
+        setBottomNavViewVisible(visible = true)
+        setSystemVisibilityFullScreen(false)
+        setScreenOrientationVertical(false)
     }
 }
