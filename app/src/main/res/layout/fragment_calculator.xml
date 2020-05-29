@@ -113,7 +113,7 @@
                 </RadioGroup>
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/spinnerMat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:popupBackground="@android:color/white"
@@ -131,7 +131,7 @@
                     app:layout_constraintBottom_toTopOf="@id/field2"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/spinner"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerMat"
                     app:layout_constraintVertical_weight="1"
                     app:shapeAppearanceOverlay="@style/cut">
 

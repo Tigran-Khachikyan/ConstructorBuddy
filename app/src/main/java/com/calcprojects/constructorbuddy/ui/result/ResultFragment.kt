@@ -1,7 +1,6 @@
 package com.calcprojects.constructorbuddy.ui.result
 
-import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,35 +8,44 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import androidx.preference.PreferenceManager
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Model
 import com.calcprojects.constructorbuddy.ui.*
 import com.calcprojects.constructorbuddy.ui.calculator.CalculationViewModel
-import com.calcprojects.constructorbuddy.ui.calculator.CalculatorFragmentDirections
 import kotlinx.android.synthetic.main.fragment_result.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
-class ResultFragment : Fragment(), CoroutineScope {
+class ResultFragment : Fragment(), ScreenConfigurations {
 
-    private var modelToSave: Model? = null
-    private lateinit var priceSharedPreferences: SharedPreferences
+    private var model: Model? = null
     private lateinit var job: Job
     private lateinit var resultViewModel: ResultViewModel
-    override val coroutineContext: CoroutineContext
-        get() = Main + job
+
+    override val hostActivity: Activity?
+        get() = activity
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        job = CoroutineScope(Main).launch {
+            delay(SCREEN_DELAY_TIME)
+            setScreenConfigurations(
+                orientationVertical = true,
+                fullScreenMode = false,
+                bottomNavViewVisible = true,
+                bottomNavViewAnim = true
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         resultViewModel = ViewModelProvider(this).get(ResultViewModel::class.java)
-        priceSharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         return inflater.inflate(R.layout.fragment_result, container, false)
     }
 
@@ -45,11 +53,10 @@ class ResultFragment : Fragment(), CoroutineScope {
         super.onViewCreated(view, savedInstanceState)
 
         val modelId = arguments?.let { ResultFragmentArgs.fromBundle(it).modelId }
-
         modelId?.let { id ->
             if (id == DEFAULT_RES_ARG) {
-                modelToSave = CalculationViewModel.modelCalculated
-                modelToSave?.let { initializeViews(it, false) }
+                model = CalculationViewModel.modelCalculated
+                model?.let { initializeViews(it, false) }
             } else {
                 resultViewModel.getModel(id).observe(viewLifecycleOwner, Observer {
                     it?.let {
@@ -60,17 +67,10 @@ class ResultFragment : Fragment(), CoroutineScope {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        job = Job()
-        launch {
-            delay(SCREEN_DELAY_TIME)
-            configureActivity()
-        }
-    }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onDestroy() {
+        super.onDestroy()
+
         job.cancel()
     }
 
@@ -140,22 +140,12 @@ class ResultFragment : Fragment(), CoroutineScope {
                 resultViewModel.save(this)
             }
 
-           /* topAppBar_res_fragment.setOnMenuItemClickListener {
-                if (it.itemId == R.id.share)
-                    (activity as MainActivity).shareModels(arrayListOf(this))
-                return@setOnMenuItemClickListener false
-            }*/
+            /* topAppBar_res_fragment.setOnMenuItemClickListener {
+                 if (it.itemId == R.id.share)
+                     (activity as MainActivity).shareModels(arrayListOf(this))
+                 return@setOnMenuItemClickListener false
+             }*/
         }
 
     }
-
-    private fun configureActivity() {
-        activity?.run {
-            window.decorView.systemUiVisibility =
-                (View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
-       // MainViewModel.showBottomActionView(show = true, withAnimation = true)
-    }
-
 }

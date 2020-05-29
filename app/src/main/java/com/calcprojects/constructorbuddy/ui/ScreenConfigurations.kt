@@ -10,10 +10,19 @@ interface ScreenConfigurations {
 
     val hostActivity: Activity?
 
-    fun setScreenConfigurations()
+    fun setScreenConfigurations(
+        orientationVertical: Boolean = true,
+        fullScreenMode: Boolean = true,
+        bottomNavViewVisible: Boolean = true,
+        bottomNavViewAnim: Boolean = false
+    ) {
+        setScreenOrientationVertical(orientationVertical)
+        setSystemVisibilityFullScreen(fullScreenMode)
+        setBottomNavViewVisible(bottomNavViewVisible, bottomNavViewAnim)
+    }
 
     @SuppressLint("SourceLockedOrientationActivity")
-    fun setScreenOrientationVertical(vertical: Boolean = true) {
+    private fun setScreenOrientationVertical(vertical: Boolean = true) {
         hostActivity?.let {
             (it as MainActivity).requestedOrientation =
                 if (vertical) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -21,7 +30,7 @@ interface ScreenConfigurations {
         }
     }
 
-    fun setSystemVisibilityFullScreen(fullScreen: Boolean = true) {
+    private fun setSystemVisibilityFullScreen(fullScreen: Boolean = true) {
 
         hostActivity?.let {
             (it as MainActivity).window.decorView.systemUiVisibility =
@@ -32,11 +41,11 @@ interface ScreenConfigurations {
                         // Hide the nav bar and status bar
                         or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         or View.SYSTEM_UI_FLAG_FULLSCREEN)
-                else View.SYSTEM_UI_FLAG_VISIBLE
+                else (View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION )
         }
     }
 
-    fun setBottomNavViewVisible(visible: Boolean = true, withAnim: Boolean = false) {
+    private fun setBottomNavViewVisible(visible: Boolean = true, withAnim: Boolean = false) {
 
         val navView = hostActivity?.let { (it as MainActivity).bottomNavView }
         navView?.run {
@@ -54,5 +63,4 @@ interface ScreenConfigurations {
             }
         }
     }
-
 }

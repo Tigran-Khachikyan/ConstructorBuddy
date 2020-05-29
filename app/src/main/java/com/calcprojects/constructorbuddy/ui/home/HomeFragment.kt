@@ -1,19 +1,25 @@
 package com.calcprojects.constructorbuddy.ui.home
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.ui.ConfigFragment
 import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
-import com.calcprojects.constructorbuddy.ui.splash.SplashFragmentDirections
+import com.calcprojects.constructorbuddy.ui.ScreenConfigurations
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
 
-class HomeFragment : ConfigFragment() {
+class HomeFragment : Fragment(),
+    ScreenConfigurations {
+
+    override val hostActivity: Activity?
+        get() = activity
 
     private lateinit var job: Job
 
@@ -26,16 +32,7 @@ class HomeFragment : ConfigFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        btn_start.setOnClickListener {
-
-            try {
-                val navController = NavHostFragment.findNavController(this)
-                navController.navigate(HomeFragmentDirections.actionGetStarted())
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-
-        }
+        btn_start.initListener()
     }
 
     override fun onStart() {
@@ -43,7 +40,12 @@ class HomeFragment : ConfigFragment() {
 
         job = CoroutineScope(Main).launch {
             delay(SCREEN_DELAY_TIME)
-            setScreenConfigurations()
+            setScreenConfigurations(
+                orientationVertical = true,
+                fullScreenMode = false,
+                bottomNavViewVisible = true,
+                bottomNavViewAnim = false
+            )
         }
     }
 
@@ -53,10 +55,15 @@ class HomeFragment : ConfigFragment() {
         job.cancel()
     }
 
-    override fun setScreenConfigurations() {
+    private fun Button.initListener() {
 
-        setBottomNavViewVisible(visible = true)
-        setSystemVisibilityFullScreen(false)
-        setScreenOrientationVertical(false)
+        setOnClickListener {
+            try {
+                val navController = NavHostFragment.findNavController(this@HomeFragment)
+                navController.navigate(HomeFragmentDirections.actionGetStarted())
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
     }
 }

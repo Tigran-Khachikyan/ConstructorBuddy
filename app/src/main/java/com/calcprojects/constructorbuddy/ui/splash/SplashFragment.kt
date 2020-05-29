@@ -1,15 +1,15 @@
 package com.calcprojects.constructorbuddy.ui.splash
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.calcprojects.constructorbuddy.R
-import com.calcprojects.constructorbuddy.ui.ConfigFragment
 import com.calcprojects.constructorbuddy.ui.SPlASH_DELAY_TIME
+import com.calcprojects.constructorbuddy.ui.ScreenConfigurations
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
@@ -19,24 +19,33 @@ import kotlinx.coroutines.launch
 /**
  * A simple [Fragment] subclass.
  */
-class SplashFragment : ConfigFragment() {
+class SplashFragment : Fragment(),
+    ScreenConfigurations {
+
+    override val hostActivity: Activity?
+        get() = activity
 
     private lateinit var job: Job
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        setScreenConfigurations()
+        setScreenConfigurations(
+            orientationVertical = true,
+            fullScreenMode = true,
+            bottomNavViewVisible = false,
+            bottomNavViewAnim = false
+        )
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onResume() {
+        super.onResume()
 
         job = CoroutineScope(Main).launch {
             delay(SPlASH_DELAY_TIME)
             try {
-                val navController = NavHostFragment.findNavController(this@SplashFragment)
+                val navController = findNavController(this@SplashFragment)
                 navController.navigate(SplashFragmentDirections.actionFinishSplash())
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -44,18 +53,11 @@ class SplashFragment : ConfigFragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onPause() {
+        super.onPause()
 
         job.cancel()
         resetStartDestinationToHomeFragment()
-    }
-
-    override fun setScreenConfigurations() {
-
-        setBottomNavViewVisible(false)
-        setScreenOrientationVertical()
-        setSystemVisibilityFullScreen()
     }
 
     private fun resetStartDestinationToHomeFragment() {
@@ -69,6 +71,5 @@ class SplashFragment : ConfigFragment() {
             ex.printStackTrace()
         }
     }
-
 
 }

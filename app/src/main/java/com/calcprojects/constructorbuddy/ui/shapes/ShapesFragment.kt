@@ -1,5 +1,6 @@
 package com.calcprojects.constructorbuddy.ui.shapes
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.figures.Form
-import com.calcprojects.constructorbuddy.ui.AdapterRecyclerShapes
-import com.calcprojects.constructorbuddy.ui.ConfigFragment
-import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
+import com.calcprojects.constructorbuddy.ui.*
 import kotlinx.android.synthetic.main.fragment_shapes.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -22,8 +21,11 @@ import kotlinx.coroutines.launch
 /**
  * A simple [Fragment] subclass.
  */
-class ShapesFragment : ConfigFragment() {
+class ShapesFragment : Fragment(),
+    ScreenConfigurations {
 
+    override val hostActivity: Activity?
+        get() = activity
     private var job: Job? = null
 
     override fun onCreateView(
@@ -35,7 +37,12 @@ class ShapesFragment : ConfigFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setScreenConfigurations()
+        setScreenConfigurations(
+            orientationVertical = false,
+            fullScreenMode = false,
+            bottomNavViewVisible = false,
+            bottomNavViewAnim = false
+        )
         recycler_shape_fr.initialize()
     }
 
@@ -43,12 +50,6 @@ class ShapesFragment : ConfigFragment() {
         super.onDestroyView()
 
         job?.cancel()
-    }
-
-    override fun setScreenConfigurations() {
-        setScreenOrientationVertical(false)
-        setSystemVisibilityFullScreen(false)
-        setBottomNavViewVisible(false)
     }
 
     private fun RecyclerView.initialize() {

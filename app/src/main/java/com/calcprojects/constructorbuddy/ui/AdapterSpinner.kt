@@ -12,7 +12,7 @@ import com.calcprojects.constructorbuddy.model.units.Unit
 import com.calcprojects.constructorbuddy.model.units.fromGCm3ToLbIn3
 
 
-class AdapterSpinnerMat(
+class AdapterSpinner(
     context: Context,
     res: Int = R.layout.holder_material,
     materials: Array<Substance>,
