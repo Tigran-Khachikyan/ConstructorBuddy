@@ -7,7 +7,7 @@ const val NO_INPUT: Double = -1.0
 const val SELECTED: Boolean = true
 const val UNSELECTED: Boolean = false
 const val SCREEN_DELAY_TIME = 800L
-const val SPlASH_DELAY_TIME = 2500L
+const val SPlASH_DELAY_TIME = 1600L
 const val DEFAULT_RES_ARG = -1
 
 const val KEY_UNITS = "key_units"

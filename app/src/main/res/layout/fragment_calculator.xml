@@ -95,7 +95,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     android:text="@string/computing"
                     android:textColor="@color/colorSecondarySP"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/orbitron_bold"
                     android:textColor="@color/colorSecondarySP"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="@id/tvComputing"
                     app:layout_constraintBottom_toBottomOf="@id/tvComputing"
@@ -170,11 +170,12 @@
             <Spinner
                 android:id="@+id/spinnerMat"
                 android:layout_width="match_parent"
-                android:layout_marginTop="8dp"
+                android:layout_margin="5dp"
                 android:padding="4dp"
                 android:layout_height="wrap_content"
                 android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

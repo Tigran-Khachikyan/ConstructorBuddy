@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.ui.SPlASH_DELAY_TIME
@@ -57,13 +58,18 @@ class SplashFragment : Fragment(),
         super.onPause()
 
         job.cancel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
         resetStartDestinationToHomeFragment()
     }
 
     private fun resetStartDestinationToHomeFragment() {
 
         try {
-            val navController = findNavController(this)
+            val navController = NavHostFragment.findNavController(this)
             val graph = navController.navInflater.inflate(R.navigation.mobile_navigation)
             graph.startDestination = R.id.toHome
             navController.graph = graph

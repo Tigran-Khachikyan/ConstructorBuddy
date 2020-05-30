@@ -16,7 +16,7 @@
     <color name="colorSecondary">#628891</color>
     <color name="colorSecondaryLight">#A7C6CD</color>
     <color name="colorSecondaryTrans">#5F507D87</color>
-    <color name="colorSecondarySP">#00251a</color>
+    <color name="colorSecondarySP">#042F30</color>
     <color name="errorColor">#7a0000</color>
-    <color name="colorSecondaryDark">#112A3F</color>
+    <color name="colorSecondaryDark">#0B65B1</color>
 </resources>

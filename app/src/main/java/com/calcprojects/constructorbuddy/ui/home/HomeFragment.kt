@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.calcprojects.constructorbuddy.R
+import com.calcprojects.constructorbuddy.ui.MainActivity
 import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
 import com.calcprojects.constructorbuddy.ui.ScreenConfigurations
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -23,6 +25,7 @@ class HomeFragment : Fragment(),
 
     private lateinit var job: Job
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -31,7 +34,7 @@ class HomeFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        
         btn_start.initListener()
     }
 
