@@ -37,7 +37,7 @@ class CalculationViewModel(application: Application) : AndroidViewModel(applicat
     private val price = MutableLiveData<Price>()
     private val typeAndUnit = MediatorLiveData<Pair<Boolean, Boolean>?>()
 
-    private val succeed = MutableLiveData<Boolean>().apply { value = false }
+    private val succeed = MutableLiveData<Boolean?>()
 
     fun setForm(_form: Form) = run { form.value = _form }
 
@@ -81,9 +81,8 @@ class CalculationViewModel(application: Application) : AndroidViewModel(applicat
         var modelCalculated: Model? = null
     }
 
-    fun calculate(): LiveData<Boolean> {
+    fun calculate(): LiveData<Boolean?> {
 
-        succeed.value = false
         viewModelScope.launch(Dispatchers.IO) {
             val model = getModel(form, substance, typeByLength, params, unit, currency, price)
 

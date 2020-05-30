@@ -87,7 +87,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lay_init_data"
             android:layout_width="match_parent"
-            android:background="@drawable/background_calculator_gradient"
             android:layout_height="0dp"
             android:padding="12dp"
             app:layout_constraintBottom_toBottomOf="parent"

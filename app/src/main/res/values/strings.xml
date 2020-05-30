@@ -48,7 +48,7 @@
     <string name="inputError">Must be completed!</string>
     <string name="chooseTheShape">choose the shape!</string>
     <string name="byLength">by Length</string>
-    <string name="byWeight">by weight</string>
+    <string name="byWeight">by Weight</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -141,7 +141,7 @@
     <string name="result">Result</string>
     <string name="initial_data">Initial data</string>
     <string name="count">Count</string>
-    <string name="error_text">Input for this field is mandatory!</string>
+    <string name="error_text">Field must be filled out!</string>
     <string name="material">Material</string>
     <string name="share">Share</string>
     <string name="save">Save</string>
@@ -153,6 +153,7 @@
     <string name="home_intro_text">Start constructing with the help of our formulas and cost predictions.</string>
     <string name="titleSend">new models to share</string>
     <string name="result_sub_title">Get calculated model.</string>
+    <string name="computing">Computing</string>
 
 
 </resources>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     android:fitsSystemWindows="true"
+    android:background="@android:color/black"
     tools:context=".ui.calculator.CalculatorFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -19,303 +19,357 @@
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:backgroundTint="@color/colorPrimaryDark"
+            android:backgroundTint="@android:color/black"
             app:menu="@menu/app_bar_menu"
-            app:title="@string/calculate"
-            app:titleTextColor="@color/colorPrimaryLight" />
+            app:subtitle="@string/calculate"
+            app:subtitleTextColor="@color/colorPrimaryLight" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nested_scrollView"
+    <!--recycler, indicator-->
+    <LinearLayout
+        android:id="@+id/layout_images"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="wrap_content"
+        android:background="@android:color/black"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/appBar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_recycler_top"
+            android:paddingBottom="8dp"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_images"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_shapes_marked"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_calculator_gradient"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator
+                android:id="@+id/indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:dotColor="@color/colorPrimary"
+                app:dotCount="4"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recycler_shapes_marked"
+                app:selectedDotColor="@color/colorAccent"
+                app:selectedDotRadius="6dp" />
+
+            <!--progress-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/progressBarLayout"
+                android:layout_width="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="gone"
+                app:layout_constraintVertical_bias="0.8"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_recycler_top"
-                    android:paddingBottom="8dp"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_shapes_marked"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:background="@android:color/white"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator
-                        android:id="@+id/indicator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        app:dotColor="@color/colorPrimary"
-                        app:dotCount="4"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/recycler_shapes_marked"
-                        app:selectedDotColor="@color/colorPrimaryDark"
-                        app:selectedDotRadius="6dp" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/lay_input"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
-                android:backgroundTintMode="screen"
-                android:paddingBottom="8dp"
-                app:layout_constraintTop_toBottomOf="@id/layout_images">
-
-                <RadioGroup
-                    android:id="@+id/radioGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:checkedButton="@+id/radByLength"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <RadioButton
-                        android:id="@+id/radByLength"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/byLength"
-                        android:textSize="18sp"
-                        app:useMaterialThemeColors="true" />
-
-                    <RadioButton
-                        android:id="@+id/radByWeight"
-                        style="@style/Widget.MaterialComponents.CompoundButton.RadioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/byWeight"
-                        android:textSize="18sp"
-                        app:useMaterialThemeColors="false" />
-                </RadioGroup>
-
-                <Spinner
-                    android:id="@+id/spinnerMat"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:popupBackground="@android:color/white"
-                    android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/radioGroup" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/field1"
-                    style="@style/inputLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:helperText="input your first "
-                    app:layout_constraintBottom_toTopOf="@id/field2"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/spinnerMat"
-                    app:layout_constraintVertical_weight="1"
-                    app:shapeAppearanceOverlay="@style/cut">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etField1"
-                        style="@style/inputText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tv_unit1"
-                    style="@style/unit_Texts"
-                    android:text="lb"
-                    app:layout_constraintBottom_toBottomOf="@id/field1"
-                    app:layout_constraintRight_toRightOf="@id/field1"
-                    app:layout_constraintTop_toTopOf="@id/field1" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/field2"
-                    style="@style/inputLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:helperText="input your first "
-                    app:layout_constraintBottom_toTopOf="@id/field4"
-                    app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/field3"
-                    app:layout_constraintTop_toBottomOf="@id/field1"
-                    app:layout_constraintVertical_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etField2"
-                        style="@style/inputText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tv_unit2"
-                    style="@style/unit_Texts"
-                    android:text="in"
-                    app:layout_constraintBottom_toBottomOf="@id/field2"
-                    app:layout_constraintRight_toRightOf="@id/field2"
-                    app:layout_constraintTop_toTopOf="@id/field2" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/field3"
-                    style="@style/inputLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="0dp"
-                    app:helperText="input your first"
-                    app:layout_constraintBottom_toBottomOf="@id/field2"
-                    app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintLeft_toRightOf="@id/field2"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/field1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etField3"
-                        style="@style/inputText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tv_unit3"
-                    style="@style/unit_Texts"
-                    android:text="cm"
-                    app:layout_constraintBottom_toBottomOf="@id/field3"
-                    app:layout_constraintRight_toRightOf="@id/field3"
-                    app:layout_constraintTop_toTopOf="@id/field3" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/field4"
-                    style="@style/inputLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:helperText="input your first"
-                    app:layout_constraintBottom_toTopOf="@id/field6"
-                    app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/field5"
-                    app:layout_constraintTop_toBottomOf="@id/field2"
-                    app:layout_constraintVertical_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etField4"
-                        style="@style/inputText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tv_unit4"
-                    style="@style/unit_Texts"
-                    android:text="kg"
-                    app:layout_constraintBottom_toBottomOf="@id/field4"
-                    app:layout_constraintRight_toRightOf="@id/field4"
-                    app:layout_constraintTop_toTopOf="@id/field4" />
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/field5"
-                    style="@style/inputLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="0dp"
-                    app:helperText="input your first"
-                    app:layout_constraintBottom_toBottomOf="@id/field4"
-                    app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintLeft_toRightOf="@id/field4"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/field3">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etField5"
-                        style="@style/inputText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tv_unit5"
-                    style="@style/unit_Texts"
-                    android:text="lb"
-                    app:layout_constraintBottom_toBottomOf="@id/field5"
-                    app:layout_constraintRight_toRightOf="@id/field5"
-                    app:layout_constraintTop_toTopOf="@id/field5" />
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/field6"
-                    style="@style/inputLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="0dp"
-                    android:hint="@string/count"
-                    app:helperText="input your first "
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/field4"
-                    app:layout_constraintVertical_weight="1"
-                    app:layout_constraintWidth_percent="0.47">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etField6"
-                        style="@style/inputText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/btn_calculate"
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleLarge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:backgroundTint="@color/colorAccent"
-                    android:fontFamily="@font/orbitron_bold"
-                    android:text="@string/calculate"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toRightOf="@id/field6"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/field6" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvComputing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/orbitron_bold"
+                    app:layout_constraintTop_toBottomOf="@id/progressBar"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:text="@string/computing"
+                    android:textColor="@color/colorSecondarySP"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/orbitron_bold"
+                    android:textColor="@color/colorSecondarySP"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="@id/tvComputing"
+                    app:layout_constraintBottom_toBottomOf="@id/tvComputing"
+                    app:layout_constraintLeft_toRightOf="@id/tvComputing" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/radByLength"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/radByLength"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/byLength"
+                android:fontFamily="@font/orbitron_bold"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                app:useMaterialThemeColors="true" />
+
+            <RadioButton
+                android:id="@+id/radByWeight"
+                style="@style/Widget.MaterialComponents.CompoundButton.RadioButton"
+                android:layout_width="wrap_content"
+                android:fontFamily="@font/orbitron_bold"
+                android:layout_height="wrap_content"
+                android:text="@string/byWeight"
+                android:layout_marginStart="16dp"
+                android:textSize="16sp"
+                app:useMaterialThemeColors="false" />
+        </RadioGroup>
+
+
+    </LinearLayout>
+
+    <!--other buttons-->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@android:color/black"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_images">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryLight"
+            android:backgroundTintMode="screen"
+            android:paddingBottom="8dp"
+            app:layout_constraintTop_toBottomOf="@id/layout_images">
+
+            <Spinner
+                android:id="@+id/spinnerMat"
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:padding="4dp"
+                android:layout_height="wrap_content"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/field1"
+                style="@style/inputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:helperText="input your first "
+                app:layout_constraintBottom_toTopOf="@id/field2"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerMat"
+                app:layout_constraintVertical_weight="1"
+                app:shapeAppearanceOverlay="@style/cut">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etField1"
+                    style="@style/inputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_unit1"
+                style="@style/unit_Texts"
+                android:text="lb"
+                app:layout_constraintBottom_toBottomOf="@id/field1"
+                app:layout_constraintRight_toRightOf="@id/field1"
+                app:layout_constraintTop_toTopOf="@id/field1" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/field2"
+                style="@style/inputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:helperText="input your first "
+                app:layout_constraintBottom_toTopOf="@id/field4"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/field3"
+                app:layout_constraintTop_toBottomOf="@id/field1"
+                app:layout_constraintVertical_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etField2"
+                    style="@style/inputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_unit2"
+                style="@style/unit_Texts"
+                android:text="in"
+                app:layout_constraintBottom_toBottomOf="@id/field2"
+                app:layout_constraintRight_toRightOf="@id/field2"
+                app:layout_constraintTop_toTopOf="@id/field2" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/field3"
+                style="@style/inputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                app:helperText="input your first"
+                app:layout_constraintBottom_toBottomOf="@id/field2"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toRightOf="@id/field2"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/field1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etField3"
+                    style="@style/inputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_unit3"
+                style="@style/unit_Texts"
+                android:text="cm"
+                app:layout_constraintBottom_toBottomOf="@id/field3"
+                app:layout_constraintRight_toRightOf="@id/field3"
+                app:layout_constraintTop_toTopOf="@id/field3" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/field4"
+                style="@style/inputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:helperText="input your first"
+                app:layout_constraintBottom_toTopOf="@id/field6"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/field5"
+                app:layout_constraintTop_toBottomOf="@id/field2"
+                app:layout_constraintVertical_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etField4"
+                    style="@style/inputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_unit4"
+                style="@style/unit_Texts"
+                android:text="kg"
+                app:layout_constraintBottom_toBottomOf="@id/field4"
+                app:layout_constraintRight_toRightOf="@id/field4"
+                app:layout_constraintTop_toTopOf="@id/field4" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/field5"
+                style="@style/inputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                app:helperText="input your first"
+                app:layout_constraintBottom_toBottomOf="@id/field4"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintLeft_toRightOf="@id/field4"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/field3">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etField5"
+                    style="@style/inputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_unit5"
+                style="@style/unit_Texts"
+                android:text="lb"
+                app:layout_constraintBottom_toBottomOf="@id/field5"
+                app:layout_constraintRight_toRightOf="@id/field5"
+                app:layout_constraintTop_toTopOf="@id/field5" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/field6"
+                style="@style/inputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
+                android:hint="@string/count"
+                app:helperText="input your first "
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/field4"
+                app:layout_constraintVertical_weight="1"
+                app:layout_constraintWidth_percent="0.47">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etField6"
+                    style="@style/inputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/btn_calculate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:backgroundTint="@color/colorAccent"
+                android:fontFamily="@font/orbitron_bold"
+                android:text="@string/calculate"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toRightOf="@id/field6"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/field6" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

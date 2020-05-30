@@ -31,6 +31,11 @@ import com.calcprojects.constructorbuddy.ui.*
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_calculator.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class CalculatorFragment : Fragment(), ScreenConfigurations,
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -42,6 +47,7 @@ class CalculatorFragment : Fragment(), ScreenConfigurations,
     private var valueField1: Double? = null
     private var isUnitDefMetric: Boolean? = null
     private lateinit var adapterSpinner: AdapterSpinner
+    private var jobComputing: Job? = null
 
     override fun onCreateView(inf: LayoutInflater, con: ViewGroup?, save: Bundle?): View? {
 
@@ -52,7 +58,6 @@ class CalculatorFragment : Fragment(), ScreenConfigurations,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.setType(true)
         initPreferenceWithDefaultValues()
         recycler_shapes_marked.initWithListeners()
         spinnerMat.initWithListeners()
@@ -120,6 +125,7 @@ class CalculatorFragment : Fragment(), ScreenConfigurations,
 
         preferences.unregisterOnSharedPreferenceChangeListener(this)
         viewModel.removeSources()
+        cancelJobComputingProgress()
     }
 
     override val hostActivity: Activity?
@@ -172,12 +178,23 @@ class CalculatorFragment : Fragment(), ScreenConfigurations,
     }
 
     private fun RadioGroup.initWithListeners() {
+
         setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.radByLength -> viewModel.setType(true)
-                R.id.radByWeight -> viewModel.setType(false)
+                R.id.radByLength -> {
+                    radByLength.setTextColor(resources.getColor(R.color.colorAccent))
+                    radByWeight.setTextColor(resources.getColor(R.color.colorPrimaryLightTrans))
+                    viewModel.setType(true)
+                }
+                R.id.radByWeight -> {
+                    radByWeight.setTextColor(resources.getColor(R.color.colorAccent))
+                    radByLength.setTextColor(resources.getColor(R.color.colorPrimaryLightTrans))
+                    viewModel.setType(false)
+                }
             }
         }
+        clearCheck()
+        radByLength.isChecked = true
     }
 
     private fun Spinner.initWithListeners() {
@@ -196,6 +213,27 @@ class CalculatorFragment : Fragment(), ScreenConfigurations,
         }
     }
 
+    private fun startComputingProgressBarLayoutShow() {
+
+        jobComputing = CoroutineScope(Main).launch {
+            progressBarLayout.visibility = View.VISIBLE
+
+            while (true) {
+                var points = ""
+                for (index in 0..3) {
+                    tvPoints.text = points
+                    delay(300)
+                    points += " ."
+                }
+            }
+        }
+    }
+
+    private fun cancelJobComputingProgress() {
+        progressBarLayout.visibility = View.GONE
+        jobComputing?.cancel()
+    }
+
     private fun initButtonCalculate() {
         btn_calculate.setOnClickListener {
 
@@ -211,18 +249,24 @@ class CalculatorFragment : Fragment(), ScreenConfigurations,
                 && par4 != NO_INPUT
                 && par5 != NO_INPUT
             ) {
+                startComputingProgressBarLayoutShow()
                 valueField1 = par1
                 viewModel.setParameters(par1, par2, par3, par4, par5)
                 includePricingOptions()
 
                 viewModel.calculate().observe(viewLifecycleOwner, Observer { succeed ->
-                    if (succeed) {
-                        try {
-                            findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
-                        } catch (ex: Exception) {
-                            ex.printStackTrace()
+
+                    succeed?.let {
+                        cancelJobComputingProgress()
+                        if (succeed) {
+                            try {
+                                findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
+                            } catch (ex: Exception) {
+                                ex.printStackTrace()
+                            }
                         }
                     }
+
                 })
             }
         }

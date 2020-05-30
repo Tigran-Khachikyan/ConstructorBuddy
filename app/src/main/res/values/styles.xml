@@ -46,17 +46,17 @@
 
 
     <style name="inputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/colorAccent</item>
+        <item name="boxStrokeColor">@android:color/black</item>
         <item name="boxStrokeWidth">2dp</item>
-        <item name="hintTextColor">@android:color/holo_green_light</item>
+        <item name="hintTextColor">@color/colorAccent</item>
         <item name="android:textColorHint">@color/colorSecondarySP</item>
         <item name="endIconMode">clear_text</item>
-        <item name="helperTextTextColor">@android:color/holo_blue_bright</item>
+        <item name="helperTextTextColor">@color/colorPrimaryDark</item>
         <item name="errorTextColor">@color/errorColor</item>
         <item name="errorIconTint">@color/errorColor</item>
         <item name="errorIconDrawable">@drawable/ic_error</item>
         <item name="endIconDrawable">@drawable/ic_cancel</item>
-        <item name="endIconTint">@color/colorPrimaryLight</item>
+        <item name="endIconTint">@android:color/black</item>
         <item name="android:fontFamily">@font/orbitron_bold</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginEnd">8dp</item>
