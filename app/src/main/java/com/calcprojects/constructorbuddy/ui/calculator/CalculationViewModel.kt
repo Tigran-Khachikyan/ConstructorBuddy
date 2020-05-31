@@ -77,22 +77,37 @@ class CalculationViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    companion object {
+    /*companion object {
         var modelCalculated: Model? = null
-    }
+    }*/
 
-    fun calculate(): LiveData<Boolean?> {
+    /*  fun calculate(): LiveData<Boolean?> {
 
-        viewModelScope.launch(Dispatchers.IO) {
+          viewModelScope.launch(Dispatchers.IO) {
+              val model = getModel(form, substance, typeByLength, params, unit, currency, price)
+
+              withContext(Dispatchers.Main) {
+
+                  succeed.value = model?.let { true } ?: false
+                  modelCalculated = model
+              }
+          }
+          return succeed
+      }*/
+
+    private val modelCalculated = MutableLiveData<Model>()
+    fun calculate(): LiveData<Model?> {
+        modelCalculated.value = null
+        viewModelScope.launch(Dispatchers.Default) {
             val model = getModel(form, substance, typeByLength, params, unit, currency, price)
 
             withContext(Dispatchers.Main) {
-
-                succeed.value = model?.let { true } ?: false
-                modelCalculated = model
+                modelCalculated.value = model
+                /*succeed.value = model?.let { true } ?: false
+                modelCalculated = model*/
             }
         }
-        return succeed
+        return modelCalculated
     }
 
     private suspend fun getModel(
@@ -156,7 +171,14 @@ class CalculationViewModel(application: Application) : AndroidViewModel(applicat
                 }
 
                 val material =
-                    currency?.let { cur -> repo.getMaterialPricedWithServerData(sub, cur, metric, price) }
+                    currency?.let { cur ->
+                        repo.getMaterialPricedWithServerData(
+                            sub,
+                            cur,
+                            metric,
+                            price
+                        )
+                    }
                         ?: Material(sub)
 
                 model = if (type) {

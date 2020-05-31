@@ -28,6 +28,7 @@ import com.calcprojects.constructorbuddy.model.price.Currency
 import com.calcprojects.constructorbuddy.model.price.Price
 import com.calcprojects.constructorbuddy.model.units.Unit
 import com.calcprojects.constructorbuddy.ui.*
+import com.calcprojects.constructorbuddy.ui.result.ResultViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_calculator.*
@@ -42,6 +43,7 @@ class CalculatorFragment : Fragment(), ScreenConfigurations,
 
     private lateinit var preferences: SharedPreferences
     private lateinit var viewModel: CalculationViewModel
+    private var resultViewModel: ResultViewModel? = null
     private lateinit var adapterRecShape: AdapterRecyclerShapes
     private val materials by lazy { Substance.values() }
     private var valueField1: Double? = null
@@ -52,6 +54,7 @@ class CalculatorFragment : Fragment(), ScreenConfigurations,
     override fun onCreateView(inf: LayoutInflater, con: ViewGroup?, save: Bundle?): View? {
 
         viewModel = ViewModelProvider(this).get(CalculationViewModel::class.java)
+        resultViewModel = activity?.let { ViewModelProvider(it).get(ResultViewModel::class.java) }
         return inf.inflate(R.layout.fragment_calculator, con, false)
     }
 
@@ -254,20 +257,19 @@ class CalculatorFragment : Fragment(), ScreenConfigurations,
                 viewModel.setParameters(par1, par2, par3, par4, par5)
                 includePricingOptions()
 
-                viewModel.calculate().observe(viewLifecycleOwner, Observer { succeed ->
+                viewModel.calculate().observe(viewLifecycleOwner, Observer { model ->
 
-                    succeed?.let {
+                    model?.let {
                         cancelJobComputingProgress()
-                        if (succeed) {
-                            try {
-                                findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
-                            } catch (ex: Exception) {
-                                ex.printStackTrace()
-                            }
+                        resultViewModel?.setCalculatedModel(it)
+                        try {
+                            findNavController().navigate(CalculatorFragmentDirections.actionShowResult())
+                        } catch (ex: Exception) {
+                            ex.printStackTrace()
                         }
                     }
-
                 })
+
             }
         }
     }

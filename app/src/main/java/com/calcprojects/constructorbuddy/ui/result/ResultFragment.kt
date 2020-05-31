@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Model
 import com.calcprojects.constructorbuddy.ui.*
-import com.calcprojects.constructorbuddy.ui.calculator.CalculationViewModel
 import kotlinx.android.synthetic.main.fragment_result.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -19,11 +18,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ResultFragment : Fragment(), ScreenConfigurations {
+class ResultFragment : Fragment(), ScreenConfigurations, SendModel {
 
     private var model: Model? = null
     private lateinit var job: Job
-    private lateinit var resultViewModel: ResultViewModel
+    private var resultViewModel: ResultViewModel? = null
 
     override val hostActivity: Activity?
         get() = activity
@@ -45,7 +44,7 @@ class ResultFragment : Fragment(), ScreenConfigurations {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        resultViewModel = ViewModelProvider(this).get(ResultViewModel::class.java)
+        resultViewModel = activity?.let { ViewModelProvider(it).get(ResultViewModel::class.java) }
         return inflater.inflate(R.layout.fragment_result, container, false)
     }
 
@@ -55,13 +54,20 @@ class ResultFragment : Fragment(), ScreenConfigurations {
 
         val modelId = arguments?.let { ResultFragmentArgs.fromBundle(it).modelId }
         modelId?.let { id ->
-            if (id == DEFAULT_RES_ARG) {
-                model = CalculationViewModel.modelCalculated
-                model?.let { initializeViews(it, false) }
-            } else {
-                resultViewModel.getModel(id).observe(viewLifecycleOwner, Observer {
+            if (id == DEFAULT_RES_ARG) {  // not from db
+                resultViewModel?.getCalculatedModel()?.observe(viewLifecycleOwner, Observer {
                     it?.let {
-                        initializeViews(it, true)
+                        initializeShowingViews(it)
+                        initSaving(it, false)
+                        initSharing(it)
+                    }
+                })
+            } else {
+                resultViewModel?.getModel(id)?.observe(viewLifecycleOwner, Observer {
+                    it?.let {
+                        initializeShowingViews(it)
+                        initSaving(it, true)
+                        initSharing(it)
                     }
                 })
             }
@@ -75,12 +81,10 @@ class ResultFragment : Fragment(), ScreenConfigurations {
         job.cancel()
     }
 
-    private fun initializeViews(model: Model, fromDB: Boolean) {
+
+    private fun initializeShowingViews(model: Model) {
 
         model.run {
-
-            if (fromDB) btn_save.visibility = View.GONE
-
             val length =
                 getString(R.string.length) + ": " + shape.length?.to2p() + " " + units.distance
             val weight = getString(R.string.weight) + ": " + weight.to3p() + " " + units.weight
@@ -136,17 +140,24 @@ class ResultFragment : Fragment(), ScreenConfigurations {
 
             iv_shape_res.setImageResource(shape.form.imageRes)
 
-            btn_save.setOnClickListener {
-
-                resultViewModel.save(this)
-            }
-
-            /* topAppBar_res_fragment.setOnMenuItemClickListener {
-                 if (it.itemId == R.id.share)
-                     (activity as MainActivity).shareModels(arrayListOf(this))
-                 return@setOnMenuItemClickListener false
-             }*/
         }
 
     }
+
+    private fun initSharing(model: Model) {
+        topAppBar_res_fragment.setOnMenuItemClickListener {
+            if (it.itemId == R.id.share)
+                shareModels(arrayListOf(model))
+            return@setOnMenuItemClickListener false
+        }
+    }
+
+    private fun initSaving(model: Model, fromDB: Boolean) {
+
+        if (fromDB) btn_save.visibility = View.GONE
+        btn_save.setOnClickListener {
+            resultViewModel?.save(model)
+        }
+    }
+
 }

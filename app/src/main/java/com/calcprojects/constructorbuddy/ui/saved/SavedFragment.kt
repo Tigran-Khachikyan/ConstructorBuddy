@@ -11,12 +11,20 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.ui.AdapterRecyclerSaved
+import com.calcprojects.constructorbuddy.ui.PROGRESS_SHOW_DELAY_TIME
+import com.calcprojects.constructorbuddy.ui.SPlASH_DELAY_TIME
 import kotlinx.android.synthetic.main.fragment_saved.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SavedFragment : Fragment() {
 
     private lateinit var savedViewModel: SavedViewModel
     private lateinit var adapterRecyclerSaved: AdapterRecyclerSaved
+    private var job: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -44,9 +52,19 @@ class SavedFragment : Fragment() {
         recycler_view_saved.adapter = adapterRecyclerSaved
 
         savedViewModel.getSavedModels().observe(viewLifecycleOwner, Observer {
-            adapterRecyclerSaved.models = it
-            adapterRecyclerSaved.notifyDataSetChanged()
+
+            job = CoroutineScope(Main).launch {
+                showProgressBar(true)
+                delay(PROGRESS_SHOW_DELAY_TIME)
+                adapterRecyclerSaved.models = it
+                adapterRecyclerSaved.notifyDataSetChanged()
+                showProgressBar(false)
+            }
         })
+    }
+
+    private fun showProgressBar(show: Boolean) {
+        progressBarLayRefresh.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun onResume() {
@@ -60,7 +78,13 @@ class SavedFragment : Fragment() {
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_VISIBLE)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-       // MainViewModel.showBottomActionView(true)
+        // MainViewModel.showBottomActionView(true)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        job?.cancel()
     }
 
 }
