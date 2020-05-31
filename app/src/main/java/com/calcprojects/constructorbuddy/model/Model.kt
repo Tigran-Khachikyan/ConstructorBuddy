@@ -16,16 +16,16 @@ import java.util.*
 @Entity(tableName = "MODELS")
 @TypeConverters(UnitTypeConverter::class)
 class Model constructor(
-    @Embedded
+    @Embedded(prefix = "shape_")
     val shape: Shape,
-    @Embedded
+    @Embedded(prefix = "mat_")
     val material: Material,
     val units: Unit,
     var weight: Double,
     val createdByLength: Boolean,
     var dateOfCreation: String,
     var name: String? = null,
-    @Embedded(prefix = "model_")
+    @Embedded(prefix = "price_")
     var price: Price? = null
 ) {
     @PrimaryKey(autoGenerate = true)

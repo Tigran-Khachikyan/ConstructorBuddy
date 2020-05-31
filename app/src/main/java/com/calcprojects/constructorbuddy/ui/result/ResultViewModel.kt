@@ -25,10 +25,10 @@ class ResultViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun save(model: Model) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.IO) {
             repo.saveModel(model)
         }
     }
 
-    fun getModel(id: Int): LiveData<Model?> = repo.getModel(id)
+    fun getModel(id: Int): LiveData<Model> = repo.getModel(id)
 }

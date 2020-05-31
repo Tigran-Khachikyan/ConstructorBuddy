@@ -7,7 +7,7 @@ import com.calcprojects.constructorbuddy.model.price.Price
 @TypeConverters(SubstanceTypeConverter::class)
 data class Material(
     val substance: Substance,
-    @Embedded
+    @Embedded(prefix = "pr_")
     val price: Price? = null
 ){
     @PrimaryKey(autoGenerate = true)

@@ -41,8 +41,6 @@ class SavedFragment : Fragment() {
         }
 
         recycler_view_saved.setHasFixedSize(true)
-        recycler_view_saved.layoutManager =
-            GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
         recycler_view_saved.adapter = adapterRecyclerSaved
 
         savedViewModel.getSavedModels().observe(viewLifecycleOwner, Observer {
@@ -50,7 +48,6 @@ class SavedFragment : Fragment() {
             adapterRecyclerSaved.notifyDataSetChanged()
         })
     }
-
 
     override fun onResume() {
         super.onResume()

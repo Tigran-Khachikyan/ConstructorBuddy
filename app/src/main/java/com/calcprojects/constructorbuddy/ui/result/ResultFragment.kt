@@ -137,6 +137,7 @@ class ResultFragment : Fragment(), ScreenConfigurations {
             iv_shape_res.setImageResource(shape.form.imageRes)
 
             btn_save.setOnClickListener {
+
                 resultViewModel.save(this)
             }
 
