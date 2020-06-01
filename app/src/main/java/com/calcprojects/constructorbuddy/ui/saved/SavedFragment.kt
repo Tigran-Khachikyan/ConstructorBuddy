@@ -1,5 +1,6 @@
 package com.calcprojects.constructorbuddy.ui.saved
 
+import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.*
@@ -13,6 +14,7 @@ import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.ui.AdapterRecyclerSaved
 import com.calcprojects.constructorbuddy.ui.PROGRESS_SHOW_DELAY_TIME
 import com.calcprojects.constructorbuddy.ui.SPlASH_DELAY_TIME
+import com.calcprojects.constructorbuddy.ui.ScreenConfigurations
 import kotlinx.android.synthetic.main.fragment_saved.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -20,11 +22,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SavedFragment : Fragment() {
+class SavedFragment : Fragment(), ScreenConfigurations {
 
     private lateinit var savedViewModel: SavedViewModel
     private lateinit var adapterRecyclerSaved: AdapterRecyclerSaved
     private var job: Job? = null
+
+    override val hostActivity: Activity?
+        get() = activity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -69,16 +74,10 @@ class SavedFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        configureActivity()
-    }
-
-    private fun configureActivity() {
-        activity?.run {
-            window.statusBarColor = resources.getColor(R.color.colorSecondaryDark)
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_VISIBLE)
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
-        // MainViewModel.showBottomActionView(true)
+        setScreenConfigurations(
+            orientationVertical = true,
+            fullScreenMode = false, bottomNavViewVisible = true, bottomNavViewAnim = true
+        )
     }
 
     override fun onDestroyView() {

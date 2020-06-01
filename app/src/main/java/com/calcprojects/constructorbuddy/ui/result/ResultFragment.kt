@@ -30,15 +30,7 @@ class ResultFragment : Fragment(), ScreenConfigurations, SendModel {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        job = CoroutineScope(Main).launch {
-            delay(SCREEN_DELAY_TIME)
-            setScreenConfigurations(
-                orientationVertical = true,
-                fullScreenMode = false,
-                bottomNavViewVisible = true,
-                bottomNavViewAnim = true
-            )
-        }
+
     }
 
     override fun onCreateView(
@@ -54,7 +46,19 @@ class ResultFragment : Fragment(), ScreenConfigurations, SendModel {
 
         val modelId = arguments?.let { ResultFragmentArgs.fromBundle(it).modelId }
         modelId?.let { id ->
-            if (id == DEFAULT_RES_ARG) {  // not from db
+            if (id == DEFAULT_RES_ARG) { // not from db
+
+                job = CoroutineScope(Main).launch {
+                    delay(SCREEN_DELAY_TIME)
+                    setScreenConfigurations(
+                        orientationVertical = true,
+                        fullScreenMode = false,
+                        bottomNavViewVisible = true,
+                        bottomNavViewAnim = true
+                    )
+                }
+                //coord_result.setPadding()
+
                 resultViewModel?.getCalculatedModel()?.observe(viewLifecycleOwner, Observer {
                     it?.let {
                         initializeShowingViews(it)
@@ -63,6 +67,17 @@ class ResultFragment : Fragment(), ScreenConfigurations, SendModel {
                     }
                 })
             } else {
+
+                job = CoroutineScope(Main).launch {
+                    delay(SCREEN_DELAY_TIME)
+                    setScreenConfigurations(
+                        orientationVertical = true,
+                        fullScreenMode = false,
+                        bottomNavViewVisible = false,
+                        bottomNavViewAnim = false
+                    )
+                }
+
                 resultViewModel?.getModel(id)?.observe(viewLifecycleOwner, Observer {
                     it?.let {
                         initializeShowingViews(it)
@@ -75,12 +90,17 @@ class ResultFragment : Fragment(), ScreenConfigurations, SendModel {
     }
 
 
-    override fun onDestroy() {
+   /* override fun onDestroy() {
         super.onDestroy()
 
         job.cancel()
-    }
+    }*/
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        job.cancel()
+    }
 
     private fun initializeShowingViews(model: Model) {
 
