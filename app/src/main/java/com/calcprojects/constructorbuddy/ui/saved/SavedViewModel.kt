@@ -26,7 +26,7 @@ class SavedViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getSavedModels(): LiveData<List<Model>> = repo.getAllModels()
-    fun removeModel(ids: List<Int>) {
+    fun removeModels(ids: List<Int>) {
         viewModelScope.launch(Dispatchers.Default) {
             repo.deleteModels(ids)
         }

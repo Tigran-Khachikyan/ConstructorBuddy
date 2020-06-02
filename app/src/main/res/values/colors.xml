@@ -20,4 +20,5 @@
     <color name="colorSecondaryTrans">#7F5A92B5</color>
     <color name="errorColor">#7a0000</color>
     <color name="colorSecondaryDark">#266485</color>
+    <color name="navBarColor">#00080C</color>
 </resources>

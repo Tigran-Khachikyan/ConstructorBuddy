@@ -29,6 +29,7 @@ import com.calcprojects.constructorbuddy.model.price.Price
 import com.calcprojects.constructorbuddy.model.units.Unit
 import com.calcprojects.constructorbuddy.ui.*
 import com.calcprojects.constructorbuddy.ui.result.ResultViewModel
+import com.calcprojects.constructorbuddy.ui.shapes.AdapterRecyclerShapes
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_calculator.*
@@ -166,7 +167,11 @@ class CalculatorFragment : Fragment(), ScreenConfigurations,
 
     private fun RecyclerView.initWithListeners() {
 
-        adapterRecShape = AdapterRecyclerShapes(requireContext(), true) {}
+        adapterRecShape =
+            AdapterRecyclerShapes(
+                requireContext(),
+                true
+            ) {}
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
         this.adapter = adapterRecShape

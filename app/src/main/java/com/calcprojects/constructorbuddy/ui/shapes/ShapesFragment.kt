@@ -60,7 +60,12 @@ class ShapesFragment : Fragment(),
             }
         }
         setHasFixedSize(true)
-        adapter = AdapterRecyclerShapes(requireContext(), false, func)
+        adapter =
+            AdapterRecyclerShapes(
+                requireContext(),
+                false,
+                func
+            )
     }
 
     private suspend fun startCalculation(form: Form) {

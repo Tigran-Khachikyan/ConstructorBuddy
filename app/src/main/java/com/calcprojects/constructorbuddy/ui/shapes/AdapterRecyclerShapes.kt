@@ -1,4 +1,4 @@
-package com.calcprojects.constructorbuddy.ui
+package com.calcprojects.constructorbuddy.ui.shapes
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.figures.Form
+import com.calcprojects.constructorbuddy.ui.SCREEN_DELAY_TIME
 
 
 class AdapterRecyclerShapes(
@@ -63,12 +64,16 @@ class AdapterRecyclerShapes(
                     .alpha(0.35F)
                     .scaleX(0.9F)
                     .scaleY(0.9F)
-                    .apply { duration = SCREEN_DELAY_TIME }
+                    .apply { duration =
+                        SCREEN_DELAY_TIME
+                    }
             else
                 itemView.animate()
                     .scaleX(1.2F)
                     .scaleY(1.2F)
-                    .apply { duration = SCREEN_DELAY_TIME }
+                    .apply { duration =
+                        SCREEN_DELAY_TIME
+                    }
         }
     }
 }
