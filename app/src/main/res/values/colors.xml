@@ -10,15 +10,15 @@
 
     <color name="colorAccent">#03DAC5</color>
 
-    <color name="colorPrimary">#276351</color>
-    <color name="colorPrimaryDark">#003829</color>
-    <color name="colorPrimaryLight">#55917d</color>
+    <color name="colorPrimary">#1c313a</color>
+    <color name="colorPrimaryMid">#C0384850</color>
+    <color name="colorPrimaryDark">#102027</color>
+    <color name="colorPrimaryLight">#97ABB6</color>
     <color name="colorPrimaryLightTrans">#80276351</color>
 
-    <color name="colorSecondary">#5a92b5</color>
-    <color name="colorSecondaryLight">#8cc2e7</color>
+    <color name="colorSecondary">#259383</color>
+    <color name="colorSecondaryLight">#e3f2fd</color>
     <color name="colorSecondaryTrans">#7F5A92B5</color>
-    <color name="errorColor">#7a0000</color>
-    <color name="colorSecondaryDark">#266485</color>
-    <color name="navBarColor">#00080C</color>
+    <color name="errorColor">#950909</color>
+    <color name="colorSecondaryDark">#12005e</color>
 </resources>

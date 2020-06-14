@@ -191,12 +191,12 @@ class CalculatorFragment : Fragment(), ScreenConfigurations,
             when (checkedId) {
                 R.id.radByLength -> {
                     radByLength.setTextColor(resources.getColor(R.color.colorAccent))
-                    radByWeight.setTextColor(resources.getColor(R.color.colorPrimaryLightTrans))
+                    radByWeight.setTextColor(resources.getColor(R.color.colorPrimaryLight))
                     viewModel.setType(true)
                 }
                 R.id.radByWeight -> {
                     radByWeight.setTextColor(resources.getColor(R.color.colorAccent))
-                    radByLength.setTextColor(resources.getColor(R.color.colorPrimaryLightTrans))
+                    radByLength.setTextColor(resources.getColor(R.color.colorPrimaryLight))
                     viewModel.setType(false)
                 }
             }

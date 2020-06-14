@@ -26,9 +26,17 @@ class SavedViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getSavedModels(): LiveData<List<Model>> = repo.getAllModels()
+
+    private val deleteSucceed = MutableLiveData<Boolean>()
+    fun doesRemoveSucceed(): LiveData<Boolean> = deleteSucceed
     fun removeModels(ids: List<Int>) {
-        viewModelScope.launch(Dispatchers.Default) {
-            repo.deleteModels(ids)
+        try {
+            viewModelScope.launch(Dispatchers.Default) {
+                repo.deleteModels(ids)
+            }
+            deleteSucceed.value = true
+        } catch (ex: Exception) {
+            deleteSucceed.value = false
         }
     }
 

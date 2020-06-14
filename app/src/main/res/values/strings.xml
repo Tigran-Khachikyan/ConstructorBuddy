@@ -150,10 +150,20 @@
 
     <string name="shape">Shape</string>
 
-    <string name="home_intro_text">Start constructing with the help of our formulas and cost predictions.</string>
+    <string name="home_intro_text">Start constructing with the\nhelp of our formulas and cost\npredictions.</string>
     <string name="titleSend">new models to share</string>
     <string name="result_sub_title">Get calculated model.</string>
     <string name="computing">Computing</string>
+    <string name="alert_dialog_remove_message">Are you going to delete selected models?</string>
+    <string name="alert_dialog_remove_title">Removing</string>
+    <string name="alert_dialog_remove_Yes">Yes</string>
+    <string name="alert_dialog_remove_Cancel">Cancel</string>
+    <string name="model_removed_ok">Model has been removed successfully!</string>
+    <string name="models_removes_ok">Models have been removed successfully!</string>
+    <string name="failed_removing">Removing failed!</string>
+    <string name="no_model_found">No Model Found</string>
+    <string name="saving_guide">-Select shape\n-Fill out parameters\n-Calculate\n-Save model</string>
+    <string name="add_model">Add New Model</string>
 
 
 </resources>

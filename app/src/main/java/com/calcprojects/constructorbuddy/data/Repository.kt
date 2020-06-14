@@ -122,8 +122,7 @@ class Repository(
     override fun getModel(id: Int): LiveData<Model> = modelDao.get(id)
 
     override fun getAllModels(): LiveData<List<Model>> {
-        val a = modelDao.getAll()
-        return a
+        return modelDao.getAll()
     }
 
 }

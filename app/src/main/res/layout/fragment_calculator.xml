@@ -160,7 +160,7 @@
             android:id="@+id/lay_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorSecondary"
+            android:background="@color/colorSecondaryLight"
             android:backgroundTintMode="screen"
             android:paddingBottom="8dp"
             app:layout_constraintTop_toBottomOf="@id/layout_images">
@@ -194,15 +194,13 @@
                     android:id="@+id/etField1"
                     style="@style/inputText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tv_unit1"
                 style="@style/unit_Texts"
-                android:text="lb"
                 app:layout_constraintBottom_toBottomOf="@id/field1"
                 app:layout_constraintRight_toRightOf="@id/field1"
                 app:layout_constraintTop_toTopOf="@id/field1" />
@@ -224,15 +222,13 @@
                     android:id="@+id/etField2"
                     style="@style/inputText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tv_unit2"
                 style="@style/unit_Texts"
-                android:text="in"
                 app:layout_constraintBottom_toBottomOf="@id/field2"
                 app:layout_constraintRight_toRightOf="@id/field2"
                 app:layout_constraintTop_toTopOf="@id/field2" />
@@ -254,15 +250,13 @@
                     android:id="@+id/etField3"
                     style="@style/inputText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tv_unit3"
                 style="@style/unit_Texts"
-                android:text="cm"
                 app:layout_constraintBottom_toBottomOf="@id/field3"
                 app:layout_constraintRight_toRightOf="@id/field3"
                 app:layout_constraintTop_toTopOf="@id/field3" />
@@ -284,15 +278,13 @@
                     android:id="@+id/etField4"
                     style="@style/inputText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tv_unit4"
                 style="@style/unit_Texts"
-                android:text="kg"
                 app:layout_constraintBottom_toBottomOf="@id/field4"
                 app:layout_constraintRight_toRightOf="@id/field4"
                 app:layout_constraintTop_toTopOf="@id/field4" />
@@ -315,15 +307,13 @@
                     android:id="@+id/etField5"
                     style="@style/inputText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tv_unit5"
                 style="@style/unit_Texts"
-                android:text="lb"
                 app:layout_constraintBottom_toBottomOf="@id/field5"
                 app:layout_constraintRight_toRightOf="@id/field5"
                 app:layout_constraintTop_toTopOf="@id/field5" />
@@ -347,8 +337,7 @@
                     android:id="@+id/etField6"
                     style="@style/inputText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -357,7 +346,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:backgroundTint="@color/colorAccent"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:textColor="@color/colorAccent"
                 android:fontFamily="@font/orbitron_bold"
                 android:text="@string/calculate"
                 android:textSize="12sp"

@@ -5,18 +5,18 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.calcprojects.constructorbuddy.R
 import com.calcprojects.constructorbuddy.model.Model
+import com.calcprojects.constructorbuddy.ui.MainActivity
 import com.calcprojects.constructorbuddy.ui.PROGRESS_SHOW_DELAY_TIME
 import com.calcprojects.constructorbuddy.ui.ScreenConfigurations
 import com.calcprojects.constructorbuddy.ui.SendModel
-import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_saved.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -45,6 +45,7 @@ class SavedFragment : Fragment(), ScreenConfigurations, SendModel {
         super.onViewCreated(view, savedInstanceState)
 
         recycler_view_saved.initialize()
+        initBtnAddNewModel()
 
         savedViewModel.getSavedModels().observe(viewLifecycleOwner, Observer {
 
@@ -52,18 +53,22 @@ class SavedFragment : Fragment(), ScreenConfigurations, SendModel {
                 showProgressBar(true)
                 delay(PROGRESS_SHOW_DELAY_TIME)
                 adapterRecyclerSaved.models = it
+                if (it.isEmpty()) {
+                    recycler_view_saved.visibility = View.GONE
+                    layout_no_saved_models.visibility = View.VISIBLE
+                } else {
+                    recycler_view_saved.visibility = View.VISIBLE
+                    layout_no_saved_models.visibility = View.GONE
+                }
                 adapterRecyclerSaved.notifyDataSetChanged()
                 showProgressBar(false)
             }
         })
     }
 
-    private fun showProgressBar(show: Boolean) {
-        progressBarLayRefresh.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
     override fun onResume() {
         super.onResume()
+
 
         setScreenConfigurations(
             orientationVertical = true, fullScreenMode = false,
@@ -105,13 +110,35 @@ class SavedFragment : Fragment(), ScreenConfigurations, SendModel {
                             R.id.share -> {
                                 if (selectedModels.isNotEmpty())
                                     shareModels(selectedModels)
-                                mode?.finish()
+                                //mode?.finish()
                                 true
                             }
                             R.id.delete -> {
                                 if (selectedModels.isNotEmpty()) {
                                     val selectedModelsIds = selectedModels.map { model -> model.id }
-                                    savedViewModel.removeModels(selectedModelsIds)
+                                    activity?.let {
+                                        val mainActivity = it as MainActivity
+                                        mainActivity.showDialogRemoveBanking(
+                                            coordLayout, selectedModelsIds
+                                        ) {
+                                            savedViewModel.removeModels(selectedModelsIds)
+                                            savedViewModel.doesRemoveSucceed()
+                                                .observe(viewLifecycleOwner,
+                                                    Observer {
+                                                        it?.let { succeed ->
+                                                            val answerToRemoving = if (succeed) {
+                                                                if (selectedModelsIds.size > 1)
+                                                                    context.getString(R.string.models_removes_ok)
+                                                                else context.getString(R.string.model_removed_ok)
+                                                            } else
+                                                                context.getString(R.string.failed_removing)
+                                                            mainActivity.showSnackBar(
+                                                                answerToRemoving, coordLayout
+                                                            )
+                                                        }
+                                                    })
+                                        }
+                                    }
                                 }
                                 mode?.finish()
                                 true
@@ -128,7 +155,7 @@ class SavedFragment : Fragment(), ScreenConfigurations, SendModel {
                             orientationVertical = true, fullScreenMode = false,
                             bottomNavViewVisible = true, bottomNavViewAnim = true
                         )
-                        collapsingLayout.visibility = View.VISIBLE
+                        // collapsingLayout.visibility = View.VISIBLE
                     }
                 }
 
@@ -162,7 +189,7 @@ class SavedFragment : Fragment(), ScreenConfigurations, SendModel {
                             orientationVertical = true, fullScreenMode = false,
                             bottomNavViewVisible = false, bottomNavViewAnim = false
                         )
-                        collapsingLayout.visibility = View.GONE
+                        // collapsingLayout.visibility = View.GONE
                         true
                     }
                 }
@@ -170,4 +197,30 @@ class SavedFragment : Fragment(), ScreenConfigurations, SendModel {
         )
         adapter = adapterRecyclerSaved
     }
+
+    private fun initBtnAddNewModel() {
+        btn_add_model.setOnClickListener {
+            findNavController().navigate(SavedFragmentDirections.actionAddNewModel())
+        }
+    }
+
+    private fun showProgressBar(show: Boolean) {
+        progressBarLayRefresh.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+
+    /*  fun AlertDialog.setCustomView() {
+
+          window?.setBackgroundDrawableResource(R.color.)
+          getButton(BUTTON_POSITIVE).gravity = Gravity.END
+          getButton(BUTTON_NEGATIVE).gravity = Gravity.START
+          getButton(BUTTON_POSITIVE).textSize = 18F
+          getButton(BUTTON_NEGATIVE).textSize = 18F
+          getButton(BUTTON_NEUTRAL).textSize = 18F
+          getButton(BUTTON_NEGATIVE).setTextColor(Color.BLACK)
+          getButton(BUTTON_POSITIVE).setTextColor(Color.WHITE)
+          getButton(BUTTON_NEUTRAL).setTextColor(Color.WHITE)
+      }*/
+
+
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorSecondaryDark"
+    android:background="@color/colorPrimary"
     tools:context=".ui.splash.SplashFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@mipmap/splash_image"
-        android:tint="@color/colorSecondary"
+        android:tint="@color/colorSecondaryLight"
         android:layout_marginStart="16dp"
         app:layout_constraintVertical_bias="0.4"
         app:layout_constraintBottom_toBottomOf="parent"
